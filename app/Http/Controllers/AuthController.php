@@ -18,17 +18,17 @@ class AuthController extends Controller
             $request->validate([
                 'username' => 'required',
                 'password' => 'required',
-                'tahun' => 'required',
+                // 'tahun' => 'required',
             ], [
                 'username.required' => 'Username wajib diisi',
                 'password.required' => 'Password wajib diisi',
-                'tahun.required' => 'Tahun wajib diisi',
+                // 'tahun.required' => 'Tahun wajib diisi',
             ]);
 
             $credentials = $request->only('username', 'password');
 
             if (Auth::attempt($credentials)) {
-                session(['tahun' => $request->tahun]);
+                // session(['tahun' => $request->tahun]);
                 return redirect(route(DashboardConstant::RouteIndex));
             }
 

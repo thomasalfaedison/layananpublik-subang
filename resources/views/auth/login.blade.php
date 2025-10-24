@@ -38,6 +38,7 @@
                     @endif
                 </div>
 
+                <?php /*
                 <div class="form-group">
                     <input type="number" class="form-control {{ $errors->has('tahun') ? 'is-invalid' : '' }}" placeholder="Tahun" name="tahun" value="{{ old('tahun', date('Y')) }}" />
                     @if ($errors->has('tahun'))
@@ -46,6 +47,7 @@
                         </div>
                     @endif
                 </div>
+                */ ?>
 
                 <div class="row">
                     <div class="col-xs-12" style="padding-left: 10px">

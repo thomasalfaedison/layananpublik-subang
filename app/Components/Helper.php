@@ -368,7 +368,6 @@ class Helper
 	public static function getTanggalAkhirPadaBulan($bulan)
 	{
 		$tahun = Session::getTahun();
-		$bulan = $bulan;
 
 		if(strlen($bulan)==1) $bulan = '0'.$bulan;
 
