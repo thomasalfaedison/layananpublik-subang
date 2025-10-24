@@ -1,0 +1,4 @@
+.select2-selection {
+    height: calc(2.25rem + 2px) !important;
+    padding: 0.5rem .75rem !important;
+}
