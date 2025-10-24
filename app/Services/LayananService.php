@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Components\Session;
 use App\Models\Layanan;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -147,6 +148,10 @@ class LayananService
 
     public function create(array $data): Layanan
     {
+        if (Session::isInstansi()) {
+            $data['id_instansi'] = Session::getIdInstansi();
+        }
+
         $this->validate($data);
 
         $data['status_atribut_persyaratan'] = $data['status_atribut_persyaratan'] ?? 0;
