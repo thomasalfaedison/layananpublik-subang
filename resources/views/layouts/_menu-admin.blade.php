@@ -13,6 +13,7 @@
             </a>
         </li>
         <li class="nav-header">MENU LAINNYA</li>
+        <?php /*
         <li class="nav-item {{ Helper::isMenuActive(['penilaian-aspek/*', 'penilaian-kelompok/*', 'penilaian-indikator/*']) ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ Helper::isMenuActive(['penilaian-aspek/*', 'penilaian-kelompok/*', 'penilaian-indikator/*']) }}">
                 <i class="fas fa-folder-open nav-icon"></i>
@@ -48,6 +49,7 @@
                 </li>
             </ul>
         </li>
+        */ ?>
         <li class="nav-item">
             <a href="{{ url('/instansi/index') }}" class="nav-link {{ Helper::isMenuActive('instansi/index') }}">
                 <i class="fas fa-building nav-icon"></i>

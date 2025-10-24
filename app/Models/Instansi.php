@@ -16,18 +16,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Instansi extends Model
 {
-    /**
-     * Summary of kuesionerResponden
-     * @var KuesionerResponden|null
-     */
-    public $kuesionerResponden;
-
-    /**
-     * Summary of beritaAcara
-     * @var BeritaAcara|null
-     */
-    public $beritaAcara;
-
     protected $table = 'instansi';
     protected $fillable = [
         'nama',

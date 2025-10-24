@@ -2,44 +2,13 @@
 
 use App\Constants\DashboardConstant;
 use App\Constants\InstansiConstant;
-use App\Constants\BeritaAcaraConstant;
-use App\Constants\BeritaAcaraRekomendasiConstant;
-use App\Constants\BeritaAcaraTandatanganConstant;
-use App\Constants\InstansiKontakConstant;
-use App\Constants\KuesionerBagianConstant;
-use App\Constants\KuesionerConstant;
-use App\Constants\KuesionerPertanyaanConstant;
-use App\Constants\KuesionerPertanyaanPilihanConstant;
-use App\Constants\KuesionerPertanyaanPenilaianConstant;
-use App\Constants\KuesionerRespondenConstant;
-use App\Constants\PenilaianAspekConstant;
-use App\Constants\EvaluasiConstant;
-use App\Constants\PenilaianIndikatorConstant;
-use App\Constants\PenilaianKelompokConstant;
-use App\Constants\JadwalConstant;
-use App\Constants\SiteConstant;
+use App\Constants\LayananConstant;
 use App\Constants\UserConstant;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstansiController;
-use App\Http\Controllers\InstansiKontakController;
-use App\Http\Controllers\BeritaAcaraController;
-use App\Http\Controllers\BeritaAcaraRekomendasiController;
-use App\Http\Controllers\BeritaAcaraTandatanganController;
-use App\Http\Controllers\KuesionerBagianController;
-use App\Http\Controllers\KuesionerController;
-use App\Http\Controllers\KuesionerPertanyaanController;
-use App\Http\Controllers\KuesionerPertanyaanPilihanController;
-use App\Http\Controllers\KuesionerPertanyaanPenilaianController;
-use App\Http\Controllers\PenilaianAspekController;
-use App\Http\Controllers\EvaluasiController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\PenilaianIndikatorController;
-use App\Http\Controllers\PenilaianKelompokController;
-use App\Http\Controllers\JadwalController;
-use App\Http\Controllers\SiteController;
+use App\Http\Controllers\LayananController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\KuesionerRespondenController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -83,3 +52,12 @@ Route::get('/user/read', [UserController::class, 'read'])->name(UserConstant::Ro
 Route::post('/user/delete', [UserController::class, 'delete'])->name(UserConstant::RouteDelete);
 Route::get('/user/export-excel', [UserController::class, 'exportExcel'])->name(UserConstant::RouteExportExcel);
 Route::post('/user/reset-password-default-all', [UserController::class, 'resetPasswordDefaultAll'])->name(UserConstant::RouteResetPasswordDefaultAll);
+
+// LAYANAN
+Route::get('/layanan/index', [LayananController::class, 'index'])->name(LayananConstant::RouteIndex);
+Route::get('/layanan/create', [LayananController::class, 'create'])->name(LayananConstant::RouteCreate);
+Route::post('/layanan/create', [LayananController::class, 'create'])->name(LayananConstant::RouteCreateProcess);
+Route::get('/layanan/update', [LayananController::class, 'update'])->name(LayananConstant::RouteUpdate);
+Route::post('/layanan/update', [LayananController::class, 'update'])->name(LayananConstant::RouteUpdateProcess);
+Route::get('/layanan/read', [LayananController::class, 'read'])->name(LayananConstant::RouteRead);
+Route::post('/layanan/delete', [LayananController::class, 'delete'])->name(LayananConstant::RouteDelete);

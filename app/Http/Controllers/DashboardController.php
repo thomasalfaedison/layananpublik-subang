@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Components\Session;
 use App\Constants\DashboardConstant;
+use App\Constants\LayananConstant;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 
@@ -16,6 +17,9 @@ class DashboardController extends Controller implements HasMiddleware
 
     public function index(Request $request)
     {
+        return redirect()->route(LayananConstant::RouteIndex);
+
+        /*
         $params = $request->query();
 
         if (Session::isInstansi()) {
@@ -23,10 +27,14 @@ class DashboardController extends Controller implements HasMiddleware
         }
 
         return view('dashboard.index');
+        */
     }
 
     public function instansi(Request $request)
     {
+        return redirect()->route(LayananConstant::RouteIndex);
+
+        /*
         $params = $request->query();
 
         $id_instansi = Session::getIdInstansi();
@@ -38,5 +46,6 @@ class DashboardController extends Controller implements HasMiddleware
         $tahun = $params['tahun'] ?? Session::getTahun();
 
         return view('dashboard.instansi');
+        */
     }
 }

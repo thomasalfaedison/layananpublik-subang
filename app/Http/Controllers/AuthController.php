@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\DashboardConstant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,7 +11,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {   
         if (Auth::check()) {
-            return redirect('/dashboard');
+            return redirect(route(DashboardConstant::RouteIndex));
         }
 
         if ($request->isMethod('POST')) {
@@ -28,7 +29,7 @@ class AuthController extends Controller
 
             if (Auth::attempt($credentials)) {
                 session(['tahun' => $request->tahun]);
-                return redirect('/dashboard');
+                return redirect(route(DashboardConstant::RouteIndex));
             }
 
             return redirect()->back()->with('danger', 'Username atau password salah')->withInput();

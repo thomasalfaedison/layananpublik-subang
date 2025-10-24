@@ -11,7 +11,7 @@
         <div class="card-body">
             <div class="row">
 
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <?= Form::label('username', 'Username') ?>
                     <?= Form::text('username', request()->query('username'), [
                         'class' => 'form-control',
