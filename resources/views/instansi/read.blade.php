@@ -54,5 +54,4 @@
     </div>
 </div>
 
-@include('instansi._card-instansi-kontak')
 @endsection
