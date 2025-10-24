@@ -2,27 +2,15 @@
 
 namespace App\Services;
 
-use App\Components\Session;
 use App\Models\Instansi;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Request;
 
 class InstansiService
 {
-    protected function getKuesionerRespondenService(): KuesionerRespondenService
-    {
-        return app()->make(KuesionerRespondenService::class);
-    }
-
-    protected function getBeritaAcaraService(): BeritaAcaraService
-    {
-        return app()->make(BeritaAcaraService::class);
-    }
-
     public function validate(array $data)
     {
         $rules = [
@@ -137,96 +125,5 @@ class InstansiService
         $query = $this->query($params);
 
         return $query->count();
-    }
-
-    public function findAllWithKuesionerResponden(string $kodeKuesioner, array $params = [])
-    {
-        $kuesionerRespondenService = $this->getKuesionerRespondenService();
-        $tahun = $params['tahun'] ?? Session::getTahun();
-
-        $allData = $this->findAll($params);
-
-        foreach ($allData as $data) {
-            $kuesioenrResponden = $kuesionerRespondenService->findOne([
-                'kode_kuesioner' => $kodeKuesioner,
-                'tahun' => $tahun,
-                'id_instansi' => $data->id,
-            ]);
-
-            $data->kuesionerResponden = $kuesioenrResponden;
-        }
-
-        $sortParam = $params['sort'] ?? null;
-        if (!empty($sortParam)) {
-            $descending = str_starts_with($sortParam, '-');
-            $column = ltrim($sortParam, '-');
-
-            $allData = $allData
-                ->sortBy(
-                    fn ($item) => data_get($item, $column),
-                    SORT_NATURAL,
-                    $descending
-                )
-                ->values();
-        }
-
-        return $allData;
-    }
-
-    public function paginateWithKuesionerResponden(string $kodeKuesioner, array $params = [])
-    {
-        $perPage = $params['perPage'] ?? 10;
-        
-        $data = collect($this->findAllWithKuesionerResponden($kodeKuesioner, $params));
-
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-
-        $pagedData = $data->slice(($currentPage - 1) * $perPage, $perPage)->values();
-
-        return new LengthAwarePaginator(
-            $pagedData,
-            $data->count(),
-            $perPage,
-            $currentPage,
-            ['path' => Request::url(), 'query' => Request::query()]
-        );
-    }
-
-    public function findAllWithBeritaAcara(array $params = [])
-    {
-        $beritaAcaraService = $this->getBeritaAcaraService();
-        $tahun = $params['tahun'] ?? Session::getTahun();
-
-        $allData = $this->findAll($params);
-
-        foreach ($allData as $data) {
-            $beritaAcara = $beritaAcaraService->firstOrCreate([
-                'tahun' => $tahun,
-                'id_instansi' => $data->id,
-            ]);
-
-            $data->beritaAcara = $beritaAcara;
-        }
-
-        return $allData;
-    }
-
-    public function paginateWithBeritaAcara(array $params = [])
-    {
-        $perPage = $params['perPage'] ?? 10;
-        
-        $data = collect($this->findAllWithBeritaAcara($params));
-
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-
-        $pagedData = $data->slice(($currentPage - 1) * $perPage, $perPage)->values();
-
-        return new LengthAwarePaginator(
-            $pagedData,
-            $data->count(),
-            $perPage,
-            $currentPage,
-            ['path' => Request::url(), 'query' => Request::query()]
-        );
     }
 }
