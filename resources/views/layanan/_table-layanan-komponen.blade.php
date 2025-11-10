@@ -23,12 +23,11 @@
             <td style="text-align: center">{{ $loop->iteration }}</td>
             <td>
                 {{ $refLayananKomponen->nama }}
-                <?= Html::a('<i class="fa fa-plus"></i> Tambah', route(LayananKomponenConstant::RouteCreate, [
+                <?= Html::a('<i class="fa fa-plus"></i>', route(LayananKomponenConstant::RouteCreate, [
                     'id_layanan' => $model->id,
                     'id_ref_layanan_komponen' => $refLayananKomponen->id,
                     'id_standar_layanan' => $id_standar_layanan,
                 ]), [
-                    'class' => 'btn btn-success btn-flat btn-xs',
                     'data-toggle' => 'tooltip',
                     'data-title' => 'Tambah Uraian',
                 ]) ?>
