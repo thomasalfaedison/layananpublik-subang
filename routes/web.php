@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\LayananController;
+use App\Http\Controllers\StandarPelayananController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -61,3 +62,6 @@ Route::get('/layanan/update', [LayananController::class, 'update'])->name(Layana
 Route::post('/layanan/update', [LayananController::class, 'update'])->name(LayananConstant::RouteUpdateProcess);
 Route::get('/layanan/read', [LayananController::class, 'read'])->name(LayananConstant::RouteRead);
 Route::post('/layanan/delete', [LayananController::class, 'delete'])->name(LayananConstant::RouteDelete);
+
+// STANDAR PELAYANAN
+Route::get('/standar-pelayanan/export-pdf', [StandarPelayananController::class, 'exportPdf'])->name('standarPelayanan.exportPdf');
