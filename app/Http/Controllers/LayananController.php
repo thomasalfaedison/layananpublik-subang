@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Components\Session;
 use App\Models\Layanan;
+use App\Models\RefLayananKomponen;
 use App\Services\InstansiService;
+use App\Services\LayananKomponenService;
 use App\Services\LayananService;
 use App\Services\RefAtributBiayaService;
 use App\Services\RefAtributSiklusLayananService;
 use App\Services\RefAtributSkmService;
 use App\Services\RefAtributSopService;
+use App\Services\RefLayananKomponenService;
 use App\Services\RefLayananPemicuService;
 use App\Services\RefLayananPenerimaManfaatService;
 use App\Services\RefLayananProdukService;
@@ -37,6 +40,8 @@ class LayananController extends Controller implements HasMiddleware
         protected RefAtributSopService $refAtributSopService,
         protected RefAtributSiklusLayananService $refAtributSiklusLayananService,
         protected RefAtributSkmService $refAtributSkmService,
+        protected RefLayananKomponenService $refLayananKomponenService,
+        protected LayananKomponenService $layananKomponenService,
     ) {
     }
 
@@ -111,7 +116,7 @@ class LayananController extends Controller implements HasMiddleware
         return view('layanan.update', $this->getFormData(compact('model', 'referrer')));
     }
 
-    public function read(Request $request)
+    public function view(Request $request)
     {
         $id = $request->get('id');
         $model = $this->layananService->findById($id);
@@ -120,7 +125,15 @@ class LayananController extends Controller implements HasMiddleware
             return abort(404, 'Not Found');
         }
 
-        return view('layanan.read', compact('model'));
+        $allRefLayananKomponen = $this->refLayananKomponenService->findAll();
+
+        $allLayananKomponen = $this->layananKomponenService->findAll([
+            'id_layanan' => $model->id,
+        ]);
+
+        $listGrup = RefLayananKomponen::getListGrup();
+
+        return view('layanan.view', compact('model', 'allRefLayananKomponen', 'allLayananKomponen', 'listGrup'));
     }
 
     public function delete(Request $request)

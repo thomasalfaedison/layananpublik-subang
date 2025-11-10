@@ -9,7 +9,7 @@ class LayananConstant
     public const RouteCreateProcess = 'layanan.createProcess';
     public const RouteUpdate = 'layanan.update';
     public const RouteUpdateProcess = 'layanan.updateProcess';
-    public const RouteRead = 'layanan.read';
+    public const RouteView = 'layanan.view';
     public const RouteDelete = 'layanan.delete';
 }
 

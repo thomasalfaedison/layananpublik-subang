@@ -32,6 +32,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property RefAtributSop|null $atributSop
  * @property RefAtributSiklusLayanan|null $atributSiklusLayanan
  * @property RefAtributSkm|null $atributSkm
+ * @property \Illuminate\Database\Eloquent\Collection<LayananKomponen> $komponen
  */
 class Layanan extends Model
 {
@@ -98,5 +99,9 @@ class Layanan extends Model
     {
         return $this->belongsTo(RefAtributSkm::class, 'id_ref_atribut_skm', 'id');
     }
-}
 
+    public function komponen()
+    {
+        return $this->hasMany(LayananKomponen::class, 'id_layanan', 'id');
+    }
+}

@@ -32,13 +32,13 @@
             </div>
 
             <div class="table-responsive">
-                <table class="table table-bordered table-striped" style="table-layout: fixed;">
+                <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th style="width:60px; text-align:center">No</th>
                             <th style="width:350px;">Nama Layanan</th>
                             @if (Session::isAdmin())
-                                <th style="width:300px;">Perangkat Daerah</th>
+                                <th>Perangkat Daerah</th>
                             @endif
                             <?php /*
                             <th style="width:250px;">Deskripsi</th>
@@ -63,7 +63,7 @@
                                 <td class="text-center">
                                     {{ $allLayanan->firstItem() + $loop->index }}
                                 </td>
-                                <td><?= Html::a($layanan->nama, route(LayananConstant::RouteRead, ['id' => $layanan->id])) ?></td>
+                                <td><?= Html::a($layanan->nama, route(LayananConstant::RouteView, ['id' => $layanan->id])) ?></td>
                                 @if (Session::isAdmin())
                                     <td>{{ optional($layanan->instansi)->nama }}</td>
                                 @endif
@@ -90,7 +90,7 @@
                                 <td>{{ optional($layanan->atributSkm)->nama }}</td>
                                 */ ?>
                                 <td class="text-center">
-                                    <?= Html::a('<i class="fa fa-eye"></i>', route(LayananConstant::RouteRead, ['id' => $layanan->id]), [
+                                    <?= Html::a('<i class="fa fa-eye"></i>', route(LayananConstant::RouteView, ['id' => $layanan->id]), [
                                         'data-toggle' => 'tooltip',
                                         'title' => 'Lihat',
                                     ]) ?>

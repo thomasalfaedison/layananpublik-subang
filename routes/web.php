@@ -3,11 +3,13 @@
 use App\Constants\DashboardConstant;
 use App\Constants\InstansiConstant;
 use App\Constants\LayananConstant;
+use App\Constants\LayananKomponenConstant;
 use App\Constants\UserConstant;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\LayananController;
+use App\Http\Controllers\LayananKomponenController;
 use App\Http\Controllers\StandarPelayananController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -60,8 +62,17 @@ Route::get('/layanan/create', [LayananController::class, 'create'])->name(Layana
 Route::post('/layanan/create', [LayananController::class, 'create'])->name(LayananConstant::RouteCreateProcess);
 Route::get('/layanan/update', [LayananController::class, 'update'])->name(LayananConstant::RouteUpdate);
 Route::post('/layanan/update', [LayananController::class, 'update'])->name(LayananConstant::RouteUpdateProcess);
-Route::get('/layanan/read', [LayananController::class, 'read'])->name(LayananConstant::RouteRead);
+Route::get('/layanan/view', [LayananController::class, 'view'])->name(LayananConstant::RouteView);
 Route::post('/layanan/delete', [LayananController::class, 'delete'])->name(LayananConstant::RouteDelete);
+
+// LAYANAN KOMPONEN
+Route::get('/layanan-komponen/index', [LayananKomponenController::class, 'index'])->name(LayananKomponenConstant::RouteIndex);
+Route::get('/layanan-komponen/create', [LayananKomponenController::class, 'create'])->name(LayananKomponenConstant::RouteCreate);
+Route::post('/layanan-komponen/create', [LayananKomponenController::class, 'create'])->name(LayananKomponenConstant::RouteCreateProcess);
+Route::get('/layanan-komponen/update', [LayananKomponenController::class, 'update'])->name(LayananKomponenConstant::RouteUpdate);
+Route::post('/layanan-komponen/update', [LayananKomponenController::class, 'update'])->name(LayananKomponenConstant::RouteUpdateProcess);
+Route::get('/layanan-komponen/view', [LayananKomponenController::class, 'view'])->name(LayananKomponenConstant::RouteView);
+Route::post('/layanan-komponen/delete', [LayananKomponenController::class, 'delete'])->name(LayananKomponenConstant::RouteDelete);
 
 // STANDAR PELAYANAN
 Route::get('/standar-pelayanan/export-pdf', [StandarPelayananController::class, 'exportPdf'])->name('standarPelayanan.exportPdf');
