@@ -36,10 +36,11 @@
                     <thead>
                         <tr>
                             <th style="width:60px; text-align:center">No</th>
+                            <th style="width:350px;">Nama Layanan</th>
                             @if (Session::isAdmin())
                                 <th style="width:300px;">Perangkat Daerah</th>
                             @endif
-                            <th style="width:350px;">Nama Layanan</th>
+                            <?php /*
                             <th style="width:250px;">Deskripsi</th>
                             <th style="width:150px;">Pemicu</th>
                             <th style="width:150px;">Teknis</th>
@@ -52,6 +53,7 @@
                             <th style="width:100px;">SOP</th>
                             <th style="width:220px;">Siklus</th>
                             <th style="width:120px;">SKM</th>
+                            */ ?>
                             <th style="width:80px; text-align:center">Aksi</th>
                         </tr>
                     </thead>
@@ -61,10 +63,11 @@
                                 <td class="text-center">
                                     {{ $allLayanan->firstItem() + $loop->index }}
                                 </td>
+                                <td><?= Html::a($layanan->nama, route(LayananConstant::RouteRead, ['id' => $layanan->id])) ?></td>
                                 @if (Session::isAdmin())
                                     <td>{{ optional($layanan->instansi)->nama }}</td>
                                 @endif
-                                <td><?= Html::a($layanan->nama, route(LayananConstant::RouteRead, ['id' => $layanan->id])) ?></td>
+                                <?php /*
                                 <td>{{ Str::limit($layanan->deskripsi, 120) }}</td>
                                 <td>{{ optional($layanan->layananPemicu)->nama }}</td>
                                 <td>{{ optional($layanan->layananTeknis)->nama }}</td>
@@ -85,6 +88,7 @@
                                 <td>{{ optional($layanan->atributSop)->nama }}</td>
                                 <td>{{ optional($layanan->atributSiklusLayanan)->nama }}</td>
                                 <td>{{ optional($layanan->atributSkm)->nama }}</td>
+                                */ ?>
                                 <td class="text-center">
                                     <?= Html::a('<i class="fa fa-eye"></i>', route(LayananConstant::RouteRead, ['id' => $layanan->id]), [
                                         'data-toggle' => 'tooltip',

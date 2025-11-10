@@ -44,15 +44,19 @@ $statusAtributProsedur = old('status_atribut_prosedur', $model->status_atribut_p
                         </div>
                     </div>
                 @endif
+            </div>
+
+            <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <?= Form::label('nama', 'Nama Layanan', ['required' => true]) ?>
-                        <?= Form::text('nama', old('nama', $model->nama), [
+                            <?= Form::label('nama', 'Nama Layanan', ['required' => true]) ?>
+                            <?= Form::textarea('nama', old('nama', $model->nama), [
                             'class' => 'form-control' . ($errors->has('nama') ? ' is-invalid' : ''),
-                            'placeholder' => 'Masukkan nama layanan'
+                            'placeholder' => 'Masukkan nama layanan',
+                            'rows' => 2
                         ]) ?>
                         @error('nama')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
@@ -65,7 +69,7 @@ $statusAtributProsedur = old('status_atribut_prosedur', $model->status_atribut_p
                         <?= Form::textarea('deskripsi', old('deskripsi', $model->deskripsi), [
                             'class' => 'form-control' . ($errors->has('deskripsi') ? ' is-invalid' : ''),
                             'placeholder' => 'Masukkan deskripsi layanan',
-                            'rows' => 3,
+                            'rows' => 4,
                         ]) ?>
                         @error('deskripsi')
                             <div class="invalid-feedback">{{ $message }}</div>
