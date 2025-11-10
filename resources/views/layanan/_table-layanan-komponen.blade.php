@@ -6,7 +6,10 @@
      * @var \App\Models\Layanan $model
      * @var \Illuminate\Support\Collection<\App\Models\LayananKomponen> $allLayananKomponen
      * @var \Illuminate\Support\Collection<\App\Models\RefLayananKomponen> $allRefLayananKomponen
+     * @var int|null $id_standar_layanan
      */
+
+    $id_standar_layanan = $id_standar_layanan ?? null;
 @endphp
 
 <table class="table table-bordered">
@@ -23,6 +26,7 @@
                 <?= Html::a('<i class="fa fa-plus"></i> Tambah', route(LayananKomponenConstant::RouteCreate, [
                     'id_layanan' => $model->id,
                     'id_ref_layanan_komponen' => $refLayananKomponen->id,
+                    'id_standar_layanan' => $id_standar_layanan,
                 ]), [
                     'class' => 'btn btn-success btn-flat btn-xs',
                     'data-toggle' => 'tooltip',
@@ -32,6 +36,7 @@
             <td>
                 @php
                     $allLayananKomponenFiltered = $allLayananKomponen
+                        ->where('id_standar_layanan', $id_standar_layanan)
                         ->where('id_ref_layanan_komponen', $refLayananKomponen->id)
                         ->sortBy('urutan');
 

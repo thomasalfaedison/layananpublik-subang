@@ -17,6 +17,7 @@ use App\Services\RefLayananPemicuService;
 use App\Services\RefLayananPenerimaManfaatService;
 use App\Services\RefLayananProdukService;
 use App\Services\RefLayananTeknisService;
+use App\Services\StandarLayananService;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\URL;
@@ -42,6 +43,7 @@ class LayananController extends Controller implements HasMiddleware
         protected RefAtributSkmService $refAtributSkmService,
         protected RefLayananKomponenService $refLayananKomponenService,
         protected LayananKomponenService $layananKomponenService,
+        protected StandarLayananService $standarLayananService,
     ) {
     }
 
@@ -131,9 +133,19 @@ class LayananController extends Controller implements HasMiddleware
             'id_layanan' => $model->id,
         ]);
 
-        $listGrup = RefLayananKomponen::getListGrup();
+        $allStandarLayanan = $this->standarLayananService->findAll();
+        $groupLabels = [
+            1 => 'Komponen Standar Pelayanan yang terkait dengan proses penyampaian pelayanan (service delivery)',
+            2 => 'Komponen Standar Pelayanan yang terkait dengan proses pengelolaan pelayanan di internal organisasi (manufacturing)',
+        ];
 
-        return view('layanan.view', compact('model', 'allRefLayananKomponen', 'allLayananKomponen', 'listGrup'));
+        return view('layanan.view', compact(
+            'model',
+            'allRefLayananKomponen',
+            'allLayananKomponen',
+            'allStandarLayanan',
+            'groupLabels'
+        ));
     }
 
     public function delete(Request $request)
@@ -187,4 +199,3 @@ class LayananController extends Controller implements HasMiddleware
         return $data;
     }
 }
-

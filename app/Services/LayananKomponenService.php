@@ -17,6 +17,7 @@ class LayananKomponenService
     {
         $rules = [
             'id_layanan' => 'required|integer',
+            'id_standar_layanan' => 'required|integer',
             'id_ref_layanan_komponen' => 'required|integer',
             'uraian' => 'required|string',
             'urutan' => 'nullable|integer',
@@ -43,6 +44,10 @@ class LayananKomponenService
 
         if (@$params['id_layanan'] !== null) {
             $query->where('id_layanan', $params['id_layanan']);
+        }
+
+        if (@$params['id_standar_layanan'] !== null) {
+            $query->where('id_standar_layanan', $params['id_standar_layanan']);
         }
 
         if (@$params['id_ref_layanan_komponen'] !== null) {
@@ -112,6 +117,7 @@ class LayananKomponenService
     public function update(LayananKomponen $model, array $data): LayananKomponen
     {
         $data['id_layanan'] = $model->id_layanan;
+        $data['id_standar_layanan'] = $model->id_standar_layanan ?? $data['id_standar_layanan'] ?? null;
         $data['id_ref_layanan_komponen'] = $model->id_ref_layanan_komponen;
 
 
@@ -162,4 +168,3 @@ class LayananKomponenService
         return $data;
     }
 }
-

@@ -7,6 +7,7 @@ use App\Models\LayananKomponen;
 use App\Services\LayananKomponenService;
 use App\Services\LayananService;
 use App\Services\RefLayananKomponenService;
+use App\Services\StandarLayananService;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\URL;
@@ -23,6 +24,7 @@ class LayananKomponenController extends Controller implements HasMiddleware
         protected LayananKomponenService $layananKomponenService,
         protected LayananService $layananService,
         protected RefLayananKomponenService $refLayananKomponenService,
+        protected StandarLayananService $standarLayananService,
     ) {
     }
 
@@ -50,10 +52,12 @@ class LayananKomponenController extends Controller implements HasMiddleware
     {
         $id_layanan = $request->query('id_layanan');
         $id_ref_layanan_komponen = $request->query('id_ref_layanan_komponen');
+        $id_standar_layanan = $request->query('id_standar_layanan');
 
         $model = new LayananKomponen();
         $model->id_layanan = $id_layanan;
         $model->id_ref_layanan_komponen = $id_ref_layanan_komponen;
+        $model->id_standar_layanan = $id_standar_layanan;
 
         $referrer = URL::previous();
 
@@ -135,8 +139,9 @@ class LayananKomponenController extends Controller implements HasMiddleware
     {
         $listLayanan = $this->getListLayanan();
         $listRefLayananKomponen = $this->refLayananKomponenService->getList();
+        $listStandarLayanan = $this->getListStandarLayanan();
 
-        return array_merge($data, compact('listLayanan', 'listRefLayananKomponen'));
+        return array_merge($data, compact('listLayanan', 'listRefLayananKomponen', 'listStandarLayanan'));
     }
 
     protected function getListLayanan(): array
@@ -149,5 +154,9 @@ class LayananKomponenController extends Controller implements HasMiddleware
 
         return $this->layananService->getList($params);
     }
-}
 
+    protected function getListStandarLayanan(): array
+    {
+        return $this->standarLayananService->getList();
+    }
+}

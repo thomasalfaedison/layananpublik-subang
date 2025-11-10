@@ -2,15 +2,17 @@
     use App\Components\Html;
     use App\Constants\LayananConstant;
     use App\Models\Layanan;
+    use App\Models\StandarLayanan;
 
     $breadcrumbs[] = ['label' => 'Layanan', 'url' => route(LayananConstant::RouteIndex)];
     $breadcrumbs[] = 'Detail Layanan';
 
     /** 
      * @var Layanan $model
-     * @var array $listGrup
      * @var \Illuminate\Support\Collection<\App\Models\LayananKomponen> $allLayananKomponen
      * @var \Illuminate\Support\Collection<\App\Models\RefLayananKomponen> $allRefLayananKomponen
+     * @var \Illuminate\Support\Collection<StandarLayanan> $allStandarLayanan
+     * @var array<int,string> $groupLabels
      */
 @endphp
 
@@ -49,33 +51,40 @@
     </div>
 </div>
 
-@foreach ($listGrup as $data)
+@forelse ($allStandarLayanan as $standarLayanan)
     <div class="card card-default">
         <div class="card-header">
             <h3 class="card-title">
-                {{ $data['nama'] }}
+                {{ $standarLayanan->nama }}
             </h3>
         </div>
         <div class="card-body">
-            @foreach ($data['sub'] as $subGrup => $judul)
+            @foreach ($groupLabels as $grupValue => $groupLabel)
                 @php
-                    $allRefLayananKomponen1 = $allRefLayananKomponen
-                        ->where('grup', $subGrup)
+                    $allRefLayananKomponenByGroup = $allRefLayananKomponen
+                        ->where('grup', $grupValue)
                         ->sortBy('urutan');
                 @endphp
-            
-                {{ $judul }}
+
+                <h6 class="font-weight-bold">{{ $groupLabel }}</h6>
 
                 @include('layanan._table-layanan-komponen', [
                     'model' => $model,
-                    'allRefLayananKomponen' => $allRefLayananKomponen1,
-                    'allLayananKomponen' => $allLayananKomponen
+                    'allRefLayananKomponen' => $allRefLayananKomponenByGroup,
+                    'allLayananKomponen' => $allLayananKomponen,
+                    'id_standar_layanan' => $standarLayanan->id,
                 ])
 
-                <br/>
-            @endforeach  
+                @if (!$loop->last)
+                    <br/>
+                @endif
+            @endforeach
         </div>
     </div>
-@endforeach
+@empty
+    <div class="alert alert-info">
+        Data standar layanan belum tersedia.
+    </div>
+@endforelse
 
 @endsection
