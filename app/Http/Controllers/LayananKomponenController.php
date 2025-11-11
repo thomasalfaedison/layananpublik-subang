@@ -51,12 +51,10 @@ class LayananKomponenController extends Controller implements HasMiddleware
     {
         $id_layanan = $request->query('id_layanan');
         $id_ref_layanan_komponen = $request->query('id_ref_layanan_komponen');
-        $id_standar_layanan = $request->query('id_standar_layanan');
 
         $model = new LayananKomponen();
         $model->id_layanan = $id_layanan;
         $model->id_ref_layanan_komponen = $id_ref_layanan_komponen;
-        $model->id_standar_layanan = $id_standar_layanan;
 
         $referrer = URL::previous();
 

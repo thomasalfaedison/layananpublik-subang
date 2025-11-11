@@ -10,6 +10,10 @@
 @section('title', 'Tambah Komponen Layanan')
 
 @section('content')
+    @include('layanan-komponen._card-nama-komponen', [
+        'model' => $model,
+    ])
+
     @include('layanan-komponen._form', [
         'model' => $model,
         'referrer' => $referrer,

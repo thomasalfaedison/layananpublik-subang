@@ -8,6 +8,7 @@ use App\Models\LayananKomponen;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -17,7 +18,6 @@ class LayananKomponenService
     {
         $rules = [
             'id_layanan' => 'required|integer',
-            'id_standar_layanan' => 'required|integer',
             'id_ref_layanan_komponen' => 'required|integer',
             'uraian' => 'required|string',
             'urutan' => 'nullable|integer',
@@ -44,10 +44,6 @@ class LayananKomponenService
 
         if (@$params['id_layanan'] !== null) {
             $query->where('id_layanan', $params['id_layanan']);
-        }
-
-        if (@$params['id_standar_layanan'] !== null) {
-            $query->where('id_standar_layanan', $params['id_standar_layanan']);
         }
 
         if (@$params['id_ref_layanan_komponen'] !== null) {
@@ -109,15 +105,32 @@ class LayananKomponenService
 
         $this->guardLayananAccess((int) $data['id_layanan']);
 
-        $data = $this->applyAudit($data, true);
+        $uraianList = $this->extractMultipleUraian($data['uraian']);
 
-        return LayananKomponen::create($data);
+        if (count($uraianList) <= 1) {
+            $data = $this->applyAudit($data, true);
+
+            return LayananKomponen::create($data);
+        }
+
+        return DB::transaction(function () use ($data, $uraianList) {
+            $lastModel = null;
+
+            foreach ($uraianList as $uraian) {
+                $payload = $data;
+                $payload['uraian'] = $uraian;
+                $payload = $this->applyAudit($payload, true);
+
+                $lastModel = LayananKomponen::create($payload);
+            }
+
+            return $lastModel;
+        });
     }
 
     public function update(LayananKomponen $model, array $data): LayananKomponen
     {
         $data['id_layanan'] = $model->id_layanan;
-        $data['id_standar_layanan'] = $model->id_standar_layanan ?? $data['id_standar_layanan'] ?? null;
         $data['id_ref_layanan_komponen'] = $model->id_ref_layanan_komponen;
 
 
@@ -166,5 +179,15 @@ class LayananKomponenService
         $data['updated_by'] = $userId;
 
         return $data;
+    }
+
+    protected function extractMultipleUraian(string $uraian): array
+    {
+        $segments = preg_split('/;\s*(?:\r?\n|$)/', $uraian);
+
+        $segments = array_map(static fn ($value) => trim($value), $segments ?? []);
+        $segments = array_values(array_filter($segments, static fn ($value) => $value !== ''));
+
+        return $segments;
     }
 }
