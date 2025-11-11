@@ -24,7 +24,6 @@ class LayananKomponenController extends Controller implements HasMiddleware
         protected LayananKomponenService $layananKomponenService,
         protected LayananService $layananService,
         protected RefLayananKomponenService $refLayananKomponenService,
-        protected StandarLayananService $standarLayananService,
     ) {
     }
 
@@ -139,9 +138,8 @@ class LayananKomponenController extends Controller implements HasMiddleware
     {
         $listLayanan = $this->getListLayanan();
         $listRefLayananKomponen = $this->refLayananKomponenService->getList();
-        $listStandarLayanan = $this->getListStandarLayanan();
 
-        return array_merge($data, compact('listLayanan', 'listRefLayananKomponen', 'listStandarLayanan'));
+        return array_merge($data, compact('listLayanan', 'listRefLayananKomponen'));
     }
 
     protected function getListLayanan(): array
@@ -153,10 +151,5 @@ class LayananKomponenController extends Controller implements HasMiddleware
         }
 
         return $this->layananService->getList($params);
-    }
-
-    protected function getListStandarLayanan(): array
-    {
-        return $this->standarLayananService->getList();
     }
 }
