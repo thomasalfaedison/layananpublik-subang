@@ -33,11 +33,6 @@
         font-weight: bold;
     }
 
-    .kop .alamat {
-        margin-top: -5px;
-        font-weight: bold;
-    }
-
     .line {
         border-top: 1px solid #000;
         border-bottom: 2px solid #000;
@@ -91,10 +86,16 @@
             </td>
             <td style="text-align: center">
                 <div class="judul">PEMERINTAH KABUPATEN SUBANG</div>
-                <div class="nama-instansi" style="line-height: 1.1">
+                @php
+                    $len = strlen($instansi->nama);
+
+                    // maksimal font 46pt, minimal 18pt
+                    $fontSize = max(18, min(46, 140 / sqrt($len))); 
+                @endphp
+                <div class="nama-instansi" style="line-height: 1.1; font-size: {{ $fontSize }}pt;">
                     {{ strtoupper($instansi->nama) }}
                 </div>
-                <div class="alamat">Jl. D.I. Panjaitan No. 81 Telp./Fax. (0260) 411425 Subang</div>
+                <div style="font-weight: bold">Jl. D.I. Panjaitan No. 81 Telp./Fax. (0260) 411425 Subang</div>
             </td>
         </tr>
     </table>
