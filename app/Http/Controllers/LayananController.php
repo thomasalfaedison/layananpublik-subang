@@ -25,6 +25,8 @@ use Illuminate\Validation\ValidationException;
 
 class LayananController extends Controller implements HasMiddleware
 {
+    public const RouteView = 'layanan.view';
+
     public static function middleware()
     {
         return ['auth'];
@@ -77,7 +79,10 @@ class LayananController extends Controller implements HasMiddleware
 
                 $model = $this->layananService->create($data);
 
-                return redirect($referrer)->with('success', 'Layanan berhasil dibuat');
+                return redirect(route(self::RouteView,[
+                    'id' => $model->id,
+                ]))->with('success', 'Layanan berhasil dibuat');
+
             } catch (ValidationException $e) {
                 return redirect()->back()
                     ->withErrors($e->validator)

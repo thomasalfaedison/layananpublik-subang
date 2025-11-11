@@ -3,6 +3,8 @@
 use App\Components\Html;
 use App\Components\Session;
 
+/* @see \App\Http\Controllers\LayananController::create() */
+/* @see \App\Http\Controllers\LayananController::update() */
 /* @var $model \App\Models\Layanan */
 /* @var $referrer string */
 /* @var $action string */
@@ -78,6 +80,7 @@ $statusAtributProsedur = old('status_atribut_prosedur', $model->status_atribut_p
                 </div>
             </div>
 
+            <?php /*
             <h5 class="mt-4 mb-3">Ciri Layanan</h5>
 
             <div class="row">
@@ -235,6 +238,7 @@ $statusAtributProsedur = old('status_atribut_prosedur', $model->status_atribut_p
                     </div>
                 </div>
             </div>
+            */ ?>
 
             <?= Form::hidden('referrer', old('referrer', $referrer)) ?>
         </div>
