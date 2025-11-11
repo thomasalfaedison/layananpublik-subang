@@ -17,9 +17,9 @@ class StandarPelayananExportService
     ) {
     }
 
-    public function stream(int|string|null $id_instansi = null)
+    public function stream(array $params = [])
     {
-        $payload = $this->buildPayload($id_instansi);
+        $payload = $this->buildPayload($params);
 
         $pdf = Pdf::loadView('standar-pelayanan.export-pdf', $payload)
             ->setPaper('A4', 'portrait');
@@ -32,13 +32,13 @@ class StandarPelayananExportService
         return $pdf->stream($filename);
     }
 
-    protected function buildPayload(int|null $id_instansi): array
+    protected function buildPayload(array $params = []): array
     {
+        $id_instansi = $params['id_instansi'];
+
         $instansi = $this->instansiService->findById($id_instansi);
 
-        $allLayanan = $this->layananService->findAll([
-            'id_instansi' => $id_instansi,
-        ]);
+        $allLayanan = $this->layananService->findAll($params);
 
         $allLayananKomponen = $this->layananKomponenService->findAll([
             'id_instansi' => $id_instansi,

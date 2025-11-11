@@ -93,6 +93,11 @@ class LayananService
             $query->where('atribut_kategori', 'like', '%' . $params['atribut_kategori'] . '%');
         }
 
+        if (@$params['urutan_persen_kelengkapan'] !== null) {
+            $direction = strtolower($params['urutan_persen_kelengkapan']) === 'asc' ? 'asc' : 'desc';
+            $query->orderBy('persen_komponen', $direction);
+        }
+
         return $query;
     }
 

@@ -28,6 +28,21 @@
                         ]) ?>
                     </div>
                 @endif
+                <div class="col-sm-4">
+                    <?= Form::label('urutan_persen_kelengkapan', 'Urutan Kelengkapan') ?>
+                    <?= Form::select(
+                        'urutan_persen_kelengkapan',
+                        [
+                            'desc' => 'Tertinggi ke Terendah',
+                            'asc' => 'Terendah ke Tertinggi',
+                        ],
+                        request()->query('urutan_persen_kelengkapan'),
+                        [
+                            'class' => 'form-control',
+                            'placeholder' => '- Pilih Urutan -',
+                        ]
+                    ) ?>
+                </div>
             </div>
         </div>
 
@@ -42,4 +57,3 @@
         </div>
     </div>
 </form>
-

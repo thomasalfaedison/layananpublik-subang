@@ -31,7 +31,8 @@
                     'class' => 'btn btn-success',
                 ]) ?>
                 <?= Html::a('<i class="fa fa-file-pdf"></i> Export PDF SK', route(StandarPelayananController::ROUTE_EXPORT_PDF, [
-                    'id_instansi' => request()->query('id_instansi')
+                    'id_instansi' => request()->query('id_instansi'),
+                    'urutan_persen_kelengkapan' => request()->query('urutan_persen_kelengkapan'),
                 ]), [
                     'class' => 'btn btn-danger',
                     'target' => '_blank',

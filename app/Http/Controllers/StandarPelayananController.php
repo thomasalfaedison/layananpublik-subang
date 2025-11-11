@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Components\Session;
 use App\Services\StandarPelayananExportService;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -23,12 +24,18 @@ class StandarPelayananController extends Controller implements HasMiddleware
 
     public function exportPdf(Request $request)
     {
-        $id_instansi = $request->query('id_instansi');
+        $params = $request->query();
+
+        if (Session::isInstansi()) {
+            $params['id_instansi'] = Session::getIdInstansi();
+        }
+
+        $id_instansi = @$params['id_instansi'];
 
         if ($id_instansi == null) {
             return back()->with('danger', 'Silahkan pilih perangkat daerah terlebih dahulu');
         }
 
-        return $this->exportService->stream($id_instansi);
+        return $this->exportService->stream($params);
     }
 }
