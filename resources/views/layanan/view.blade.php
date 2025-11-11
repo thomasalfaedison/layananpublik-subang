@@ -51,40 +51,33 @@
     </div>
 </div>
 
-@forelse ($allStandarLayanan as $standarLayanan)
-    <div class="card card-default">
-        <div class="card-header">
-            <h3 class="card-title">
-                {{ $standarLayanan->nama }}
-            </h3>
-        </div>
-        <div class="card-body">
-            @foreach ($groupLabels as $grupValue => $groupLabel)
-                @php
-                    $allRefLayananKomponenByGroup = $allRefLayananKomponen
-                        ->where('grup', $grupValue)
-                        ->sortBy('urutan');
-                @endphp
-
-                <h6 class="font-weight-bold">{{ $groupLabel }}</h6>
-
-                @include('layanan._table-layanan-komponen', [
-                    'model' => $model,
-                    'allRefLayananKomponen' => $allRefLayananKomponenByGroup,
-                    'allLayananKomponen' => $allLayananKomponen,
-                    'id_standar_layanan' => $standarLayanan->id,
-                ])
-
-                @if (!$loop->last)
-                    <br/>
-                @endif
-            @endforeach
-        </div>
+<div class="card card-default">
+    <div class="card-header">
+        <h3 class="card-title">
+            Layanan Komponen
+        </h3>
     </div>
-@empty
-    <div class="alert alert-info">
-        Data standar layanan belum tersedia.
+    <div class="card-body">
+        @foreach ($groupLabels as $grupValue => $groupLabel)
+            @php
+                $allRefLayananKomponenByGroup = $allRefLayananKomponen
+                    ->where('grup', $grupValue)
+                    ->sortBy('urutan');
+            @endphp
+
+            <h6 class="font-weight-bold">{{ $groupLabel }}</h6>
+
+            @include('layanan._table-layanan-komponen', [
+                'model' => $model,
+                'allRefLayananKomponen' => $allRefLayananKomponenByGroup,
+                'allLayananKomponen' => $allLayananKomponen,
+            ])
+
+            @if (!$loop->last)
+                <br/>
+            @endif
+        @endforeach
     </div>
-@endforelse
+</div>
 
 @endsection

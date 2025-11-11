@@ -138,7 +138,6 @@ class LayananController extends Controller implements HasMiddleware
             'id_layanan' => $model->id,
         ]);
 
-        $allStandarLayanan = $this->standarLayananService->findAll();
         $groupLabels = [
             1 => 'Komponen Standar Pelayanan yang terkait dengan proses penyampaian pelayanan (service delivery)',
             2 => 'Komponen Standar Pelayanan yang terkait dengan proses pengelolaan pelayanan di internal organisasi (manufacturing)',
@@ -148,7 +147,6 @@ class LayananController extends Controller implements HasMiddleware
             'model',
             'allRefLayananKomponen',
             'allLayananKomponen',
-            'allStandarLayanan',
             'groupLabels'
         ));
     }

@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property int $id_layanan
- * @property int $id_standar_layanan
  * @property int $id_ref_layanan_komponen
  * @property string $uraian
  * @property int|null $urutan
@@ -26,7 +25,6 @@ class LayananKomponen extends Model
 
     protected $fillable = [
         'id_layanan',
-        'id_standar_layanan',
         'id_ref_layanan_komponen',
         'uraian',
         'urutan',

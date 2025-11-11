@@ -19,23 +19,6 @@
         </div>
 
         <div class="card-body">
-            
-            @if ($model->id_standar_layanan == null)
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <?= Form::label('id_standar_layanan', 'Standar Layanan', ['required' => true]) ?>
-                        <?= Form::select('id_standar_layanan', $listStandarLayanan, old('id_standar_layanan', $model->id_standar_layanan), [
-                            'class' => 'form-control select2-field' . ($errors->has('id_standar_layanan') ? ' is-invalid' : ''),
-                            'placeholder' => '- Pilih Standar Layanan -',
-                        ]) ?>
-                        @error('id_standar_layanan')
-                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-            @else
-                <input type="hidden" name="id_standar_layanan" value="{{ $model->id_standar_layanan }}">
-            @endif
 
             @if ($model->id_layanan == null)    
                 <div class="col-sm-6">
