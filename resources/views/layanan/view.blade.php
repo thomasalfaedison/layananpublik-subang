@@ -31,13 +31,18 @@
     <div class="card-body">
         <table class="table table-bordered">
             <tr>
+                <th>Perangkat Daerah</th>
+                <td>{{ $model->instansi?->nama }}</td>
+            </tr>
+            <tr>
                 <th style="width:200px;">Nama Layanan</th>
                 <td>{{ $model->nama }}</td>
             </tr>
             <tr>
-                <th>Perangkat Daerah</th>
-                <td>{{ $model->instansi?->nama }}</td>
+                <th style="width:200px;">Deskripsi Layanan</th>
+                <td>{{ $model->deskripsi }}</td>
             </tr>
+
         </table>
     </div>
     <div class="card-footer">

@@ -36,9 +36,9 @@
                     <thead>
                         <tr>
                             <th style="width:60px; text-align:center">No</th>
-                            <th style="width:350px;">Nama Layanan</th>
+                            <th>Nama Layanan</th>
                             @if (Session::isAdmin())
-                                <th>Perangkat Daerah</th>
+                                <th style="width:400px;">Perangkat Daerah</th>
                             @endif
                             <?php /*
                             <th style="width:250px;">Deskripsi</th>
