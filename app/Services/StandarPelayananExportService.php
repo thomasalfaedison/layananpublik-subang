@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Instansi;
 use App\Models\RefLayananKomponen;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
@@ -14,6 +13,7 @@ class StandarPelayananExportService
         protected LayananService $layananService,
         protected LayananKomponenService $layananKomponenService,
         protected RefLayananKomponenService $refLayananKomponenService,
+        protected StandarPelayananService $standarPelayananService,
     ) {
     }
 
@@ -34,9 +34,19 @@ class StandarPelayananExportService
 
     protected function buildPayload(array $params = []): array
     {
-        $id_instansi = $params['id_instansi'];
+        $id_instansi = $params['id_instansi'] ?? null;
+
+        if ($id_instansi === null) {
+            throw new \InvalidArgumentException('id_instansi tidak boleh kosong');
+        }
 
         $instansi = $this->instansiService->findById($id_instansi);
+
+        if ($instansi === null) {
+            abort(404, 'Instansi tidak ditemukan');
+        }
+
+        $standarPelayanan = $this->standarPelayananService->findByInstansi($id_instansi);
 
         $allLayanan = $this->layananService->findAll($params);
 
@@ -84,6 +94,7 @@ class StandarPelayananExportService
             ],
             'generated_at' => now()->format('d F Y H:i') . ' WIB',
             'instansi' => $instansi,
+            'standarPelayanan' => $standarPelayanan,
             'allLayanan' => $allLayanan,
             'allLayananKomponen' => $allLayananKomponen,
             'listRefLayananKomponen' => $listRefLayananKomponen,

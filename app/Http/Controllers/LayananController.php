@@ -17,7 +17,6 @@ use App\Services\RefLayananPemicuService;
 use App\Services\RefLayananPenerimaManfaatService;
 use App\Services\RefLayananProdukService;
 use App\Services\RefLayananTeknisService;
-use App\Services\StandarLayananService;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\URL;
@@ -46,7 +45,6 @@ class LayananController extends Controller implements HasMiddleware
         protected RefAtributSkmService $refAtributSkmService,
         protected RefLayananKomponenService $refLayananKomponenService,
         protected LayananKomponenService $layananKomponenService,
-        protected StandarLayananService $standarLayananService,
     ) {
     }
 

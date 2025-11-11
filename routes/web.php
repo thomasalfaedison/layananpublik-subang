@@ -73,4 +73,10 @@ Route::get('/layanan-komponen/view', [LayananKomponenController::class, 'view'])
 Route::post('/layanan-komponen/delete', [LayananKomponenController::class, 'delete'])->name(LayananKomponenConstant::RouteDelete);
 
 // STANDAR PELAYANAN
+Route::get('/standar-pelayanan/index', [StandarPelayananController::class, 'index'])->name(StandarPelayananController::ROUTE_INDEX);
+Route::get('/standar-pelayanan/create', [StandarPelayananController::class, 'create'])->name(StandarPelayananController::ROUTE_CREATE);
+Route::post('/standar-pelayanan/create', [StandarPelayananController::class, 'create'])->name(StandarPelayananController::ROUTE_CREATE_PROCESS);
+Route::get('/standar-pelayanan/update', [StandarPelayananController::class, 'update'])->name(StandarPelayananController::ROUTE_UPDATE);
+Route::post('/standar-pelayanan/update', [StandarPelayananController::class, 'update'])->name(StandarPelayananController::ROUTE_UPDATE_PROCESS);
+Route::post('/standar-pelayanan/delete', [StandarPelayananController::class, 'delete'])->name(StandarPelayananController::ROUTE_DELETE);
 Route::get('/standar-pelayanan/export-pdf', [StandarPelayananController::class, 'exportPdf'])->name(StandarPelayananController::ROUTE_EXPORT_PDF);

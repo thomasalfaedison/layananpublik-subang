@@ -21,7 +21,10 @@
             </td>
             <td>
                 @php
-                    $allLayananKomponenFiltered = $allLayananKomponen->where('id_ref_layanan_komponen', $refLayananKommponen->id);
+                    $allLayananKomponenFiltered = $allLayananKomponen
+                        ->where('id_ref_layanan_komponen', $refLayananKommponen->id)
+                        ->sortBy('urutan');
+                        
                     $jumlah = $allLayananKomponenFiltered->count();
                 @endphp
                 @if ($allLayananKomponenFiltered->isNotEmpty())

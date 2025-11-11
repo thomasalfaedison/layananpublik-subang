@@ -108,17 +108,28 @@ class LayananKomponenService
 
         $uraianList = $this->extractMultipleUraian($data['uraian']);
 
+        $lastUrutan = $this->getLastUrutan([
+            'id_layanan' => $data['id_layanan'],
+            'id_ref_layanan_komponen' => $data['id_ref_layanan_komponen'],
+        ]);
+        $currentUrutan = $lastUrutan + 1;
+
         if (count($uraianList) <= 1) {
             $data = $this->applyAudit($data, true);
 
+            if (@$data['urutan'] == null) {
+                $data['urutan'] = $currentUrutan;
+            }
+
             $model = LayananKomponen::create($data);
         } else {
-            $model = DB::transaction(function () use ($data, $uraianList) {
+            $model = DB::transaction(function () use ($data, $uraianList, $currentUrutan) {
                 $lastModel = null;
 
                 foreach ($uraianList as $uraian) {
                     $payload = $data;
                     $payload['uraian'] = $uraian;
+                    $payload['urutan'] = $currentUrutan++;
                     $payload = $this->applyAudit($payload, true);
 
                     $lastModel = LayananKomponen::create($payload);
@@ -128,7 +139,7 @@ class LayananKomponenService
             });
         }
 
-        $this->updatePersenKomponen((int) $data['id_layanan']);
+        $this->updatePersenKomponen($data['id_layanan']);
 
         return $model;
     }
@@ -141,7 +152,7 @@ class LayananKomponenService
 
         $this->validate($data);
 
-        $this->guardLayananAccess((int) $data['id_layanan']);
+        $this->guardLayananAccess($data['id_layanan']);
 
         $data = $this->applyAudit($data);
 
@@ -202,7 +213,7 @@ class LayananKomponenService
         return $segments;
     }
 
-    protected function updatePersenKomponen(int $id_layanan): void
+    protected function updatePersenKomponen(?int $id_layanan): void
     {
         $totalKomponen = RefLayananKomponen::query()->count();
 
@@ -226,5 +237,14 @@ class LayananKomponenService
         Layanan::query()
             ->where('id', $id_layanan)
             ->update(['persen_komponen' => $persen]);
+    }
+
+    public function getLastUrutan(array $params = []): int
+    {
+        $query = $this->query($params);
+
+        $max = $query->max('urutan');
+
+        return $max === null ? 0 : (int) $max;
     }
 }

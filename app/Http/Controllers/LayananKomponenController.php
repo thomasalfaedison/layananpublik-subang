@@ -7,7 +7,6 @@ use App\Models\LayananKomponen;
 use App\Services\LayananKomponenService;
 use App\Services\LayananService;
 use App\Services\RefLayananKomponenService;
-use App\Services\StandarLayananService;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\URL;
@@ -52,9 +51,15 @@ class LayananKomponenController extends Controller implements HasMiddleware
         $id_layanan = $request->query('id_layanan');
         $id_ref_layanan_komponen = $request->query('id_ref_layanan_komponen');
 
+        $currentUrutan = $this->layananKomponenService->getLastUrutan([
+            'id_layanan' => $id_layanan,
+            'id_ref_layanan_komponen' => $id_ref_layanan_komponen,
+        ]) + 1;
+
         $model = new LayananKomponen();
         $model->id_layanan = $id_layanan;
         $model->id_ref_layanan_komponen = $id_ref_layanan_komponen;
+        $model->urutan = $currentUrutan;
 
         $referrer = URL::previous();
 
