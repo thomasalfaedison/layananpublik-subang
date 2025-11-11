@@ -1,0 +1,49 @@
+@php
+    use App\Components\Helper;
+
+    /**
+     * @var \Illuminate\Support\Collection<\App\Models\Instansi> $allInstansi
+     * @var \Illuminate\Support\Collection<int, \Illuminate\Database\Eloquent\Model> $instansiSummary
+     **/
+@endphp
+
+<div class="card card-default">
+    <div class="card-header">
+        <h3 class="card-title">
+            Daftar Perangkat Daerah
+        </h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th style="width: 60px; text-align: center;">No</th>
+                    <th>Nama Perangkat Daerah</th>
+                    <th style="width: 150px; text-align: center;">Jumlah Layanan</th>
+                    <th style="width: 150px; text-align: center;">% Kelengkapan</th>
+                </tr>
+            </thead>
+            @foreach ($allInstansi as $instansi)
+                @php
+                    $summary = $instansiSummary->get($instansi->id);
+                    $jumlahLayanan = $summary->jumlah_layanan ?? 0;
+                    $persenKelengkapan = $summary->persen_kelengkapan ?? 0;
+                @endphp
+                <tr>
+                    <td style="text-align: center;">
+                        {{ $loop->iteration }}
+                    </td>
+                    <td>
+                        {{ $instansi->nama }}
+                    </td>
+                    <td style="text-align: center">
+                        <?= Helper::rp($jumlahLayanan, 0) ?>
+                    </td>
+                    <td style="text-align: center">
+                        <?= Helper::rp($persenKelengkapan, 0, 2) ?>%
+                    </td>
+                </tr>
+            @endforeach
+        </table>
+    </div>
+</div>

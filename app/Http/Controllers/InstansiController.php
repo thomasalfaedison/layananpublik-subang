@@ -12,6 +12,8 @@ use Illuminate\Validation\ValidationException;
 
 class InstansiController extends Controller implements HasMiddleware
 {
+    public const ROUTE_INDEX = 'instansi.index';
+
     public static function middleware()
     {
         return ['auth'];

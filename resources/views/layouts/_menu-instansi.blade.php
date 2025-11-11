@@ -6,6 +6,12 @@
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <li class="nav-header">MENU UTAMA</li>
         <li class="nav-item">
+            <a href="{{ url('/dashboard') }}" class="nav-link {{ Helper::isMenuActive('dashboard') }}">
+                <i class="fas fa-home nav-icon"></i>
+                <p>Dashboard</p>
+            </a>
+        </li>
+        <li class="nav-item">
             <a href="{{ url('/layanan/index') }}" class="nav-link {{ Helper::isMenuActive('layanan/index') }}">
                 <i class="fas fa-edit nav-icon"></i>
                 <p>Layanan</p>

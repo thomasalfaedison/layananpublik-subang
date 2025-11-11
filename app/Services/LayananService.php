@@ -176,5 +176,25 @@ class LayananService
     {
         return $model->delete();
     }
-}
 
+    public function count(array $params = [])
+    {
+        $query = $this->query($params);
+
+        return $query->count();
+    }
+
+    public function summarizeByInstansi(array $params = []): Collection
+    {
+        $query = Layanan::query()
+            ->selectRaw('id_instansi, COUNT(*) as jumlah_layanan')
+            ->selectRaw('AVG(COALESCE(persen_komponen, 0)) as persen_kelengkapan')
+            ->groupBy('id_instansi');
+
+        if (@$params['array_id_instansi'] !== null) {
+            $query->whereIn('id_instansi', $params['array_id_instansi']);
+        }
+
+        return $query->get()->keyBy('id_instansi');
+    }
+}

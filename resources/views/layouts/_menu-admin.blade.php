@@ -7,49 +7,18 @@
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <li class="nav-header">MENU UTAMA</li>
         <li class="nav-item">
+            <a href="{{ url('/dashboard') }}" class="nav-link {{ Helper::isMenuActive('dashboard') }}">
+                <i class="fas fa-home nav-icon"></i>
+                <p>Dashboard</p>
+            </a>
+        </li>
+        <li class="nav-item">
             <a href="{{ url('/layanan/index') }}" class="nav-link {{ Helper::isMenuActive('layanan/index') }}">
                 <i class="fas fa-edit nav-icon"></i>
                 <p>Layanan</p>
             </a>
         </li>
         <li class="nav-header">MENU LAINNYA</li>
-        <?php /*
-        <li class="nav-item {{ Helper::isMenuActive(['penilaian-aspek/*', 'penilaian-kelompok/*', 'penilaian-indikator/*']) ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ Helper::isMenuActive(['penilaian-aspek/*', 'penilaian-kelompok/*', 'penilaian-indikator/*']) }}">
-                <i class="fas fa-folder-open nav-icon"></i>
-                <p>
-                    Referensi
-                    <i class="right fas fa-angle-left"></i>
-                </p>
-            </a>
-            <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="{{ url('/penilaian-aspek/index') }}" class="nav-link {{ Helper::isMenuActive('penilaian-aspek/*') }}">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Pemicu Layanan</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ url('/penilaian-indikator/index') }}" class="nav-link {{ Helper::isMenuActive('penilaian-indikator/*') }}">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Teknis Layanan</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ url('/penilaian-indikator/index') }}" class="nav-link {{ Helper::isMenuActive('penilaian-indikator/*') }}">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Penerima Manfaat</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ url('/penilaian-indikator/index') }}" class="nav-link {{ Helper::isMenuActive('penilaian-indikator/*') }}">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Produk Layanan</p>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        */ ?>
         <li class="nav-item">
             <a href="{{ url('/instansi/index') }}" class="nav-link {{ Helper::isMenuActive('instansi/index') }}">
                 <i class="fas fa-building nav-icon"></i>

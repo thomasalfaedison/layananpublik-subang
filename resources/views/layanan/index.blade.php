@@ -61,7 +61,7 @@
                             <th style="width:220px;">Siklus</th>
                             <th style="width:120px;">SKM</th>
                             */ ?>
-                            <th style="width:100px; text-align:center">Persen Pengisian</th>
+                            <th style="width:110px; text-align:center">Persen Kelengkapan</th>
                             <th style="width:80px; text-align:center">Aksi</th>
                         </tr>
                     </thead>

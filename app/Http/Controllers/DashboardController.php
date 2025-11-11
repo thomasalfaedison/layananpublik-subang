@@ -5,29 +5,40 @@ namespace App\Http\Controllers;
 use App\Components\Session;
 use App\Constants\DashboardConstant;
 use App\Constants\LayananConstant;
+use App\Services\DashboardService;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 
 class DashboardController extends Controller implements HasMiddleware
 {
+    public const ROUTE_INDEX = 'dashboard.index';
+
     public static function middleware()
     {
         return ['auth'];
     }
 
+    public function __construct(
+        protected DashboardService $dashboardService,
+    ) {}
+
     public function index(Request $request)
     {
-        return redirect()->route(LayananConstant::RouteIndex);
+        $jumlahInstansi = $this->dashboardService->getJumlahInstansi();
+        $jumlahLayanan = $this->dashboardService->getJumlahLayanan();
+        $allInstansi = $this->dashboardService->getAllInstansi();
+        $instansiSummary = collect();
 
-        /*
-        $params = $request->query();
-
-        if (Session::isInstansi()) {
-            return redirect(route(DashboardConstant::RouteInstansi));
+        if ($allInstansi->isNotEmpty()) {
+            $instansiSummary = $this->dashboardService->getInstansiSummary($allInstansi->pluck('id')->all());
         }
 
-        return view('dashboard.index');
-        */
+        return view('dashboard.index', [
+            'jumlahInstansi' => $jumlahInstansi,
+            'jumlahLayanan' => $jumlahLayanan,
+            'allInstansi' => $allInstansi,
+            'instansiSummary' => $instansiSummary,
+        ]);
     }
 
     public function instansi(Request $request)

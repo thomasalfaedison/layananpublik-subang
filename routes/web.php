@@ -1,6 +1,5 @@
 <?php
 
-use App\Constants\DashboardConstant;
 use App\Constants\InstansiConstant;
 use App\Constants\LayananConstant;
 use App\Constants\LayananKomponenConstant;
@@ -25,11 +24,10 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // DASHBOARD
-Route::get('/dashboard', [DashboardController::class, 'index'])->name(DashboardConstant::RouteIndex);
-Route::get('/dashboard/instansi', [DashboardController::class, 'instansi'])->name(DashboardConstant::RouteInstansi);
+Route::get('/dashboard', [DashboardController::class, 'index'])->name(DashboardController::ROUTE_INDEX);
 
 // INSTANSI
-Route::get('/instansi/index', [InstansiController::class, 'index'])->name(InstansiConstant::RouteIndex);
+Route::get('/instansi/index', [InstansiController::class, 'index'])->name(InstansiController::ROUTE_INDEX);
 Route::get('/instansi/create', [InstansiController::class, 'create'])->name(InstansiConstant::RouteCreate);
 Route::post('/instansi/create', [InstansiController::class, 'create'])->name(InstansiConstant::RouteCreateProcess);
 Route::get('/instansi/update', [InstansiController::class, 'update'])->name(InstansiConstant::RouteUpdate);
@@ -57,7 +55,7 @@ Route::get('/user/export-excel', [UserController::class, 'exportExcel'])->name(U
 Route::post('/user/reset-password-default-all', [UserController::class, 'resetPasswordDefaultAll'])->name(UserConstant::RouteResetPasswordDefaultAll);
 
 // LAYANAN
-Route::get('/layanan/index', [LayananController::class, 'index'])->name(LayananConstant::RouteIndex);
+Route::get('/layanan/index', [LayananController::class, 'index'])->name(LayananController::ROUTE_INDEX);
 Route::get('/layanan/create', [LayananController::class, 'create'])->name(LayananConstant::RouteCreate);
 Route::post('/layanan/create', [LayananController::class, 'create'])->name(LayananConstant::RouteCreateProcess);
 Route::get('/layanan/update', [LayananController::class, 'update'])->name(LayananConstant::RouteUpdate);

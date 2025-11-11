@@ -25,6 +25,7 @@ use Illuminate\Validation\ValidationException;
 
 class LayananController extends Controller implements HasMiddleware
 {
+    public const ROUTE_INDEX = 'layanan.index';
     public const RouteView = 'layanan.view';
 
     public static function middleware()
