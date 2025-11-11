@@ -19,7 +19,7 @@
 
         <div class="card-body">
             <div class="row">
-                @if (Session::isAdmin())
+                @if ($model->id_instansi == null)
                     <div class="col-sm-6">
                         <div class="form-group">
                             <?= Form::label('id_instansi', 'Perangkat Daerah', ['required' => true]) ?>

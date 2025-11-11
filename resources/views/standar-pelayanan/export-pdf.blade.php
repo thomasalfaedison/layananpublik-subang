@@ -261,7 +261,7 @@
     <div>Ditetapkan di : Subang</div>
     <div>pada tanggal : <u></u></div>
 
-    <div style="margin-top: 30px; font-weight: bold;">
+    <div style="margin-top: 30px;">
         {{ strtoupper($standarPelayanan?->jabatan_ttd) }}
     </div>
 

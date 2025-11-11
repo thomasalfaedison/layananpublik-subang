@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Instansi;
 use App\Services\InstansiJenisService;
 use App\Services\InstansiService;
+use App\Services\StandarPelayananService;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\URL;
@@ -23,6 +24,7 @@ class InstansiController extends Controller implements HasMiddleware
     public function __construct(
         protected InstansiService $instansiService,
         protected InstansiJenisService $instansiJenisService,
+        protected StandarPelayananService $standarPelayananService,
     ) {}
 
     public function index(Request $request)
@@ -39,6 +41,16 @@ class InstansiController extends Controller implements HasMiddleware
         $params = $request->query();
 
         $allInstansi = $this->instansiService->paginate($params);
+
+        $allInstansi->getCollection()->transform(function (Instansi $instansi) {
+            $standarPelayanan = $this->standarPelayananService->firstOrCreate([
+                'id_instansi' => $instansi->id,
+            ]);
+
+            $instansi->setRelation('standarPelayanan', $standarPelayanan);
+
+            return $instansi;
+        });
 
         return view('instansi.index-standar-pelayanan',compact('allInstansi'));
     }

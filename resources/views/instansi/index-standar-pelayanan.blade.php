@@ -26,6 +26,7 @@
                         <tr>
                             <th style="width:60px; text-align:center">No</th>
                             <th>Perangkat Daerah</th>
+                            <th>Nomor SK</th>
                             <th style="width:70px; text-align:center">Aksi</th>
                         </tr>
                     </thead>
@@ -36,9 +37,10 @@
                                     {{ $allInstansi->firstItem() + $loop->index }}
                                 </td>
                                 <td>{{ $instansi->nama }}</td>
+                                <td>{{ $instansi->standarPelayanan->nomor ?? '-' }}</td>
                                 <td class="text-center">
                                     <?= Html::a('<i class="fa fa-edit"></i>',  route(StandarPelayananController::ROUTE_VIEW,[
-                                        'id' => @$standarPelayanan->id,
+                                        'id' => optional($instansi->standarPelayanan)->id,
                                 ]), [
                                         'data-toggle' => 'tooltip',
                                         'title' => 'Lihat',
@@ -47,7 +49,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3" class="text-center">
+                                <td colspan="4" class="text-center">
                                     Data perangkat daerah tidak ditemukan.
                                 </td>
                             </tr>

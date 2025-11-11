@@ -128,6 +128,8 @@ class StandarPelayananService
     {
         if (Session::isInstansi()) {
             $data['id_instansi'] = Session::getIdInstansi();
+        } else {
+            $data['id_instansi'] = $model->id_instansi;
         }
 
         $this->validate($data, $model);
