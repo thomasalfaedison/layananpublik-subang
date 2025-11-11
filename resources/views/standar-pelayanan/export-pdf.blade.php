@@ -214,6 +214,66 @@
     </tr>
 </table>
 
+<div style="margin-top: 20px; text-align: center;">MEMUTUSKAN</div>
+
+<table class="table" style="margin-top: 20px;">
+    <tr>
+        <td style="width: 120px;">Menetapkan</td>
+        <td style="width: 10px;">:</td>
+        <td> </td>
+    </tr>
+
+    <tr>
+        <td style="vertical-align: top;">KESATU</td>
+        <td style="vertical-align: top;">:</td>
+        <td>
+            Standar Pelayanan di {{ $instansi->nama }} Kabupaten Subang sebanyak 7 (tujuh) jenis layanan.
+        </td>
+    </tr>
+
+    <tr>
+        <td style="vertical-align: top;">KEDUA</td>
+        <td style="vertical-align: top;">:</td>
+        <td>
+            Standar Pelayanan tersebut adalah sebagai berikut:
+            <ol style="margin: 6px 0 0 18px; padding: 0;">
+                <li>Standar Pelayanan Kartu Indonesia Sehat;</li>
+                <li>Standar Pelayanan PKH;</li>
+                <li>Standar Pelayanan Kartu Indonesia Pintar;</li>
+                <li>Standar Pelayanan Bantuan Sosial Tunai;</li>
+                <li>Standar Pelayanan Rutilahu;</li>
+                <li>Standar Pelayanan Bantuan Pangan Non-Tunai;</li>
+                <li>Standar Pelayanan Bantuan Sosial Kerumah Sakit Ciereng.</li>
+            </ol>
+        </td>
+    </tr>
+
+    <tr>
+        <td style="vertical-align: top;">KETIGA</td>
+        <td style="vertical-align: top;">:</td>
+        <td>
+            Keputusan Kepala Dinas ini mulai berlaku pada tanggal ditetapkan.
+        </td>
+    </tr>
+</table>
+
+<div style="margin-top: 36px; width: 50%; float: right; text-align: center;">
+    <div>Ditetapkan di : Subang</div>
+    <div>pada tanggal : <u></u></div>
+
+    <div style="margin-top: 30px; font-weight: bold;">
+        Kepala {{ strtoupper($instansi->nama) }}
+    </div>
+
+    <div style="height: 70px;"></div>
+    <div style="text-decoration: underline; font-weight: bold;"></div>
+    <div>NIP. </div>
+</div>
+
+<div style="clear: both;"></div>
+<!-- AKHIR BLOK -->
+
+
 @if ($allLayanan->isNotEmpty())    
     <div class="page-break"></div>
 
