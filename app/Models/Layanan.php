@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $id_ref_atribut_sop
  * @property int|null $id_ref_atribut_siklus_layanan
  * @property int|null $id_ref_atribut_skm
+ * @property string|null $persen_komponen
  * @property string|null $created_at
  * @property string|null $updated_at
  * @property string|null $deleted_at
@@ -53,6 +54,7 @@ class Layanan extends Model
         'id_ref_atribut_sop',
         'id_ref_atribut_siklus_layanan',
         'id_ref_atribut_skm',
+        'persen_komponen',
     ];
 
     public function instansi()

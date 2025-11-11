@@ -1,5 +1,6 @@
 @php
     use App\Components\Html;
+    use App\Components\Helper;
     use App\Components\Session;
     use App\Constants\LayananConstant;
     use Illuminate\Support\Str;
@@ -54,6 +55,7 @@
                             <th style="width:220px;">Siklus</th>
                             <th style="width:120px;">SKM</th>
                             */ ?>
+                            <th style="width:100px; text-align:center">Persen Pengisian</th>
                             <th style="width:80px; text-align:center">Aksi</th>
                         </tr>
                     </thead>
@@ -89,6 +91,9 @@
                                 <td>{{ optional($layanan->atributSiklusLayanan)->nama }}</td>
                                 <td>{{ optional($layanan->atributSkm)->nama }}</td>
                                 */ ?>
+                                <td style="text-align: center">
+                                    <?= Helper::rp($layanan->persen_komponen, 0, 2) ?>%
+                                </td>
                                 <td class="text-center">
                                     <?= Html::a('<i class="fa fa-eye"></i>', route(LayananConstant::RouteView, ['id' => $layanan->id]), [
                                         'data-toggle' => 'tooltip',

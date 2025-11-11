@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Components\Session;
 use App\Models\Layanan;
 use App\Models\LayananKomponen;
+use App\Models\RefLayananKomponen;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -110,22 +111,26 @@ class LayananKomponenService
         if (count($uraianList) <= 1) {
             $data = $this->applyAudit($data, true);
 
-            return LayananKomponen::create($data);
+            $model = LayananKomponen::create($data);
+        } else {
+            $model = DB::transaction(function () use ($data, $uraianList) {
+                $lastModel = null;
+
+                foreach ($uraianList as $uraian) {
+                    $payload = $data;
+                    $payload['uraian'] = $uraian;
+                    $payload = $this->applyAudit($payload, true);
+
+                    $lastModel = LayananKomponen::create($payload);
+                }
+
+                return $lastModel;
+            });
         }
 
-        return DB::transaction(function () use ($data, $uraianList) {
-            $lastModel = null;
+        $this->updatePersenKomponen((int) $data['id_layanan']);
 
-            foreach ($uraianList as $uraian) {
-                $payload = $data;
-                $payload['uraian'] = $uraian;
-                $payload = $this->applyAudit($payload, true);
-
-                $lastModel = LayananKomponen::create($payload);
-            }
-
-            return $lastModel;
-        });
+        return $model;
     }
 
     public function update(LayananKomponen $model, array $data): LayananKomponen
@@ -142,6 +147,8 @@ class LayananKomponenService
 
         $model->update($data);
 
+        $this->updatePersenKomponen($model->id_layanan);
+
         return $model;
     }
 
@@ -149,7 +156,11 @@ class LayananKomponenService
     {
         $this->guardLayananAccess($model->id_layanan);
 
-        return $model->delete();
+        $deleted = $model->delete();
+
+        $this->updatePersenKomponen($model->id_layanan);
+
+        return $deleted;
     }
 
     protected function guardLayananAccess(int $idLayanan): void
@@ -189,5 +200,31 @@ class LayananKomponenService
         $segments = array_values(array_filter($segments, static fn ($value) => $value !== ''));
 
         return $segments;
+    }
+
+    protected function updatePersenKomponen(int $id_layanan): void
+    {
+        $totalKomponen = RefLayananKomponen::query()->count();
+
+        if ($totalKomponen === 0) {
+            Layanan::query()
+                ->where('id', $id_layanan)
+                ->update(['persen_komponen' => 0]);
+
+            return;
+        }
+
+        $terisi = LayananKomponen::query()
+            ->where('id_layanan', $id_layanan)
+            ->select('id_ref_layanan_komponen')
+            ->distinct()
+            ->count('id_ref_layanan_komponen');
+
+        $persen = ($terisi / $totalKomponen) * 100;
+        $persen = max(0, min(100, $persen));
+
+        Layanan::query()
+            ->where('id', $id_layanan)
+            ->update(['persen_komponen' => $persen]);
     }
 }
