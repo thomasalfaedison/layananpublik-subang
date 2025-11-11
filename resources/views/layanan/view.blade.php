@@ -54,7 +54,7 @@
 <div class="card card-default">
     <div class="card-header">
         <h3 class="card-title">
-            Layanan Komponen
+            Komponen Layanan
         </h3>
     </div>
     <div class="card-body">

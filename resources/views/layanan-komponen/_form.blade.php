@@ -35,7 +35,7 @@
                 </div>
             @endif
 
-            @if ($model->id_ref_layanan_komponen == null)    
+            @if ($model->id_ref_layanan_komponen == null)
                 <div class="col-sm-6">
                     <div class="form-group">
                         <?= Form::label('id_ref_layanan_komponen', 'Komponen', ['required' => true]) ?>
@@ -50,19 +50,34 @@
                 </div>
             @endif
 
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <?= Form::label('uraian', 'Uraian', ['required' => true]) ?>
-                    <?= Form::textarea('uraian', old('uraian', $model->uraian), [
-                        'class' => 'form-control' . ($errors->has('uraian') ? ' is-invalid' : ''),
-                        'placeholder' => 'Tuliskan uraian komponen',
-                        'rows' => 2,
-                    ]) ?>
-                    @error('uraian')
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                            <?= Form::label('uraian', 'Uraian', ['required' => true]) ?>
+                            <?= Form::textarea('uraian', old('uraian', $model->uraian), [
+                            'class' => 'form-control' . ($errors->has('uraian') ? ' is-invalid' : ''),
+                            'placeholder' => 'Tuliskan uraian komponen',
+                            'rows' => 8,
+                        ]) ?>
+                        @error('uraian')
                         <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <div class="alert alert-info">
+                            Untuk memasukan lebih dari 1 data secara langsung silahkan gunakan
+                            titik koma (;) pada akhir uraian, sebagai contoh:<br/>
+                            Uraian 1;<br/>
+                            Uraian 2;<br/>
+                            Uraian 3
+                        </div>
+                    </div>
                 </div>
             </div>
+
 
             <div class="col-sm-6">
                 <div class="form-group">
