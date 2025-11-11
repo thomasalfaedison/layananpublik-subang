@@ -78,17 +78,6 @@
 </head>
 <body>
 
-@php
-    $instansiNama = optional($instansi)->nama ?? '';
-    $standarNomor = optional($standarPelayanan)->nomor;
-    $alamatKantor = trim(optional($standarPelayanan)->alamat ?? (optional($instansi)->alamat ?? ''));
-    $alamatKantor = $alamatKantor !== '' ? $alamatKantor : 'Jl. D.I. Panjaitan No. 81 Telp./Fax. (0260) 411425 Subang';
-    $jabatanTTD = optional($standarPelayanan)->jabatan_ttd ?: ('Kepala ' . $instansiNama);
-    $namaTTD = optional($standarPelayanan)->nama_ttd;
-    $nipTTD = optional($standarPelayanan)->nip_ttd;
-    $kotaInstansi = optional($instansi)->kota ?? 'Subang';
-@endphp
-
 <div class="kop">
     <table style="margin-left: auto; margin-right: auto; width:100%">
         <tr>
@@ -106,7 +95,7 @@
                 <div class="nama-instansi" style="line-height: 1.1; font-size: {{ $fontSize }}pt;">
                     {{ strtoupper($instansi->nama) }}
                 </div>
-                <div style="font-weight: bold">{{ $alamatKantor }}</div>
+                <div style="font-weight: bold">{{ $standarPelayanan?->alamat }}</div>
             </td>
         </tr>
     </table>
@@ -115,7 +104,7 @@
 
 <div style="text-align: center;">
     <div>KEPUTUSAN KEPALA {{ strtoupper($instansi->nama) }} KABUPATEN SUBANG</div>
-    <div>NOMOR : {{ $standarNomor ?? '.......................' }}</div>
+    <div>NOMOR : {{ $standarPelayanan?->nomor ?? '.......................' }}</div>
     <div style="margin-top: 30px; margin-bottom: 20px;">TENTANG</div>
     <div>STANDAR PELAYANAN<br>DI {{ strtoupper($instansi->nama) }} KABUPATEN SUBANG</div>
     <p>KEPALA {{ strtoupper($instansi->nama) }} KABUPATEN SUBANG</p>
@@ -269,18 +258,18 @@
 </table>
 
 <div style="margin-top: 36px; width: 50%; float: right; text-align: center;">
-    <div>Ditetapkan di : {{ strtoupper($kotaInstansi) }}</div>
+    <div>Ditetapkan di : Subang</div>
     <div>pada tanggal : <u></u></div>
 
     <div style="margin-top: 30px; font-weight: bold;">
-        {{ strtoupper($jabatanTTD) }}
+        {{ strtoupper($standarPelayanan?->jabatan_ttd) }}
     </div>
 
-    <div style="height: 70px;"></div>
+    <div style="height: 80px;"></div>
     <div style="text-decoration: underline; font-weight: bold;">
-        {{ $namaTTD ?? '' }}
+        {{ $standarPelayanan?->nama_ttd }}
     </div>
-    <div>NIP. {{ $nipTTD ?? '' }}</div>
+    <div style="margin-top: 3px;">NIP. {{ $standarPelayanan?->nip_ttd }}</div>
 </div>
 
 <div style="clear: both;"></div>

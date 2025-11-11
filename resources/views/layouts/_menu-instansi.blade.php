@@ -17,6 +17,12 @@
                 <p>Layanan</p>
             </a>
         </li>
+        <li class="nav-item">
+            <a href="{{ url('/standar-pelayanan/view') }}" class="nav-link {{ Helper::isMenuActive('standar-pelayanan/view') }}">
+                <i class="fas fa-print nav-icon"></i>
+                <p>Cetak SK Layanan</p>
+            </a>
+        </li>
 
         <li class="nav-header">MENU LAINNYA</li>
         <li class="nav-item">

@@ -64,7 +64,7 @@
                         <?= Form::textarea('alamat', old('alamat', $model->alamat), [
                             'class' => 'form-control' . ($errors->has('alamat') ? ' is-invalid' : ''),
                             'rows' => 3,
-                            'placeholder' => 'Alamat yang akan ditampilkan pada dokumen',
+                            'placeholder' => 'Alamat yang akan ditampilkan',
                         ]) ?>
                         @error('alamat')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -73,12 +73,10 @@
                 </div>
             </div>
 
-            <h5 class="mt-3 mb-2">Pejabat Penandatangan</h5>
-
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <?= Form::label('jabatan_ttd', 'Jabatan') ?>
+                        <?= Form::label('jabatan_ttd', 'Jabatan Penandatangan') ?>
                         <?= Form::text('jabatan_ttd', old('jabatan_ttd', $model->jabatan_ttd), [
                             'class' => 'form-control' . ($errors->has('jabatan_ttd') ? ' is-invalid' : ''),
                             'placeholder' => 'Contoh: Kepala Dinas ...',
@@ -93,7 +91,7 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <?= Form::label('nama_ttd', 'Nama Pejabat') ?>
+                        <?= Form::label('nama_ttd', 'Nama Penandatangan') ?>
                         <?= Form::text('nama_ttd', old('nama_ttd', $model->nama_ttd), [
                             'class' => 'form-control' . ($errors->has('nama_ttd') ? ' is-invalid' : ''),
                             'placeholder' => 'Nama lengkap sesuai jabatan',
@@ -108,10 +106,10 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <?= Form::label('nip_ttd', 'NIP Pejabat') ?>
+                        <?= Form::label('nip_ttd', 'NIP Penandatangan') ?>
                         <?= Form::text('nip_ttd', old('nip_ttd', $model->nip_ttd), [
                             'class' => 'form-control' . ($errors->has('nip_ttd') ? ' is-invalid' : ''),
-                            'placeholder' => 'Cth: 19700101 199001 1 001',
+                            'placeholder' => 'Cth: 197001011990011001',
                         ]) ?>
                         @error('nip_ttd')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -126,10 +124,6 @@
         <div class="card-footer">
             <?= Html::submit('<i class="fa fa-check"></i> Simpan', [
                 'class' => 'btn btn-success',
-            ]) ?>
-
-            <?= Html::a('<i class="fa fa-arrow-left"></i> Kembali', route(StandarPelayananController::ROUTE_INDEX), [
-                'class' => 'btn btn-default ml-2',
             ]) ?>
         </div>
     </div>

@@ -13,6 +13,7 @@ use Illuminate\Validation\ValidationException;
 class InstansiController extends Controller implements HasMiddleware
 {
     public const ROUTE_INDEX = 'instansi.index';
+    public const ROUTE_INDEX_STANDAR_PELAYANAN = 'instansi.indexStandarPelayanan';
 
     public static function middleware()
     {
@@ -31,6 +32,15 @@ class InstansiController extends Controller implements HasMiddleware
         $allInstansi = $this->instansiService->paginate($params);
 
         return view('instansi.index',compact('allInstansi'));
+    }
+
+    public function indexStandarPelayanan(Request $request)
+    {
+        $params = $request->query();
+
+        $allInstansi = $this->instansiService->paginate($params);
+
+        return view('instansi.index-standar-pelayanan',compact('allInstansi'));
     }
 
     public function create(Request $request)

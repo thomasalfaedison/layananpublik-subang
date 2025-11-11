@@ -145,4 +145,9 @@ class StandarPelayananService
 
         return $model->delete();
     }
+
+    public function firstOrCreate(array $attributes, array $values = [])
+    {
+        return StandarPelayanan::firstOrCreate($attributes, $values);
+    }
 }

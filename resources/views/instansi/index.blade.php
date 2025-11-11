@@ -73,7 +73,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="text-center">
+                                <td colspan="7" class="text-center">
                                     Data perangkat daerah tidak ditemukan.
                                 </td>
                             </tr>

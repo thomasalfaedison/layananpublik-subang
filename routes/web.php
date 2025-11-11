@@ -28,6 +28,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name(DashboardC
 
 // INSTANSI
 Route::get('/instansi/index', [InstansiController::class, 'index'])->name(InstansiController::ROUTE_INDEX);
+Route::get('/instansi/index-standar-pelayanan', [InstansiController::class, 'indexStandarPelayanan'])->name(InstansiController::ROUTE_INDEX_STANDAR_PELAYANAN);
 Route::get('/instansi/create', [InstansiController::class, 'create'])->name(InstansiConstant::RouteCreate);
 Route::post('/instansi/create', [InstansiController::class, 'create'])->name(InstansiConstant::RouteCreateProcess);
 Route::get('/instansi/update', [InstansiController::class, 'update'])->name(InstansiConstant::RouteUpdate);
@@ -78,5 +79,6 @@ Route::get('/standar-pelayanan/create', [StandarPelayananController::class, 'cre
 Route::post('/standar-pelayanan/create', [StandarPelayananController::class, 'create'])->name(StandarPelayananController::ROUTE_CREATE_PROCESS);
 Route::get('/standar-pelayanan/update', [StandarPelayananController::class, 'update'])->name(StandarPelayananController::ROUTE_UPDATE);
 Route::post('/standar-pelayanan/update', [StandarPelayananController::class, 'update'])->name(StandarPelayananController::ROUTE_UPDATE_PROCESS);
+Route::get('/standar-pelayanan/view', [StandarPelayananController::class, 'view'])->name(StandarPelayananController::ROUTE_VIEW);
 Route::post('/standar-pelayanan/delete', [StandarPelayananController::class, 'delete'])->name(StandarPelayananController::ROUTE_DELETE);
 Route::get('/standar-pelayanan/export-pdf', [StandarPelayananController::class, 'exportPdf'])->name(StandarPelayananController::ROUTE_EXPORT_PDF);

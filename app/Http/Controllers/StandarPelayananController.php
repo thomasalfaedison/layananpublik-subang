@@ -19,6 +19,7 @@ class StandarPelayananController extends Controller implements HasMiddleware
     public const ROUTE_CREATE_PROCESS = 'standar-pelayanan.createProcess';
     public const ROUTE_UPDATE = 'standar-pelayanan.update';
     public const ROUTE_UPDATE_PROCESS = 'standar-pelayanan.updateProcess';
+    public const ROUTE_VIEW = 'standar-pelayanan.view';
     public const ROUTE_DELETE = 'standar-pelayanan.delete';
     public const ROUTE_EXPORT_PDF = 'standar-pelayanan.export-pdf';
 
@@ -39,6 +40,7 @@ class StandarPelayananController extends Controller implements HasMiddleware
         $params = $request->query();
 
         if (Session::isInstansi()) {
+            abort(403, 'Anda tidak memiliki akses ke halaman ini');
             $params['id_instansi'] = Session::getIdInstansi();
         }
 
@@ -112,6 +114,27 @@ class StandarPelayananController extends Controller implements HasMiddleware
             'referrer' => $referrer,
             'action' => route(self::ROUTE_UPDATE_PROCESS, ['id' => $model->id]),
         ]));
+    }
+
+    public function view(Request $request)
+    {
+        $id = $request->get('id');
+        
+        if (Session::isInstansi()) {
+            $id_instansi = Session::getIdInstansi();
+            
+            $model = $this->standarPelayananService->firstOrCreate([
+                'id_instansi' => $id_instansi,
+            ]);
+        } else {
+            $model = $this->standarPelayananService->findById($id);
+        }
+
+        if ($model === null) {
+            return abort(404, 'Not Found');
+        }
+
+        return view('standar-pelayanan.view', compact('model'));
     }
 
     public function delete(Request $request)
