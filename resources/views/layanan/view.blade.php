@@ -42,6 +42,10 @@
                 <th style="width:200px;">Deskripsi Layanan</th>
                 <td>{{ $model->deskripsi }}</td>
             </tr>
+            <tr>
+                <th style="width:200px;">Persen Pengisian</th>
+                <td>{{ $model->persen_komponen }}%</td>
+            </tr>
 
         </table>
     </div>

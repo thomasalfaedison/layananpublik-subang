@@ -1,10 +1,13 @@
 @php
-    use App\Components\Html;
-    use App\Constants\LayananKomponenConstant;
 
-    /* @var $model \App\Models\LayananKomponen */
-    /* @var $referrer string */
-    /* @var $action string */
+use App\Components\Html;
+use App\Constants\LayananKomponenConstant;
+
+/* @see \App\Http\Controllers\LayananKomponenController::create() */
+/* @see \App\Http\Controllers\LayananKomponenController::update() */
+/* @var $model \App\Models\LayananKomponen */
+/* @var $referrer string */
+/* @var $action string */
 
     $backUrl = $referrer ?? route(LayananKomponenConstant::RouteIndex);
 @endphp
@@ -15,7 +18,7 @@
 
     <div class="card card-default">
         <div class="card-header">
-            <h3 class="card-title">Form Komponen Layanan</h3>
+            <h3 class="card-title">Form Komponen Layanan: {{ $model->refLayananKomponen?->nama }}</h3>
         </div>
 
         <div class="card-body">
@@ -57,10 +60,10 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
-                            <?= Form::label('uraian', 'Uraian', ['required' => true]) ?>
+                            <?= Form::label('uraian', 'Uraian ' . $model->refLayananKomponen?->nama, ['required' => true]) ?>
                             <?= Form::textarea('uraian', old('uraian', $model->uraian), [
                             'class' => 'form-control' . ($errors->has('uraian') ? ' is-invalid' : ''),
-                            'placeholder' => 'Tuliskan uraian komponen',
+                            'placeholder' => 'Tuliskan Uraian ' . $model->refLayananKomponen?->nama,
                             'rows' => 8,
                         ]) ?>
                         @error('uraian')

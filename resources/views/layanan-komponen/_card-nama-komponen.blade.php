@@ -8,10 +8,16 @@
     <div class="card-body">
         <table class="table table-bordered">
             <tr>
-                <th style="width: 150px; text-align:right">Komponen</th>
-                <td>
-                    {{ $model->refLayananKomponen?->nama }}
-                </td>
+                <th>Perangkat Daerah</th>
+                <td>{{ @$model->layanan?->instansi?->nama }}</td>
+            </tr>
+            <tr>
+                <th style="width:200px;">Nama Layanan</th>
+                <td>{{ @$model->layanan?->nama }}</td>
+            </tr>
+            <tr>
+                <th style="width:200px;">Deskripsi Layanan</th>
+                <td>{{ $model->layanan?->deskripsi }}</td>
             </tr>
         </table>
     </div>
