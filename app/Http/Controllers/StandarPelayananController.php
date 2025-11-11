@@ -8,6 +8,9 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 
 class StandarPelayananController extends Controller implements HasMiddleware
 {
+    public const ROUTE_EXPORT_PDF = 'standar-pelayanan.export-pdf';
+
+
     public static function middleware()
     {
         return ['auth'];
@@ -20,8 +23,12 @@ class StandarPelayananController extends Controller implements HasMiddleware
 
     public function exportPdf(Request $request)
     {
-        $idInstansi = $request->query('id_instansi');
+        $id_instansi = $request->query('id_instansi');
 
-        return $this->exportService->stream($idInstansi);
+        if ($id_instansi == null) {
+            return back()->with('danger', 'Silahkan pilih perangkat daerah terlebih dahulu');
+        }
+
+        return $this->exportService->stream($id_instansi);
     }
 }

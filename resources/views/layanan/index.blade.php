@@ -3,7 +3,7 @@
     use App\Components\Helper;
     use App\Components\Session;
     use App\Constants\LayananConstant;
-    use Illuminate\Support\Str;
+    use App\Http\Controllers\StandarPelayananController;
 
     /**
      * @var \Illuminate\Pagination\LengthAwarePaginator<int, \App\Models\Layanan> $allLayanan
@@ -29,6 +29,12 @@
             <div class="mb-3">
                 <?= Html::a('<i class="fa fa-plus"></i> Tambah Layanan', route(LayananConstant::RouteCreate), [
                     'class' => 'btn btn-success',
+                ]) ?>
+                <?= Html::a('<i class="fa fa-file-pdf"></i> Export PDF SK', route(StandarPelayananController::ROUTE_EXPORT_PDF, [
+                    'id_instansi' => request()->query('id_instansi')
+                ]), [
+                    'class' => 'btn btn-danger',
+                    'target' => '_blank',
                 ]) ?>
             </div>
 

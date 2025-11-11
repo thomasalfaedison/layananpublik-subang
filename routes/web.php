@@ -75,4 +75,4 @@ Route::get('/layanan-komponen/view', [LayananKomponenController::class, 'view'])
 Route::post('/layanan-komponen/delete', [LayananKomponenController::class, 'delete'])->name(LayananKomponenConstant::RouteDelete);
 
 // STANDAR PELAYANAN
-Route::get('/standar-pelayanan/export-pdf', [StandarPelayananController::class, 'exportPdf'])->name('standarPelayanan.exportPdf');
+Route::get('/standar-pelayanan/export-pdf', [StandarPelayananController::class, 'exportPdf'])->name(StandarPelayananController::ROUTE_EXPORT_PDF);

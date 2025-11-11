@@ -26,27 +26,8 @@ class RefLayananKomponen extends Model
     public static function getListGrup()
     {
         return [
-            '1' => [
-                'nama' => 'STANDAR PELAYANAN KARTU INDONESIA SEHAT',
-                'sub' => [
-                    '1.1' => 'Komponen Standar Pelayanan yang terkait dengan proses penyampaian pelayanan (service delivery)',
-                    '1.2' => 'Komponen Standar Pelayanan yang terkait dengan proses pengelolaan pelayanan di internal organisasi (manufacturing)',
-                ],
-            ],
-            '2' => [
-                'nama' => 'STANDAR PELAYANAN PKH',
-                'sub' => [
-                    '2.1' => 'Komponen Standar Pelayanan yang terkait dengan proses penyampaian pelayanan (service delivery)',
-                    '2.2' => 'Komponen Standar Pelayanan yang terkait dengan proses pengelolaan pelayanandi internal organisasi (manufacturing)',
-                ],
-            ],
-            '3' => [
-                'nama' => 'STANDAR PELAYANAN KARTU INDONESIA PINTAR',
-                'sub' => [
-                    '3.1' => 'Komponen Standar Pelayanan yang terkait dengan proses penyampaian pelayanan (service delivery)',
-                    '3.2' => 'Komponen Standar Pelayanan yang terkait dengan proses pengelolaan pelayanandi internal organisasi (manufacturing)',
-                ],
-            ]
+            1 => 'Komponen Standar Pelayanan yang terkait dengan proses penyampaian pelayanan (service delivery)',
+            2 => 'Komponen Standar Pelayanan yang terkait dengan proses pengelolaan pelayanan di internal organisasi (manufacturing)',
         ];
     }
 }

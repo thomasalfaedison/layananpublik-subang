@@ -138,10 +138,7 @@ class LayananController extends Controller implements HasMiddleware
             'id_layanan' => $model->id,
         ]);
 
-        $groupLabels = [
-            1 => 'Komponen Standar Pelayanan yang terkait dengan proses penyampaian pelayanan (service delivery)',
-            2 => 'Komponen Standar Pelayanan yang terkait dengan proses pengelolaan pelayanan di internal organisasi (manufacturing)',
-        ];
+        $groupLabels = RefLayananKomponen::getListGrup();
 
         return view('layanan.view', compact(
             'model',

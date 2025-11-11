@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Instansi;
+use App\Models\RefLayananKomponen;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
 
@@ -10,27 +11,42 @@ class StandarPelayananExportService
 {
     public function __construct(
         protected InstansiService $instansiService,
+        protected LayananService $layananService,
+        protected LayananKomponenService $layananKomponenService,
+        protected RefLayananKomponenService $refLayananKomponenService,
     ) {
     }
 
-    public function stream(int|string|null $idInstansi = null)
+    public function stream(int|string|null $id_instansi = null)
     {
-        $payload = $this->buildPayload($idInstansi);
+        $payload = $this->buildPayload($id_instansi);
 
-        $pdf = Pdf::loadView('standar_pelayanan.export_pdf', $payload)
+        $pdf = Pdf::loadView('standar-pelayanan.export-pdf', $payload)
             ->setPaper('A4', 'portrait');
 
         $filename = sprintf(
             'standar-pelayanan-%s.pdf',
-            Str::slug($payload['instansi']['name'])
+            Str::slug(@$payload['instansi']->nama)
         );
 
         return $pdf->stream($filename);
     }
 
-    protected function buildPayload(int|string|null $idInstansi): array
+    protected function buildPayload(int|null $id_instansi): array
     {
-        $instansi = $this->resolveInstansi($idInstansi);
+        $instansi = $this->instansiService->findById($id_instansi);
+
+        $allLayanan = $this->layananService->findAll([
+            'id_instansi' => $id_instansi,
+        ]);
+
+        $allLayananKomponen = $this->layananKomponenService->findAll([
+            'id_instansi' => $id_instansi,
+        ]);
+
+        $listRefLayananKomponen = $this->refLayananKomponenService->findAll();
+
+        $listGrupLabel = RefLayananKomponen::getListGrup();
 
         return [
             'document' => [
@@ -39,7 +55,6 @@ class StandarPelayananExportService
                 'title' => 'Keputusan Kepala Perangkat Daerah Tentang Standar Pelayanan',
                 'preamble' => 'Dalam rangka memberikan kepastian terhadap kualitas pelayanan publik dan memastikan terpenuhinya hak masyarakat, setiap perangkat daerah wajib menetapkan standar pelayanan yang menjadi acuan utama dalam penyelenggaraan layanan.',
             ],
-            'instansi' => $this->mapInstansiData($instansi, $idInstansi),
             'service' => [
                 'name' => 'Pelayanan Perizinan Usaha Mikro dan Kecil',
                 'description' => 'Pelayanan penerbitan dan pembaharuan perizinan usaha mikro dan kecil sebagai bentuk fasilitasi pemerintah daerah untuk pelaku usaha.',
@@ -68,29 +83,11 @@ class StandarPelayananExportService
                 'Menindaklanjuti pengaduan paling lambat 2 (dua) hari kerja setelah diterima.',
             ],
             'generated_at' => now()->format('d F Y H:i') . ' WIB',
-        ];
-    }
-
-    protected function resolveInstansi(int|string|null $idInstansi): ?Instansi
-    {
-        if ($idInstansi === null || !is_numeric($idInstansi)) {
-            return null;
-        }
-
-        return $this->instansiService->findById((int) $idInstansi);
-    }
-
-    protected function mapInstansiData(?Instansi $instansi, int|string|null $rawId): array
-    {
-        $fallbackId = $rawId ?? '1';
-
-        return [
-            'id' => $instansi?->id ?? $fallbackId,
-            'name' => $instansi?->nama ?? 'Dinas Pelayanan Terpadu Kabupaten Subang',
-            'address' => $instansi?->alamat ?? 'Jl. Dewi Sartika No. 1, Kab. Subang, Jawa Barat',
-            'head_name' => $instansi?->kepala_nama ?? 'Drs. H. Adi Prasetya, M.Si.',
-            'head_position' => $instansi?->kepala_nama_jabatan ?? 'Kepala Dinas Pelayanan Terpadu',
-            'nip' => $instansi?->kepala_nip ?? '19650101 199003 1 001',
+            'instansi' => $instansi,
+            'allLayanan' => $allLayanan,
+            'allLayananKomponen' => $allLayananKomponen,
+            'listRefLayananKomponen' => $listRefLayananKomponen,
+            'listGrupLabel' => $listGrupLabel,
         ];
     }
 }
