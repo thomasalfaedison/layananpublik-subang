@@ -227,7 +227,7 @@
         <td style="vertical-align: top;">KESATU</td>
         <td style="vertical-align: top;">:</td>
         <td>
-            Standar Pelayanan di {{ $instansi->nama }} Kabupaten Subang sebanyak 7 (tujuh) jenis layanan.
+            Standar Pelayanan di {{ $instansi->nama }} Kabupaten Subang sebanyak {{ count($allLayanan) }} jenis layanan.
         </td>
     </tr>
 
@@ -237,13 +237,9 @@
         <td>
             Standar Pelayanan tersebut adalah sebagai berikut:
             <ol style="margin: 6px 0 0 18px; padding: 0;">
-                <li>Standar Pelayanan Kartu Indonesia Sehat;</li>
-                <li>Standar Pelayanan PKH;</li>
-                <li>Standar Pelayanan Kartu Indonesia Pintar;</li>
-                <li>Standar Pelayanan Bantuan Sosial Tunai;</li>
-                <li>Standar Pelayanan Rutilahu;</li>
-                <li>Standar Pelayanan Bantuan Pangan Non-Tunai;</li>
-                <li>Standar Pelayanan Bantuan Sosial Kerumah Sakit Ciereng.</li>
+                @foreach ($allLayanan as $layanan)
+                    <li>{{ $layanan->nama }}</li>
+                @endforeach
             </ol>
         </td>
     </tr>
