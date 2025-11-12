@@ -40,7 +40,7 @@
                     @if($jumlah > 1) <ol style="padding-left:20px;margin-bottom:0"> @endif
                         @foreach ($allLayananKomponenFiltered as $item)
                             @if($jumlah > 1) <li> @endif
-                                {{ $item->uraian }}
+                                <?= nl2br($item->uraian) ?>
                                 <?= Html::a(
                                     '<i class="fa fa-pencil-alt"></i>',
                                     route(LayananKomponenConstant::RouteUpdate, ['id' => $item->id]),
