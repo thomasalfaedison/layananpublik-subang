@@ -46,6 +46,9 @@ $statusAtributProsedur = old('status_atribut_prosedur', $model->status_atribut_p
                         </div>
                     </div>
                 @endif
+                @if(Session::isInstansi())
+                    <?= Form::hidden('id_instansi', old('id_instansi', $model->id_instansi)) ?>
+                @endif
             </div>
 
             <div class="row">
