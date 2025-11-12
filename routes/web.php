@@ -61,6 +61,10 @@ Route::get('/layanan/create', [LayananController::class, 'create'])->name(Layana
 Route::post('/layanan/create', [LayananController::class, 'create'])->name(LayananConstant::RouteCreateProcess);
 Route::get('/layanan/update', [LayananController::class, 'update'])->name(LayananConstant::RouteUpdate);
 Route::post('/layanan/update', [LayananController::class, 'update'])->name(LayananConstant::RouteUpdateProcess);
+Route::get('/layanan/update-identitas', [LayananController::class, 'updateIdentitas'])->name(LayananController::ROUTE_UPDATE_IDENTITAS);
+Route::post('/layanan/update-identitas', [LayananController::class, 'updateIdentitas'])->name(LayananController::ROUTE_UPDATE_IDENTITAS);
+Route::get('/layanan/update-skm', [LayananController::class, 'updateSkm'])->name(LayananController::ROUTE_UPDATE_SKM);
+Route::post('/layanan/update-skm', [LayananController::class, 'updateSkm'])->name(LayananController::ROUTE_UPDATE_SKM);
 Route::get('/layanan/view', [LayananController::class, 'view'])->name(LayananConstant::RouteView);
 Route::post('/layanan/delete', [LayananController::class, 'delete'])->name(LayananConstant::RouteDelete);
 

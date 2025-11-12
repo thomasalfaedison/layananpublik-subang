@@ -54,6 +54,9 @@ class Layanan extends Model
         'id_ref_atribut_sop',
         'id_ref_atribut_siklus_layanan',
         'id_ref_atribut_skm',
+        'jumlah_pengguna',
+        'status_skm',
+        'nilai_skm',
         'persen_komponen',
     ];
 

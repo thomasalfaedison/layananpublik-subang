@@ -26,6 +26,8 @@ class LayananController extends Controller implements HasMiddleware
 {
     public const ROUTE_INDEX = 'layanan.index';
     public const RouteView = 'layanan.view';
+    public const ROUTE_UPDATE_IDENTITAS = 'layanan.update-identitas';
+    public const ROUTE_UPDATE_SKM = 'layanan.update-skm';
 
     public static function middleware()
     {
@@ -120,6 +122,68 @@ class LayananController extends Controller implements HasMiddleware
         }
 
         return view('layanan.update', $this->getFormData(compact('model', 'referrer')));
+    }
+
+    public function updateIdentitas(Request $request)
+    {
+        $id = $request->get('id');
+        $model = $this->layananService->findById($id);
+        $referrer = URL::previous();
+
+        if ($model === null) {
+            return abort(404, 'Not Found');
+        }
+
+        if ($request->isMethod('post')) {
+            try {
+                $data = $this->normalizeBooleanFields($request->all());
+                $referrer = $request->post('referrer', $referrer);
+
+                $model = $this->layananService->update($model, $data);
+
+                return redirect($referrer)->with('success', 'Layanan berhasil diperbarui');
+            } catch (ValidationException $e) {
+                return redirect()->back()
+                    ->withErrors($e->validator)
+                    ->withInput()
+                    ->with('danger', 'Data gagal disimpan. Silakan periksa kembali isian Anda.');
+            }
+        }
+
+        $action = route(self::ROUTE_UPDATE_IDENTITAS, ['id' => $model->id]);
+
+        return view('layanan.update-identitas', $this->getFormData(compact('model', 'referrer','action')));
+    }
+
+    public function updateSkm(Request $request)
+    {
+        $id = $request->get('id');
+        $model = $this->layananService->findById($id);
+        $referrer = URL::previous();
+
+        if ($model === null) {
+            return abort(404, 'Not Found');
+        }
+
+        if ($request->isMethod('post')) {
+            try {
+                $data = $this->normalizeBooleanFields($request->all());
+                $referrer = $request->post('referrer', $referrer);
+
+                $model = $this->layananService->update($model, $data);
+
+                return redirect($referrer)->with('success', 'Layanan berhasil diperbarui');
+            } catch (ValidationException $e) {
+                return redirect()->back()
+                    ->withErrors($e->validator)
+                    ->withInput()
+                    ->with('danger', 'Data gagal disimpan. Silakan periksa kembali isian Anda.');
+            }
+        }
+
+        $action = route(self::ROUTE_UPDATE_IDENTITAS, ['id' => $model->id]);
+
+        return view('layanan.update-skm', $this->getFormData(compact('model', 'referrer','action')));
     }
 
     public function view(Request $request)
