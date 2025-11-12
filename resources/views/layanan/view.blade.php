@@ -1,20 +1,20 @@
 @php
 
-use App\Components\Html;
-use App\Constants\LayananConstant;
-use App\Http\Controllers\LayananController;use App\Models\Layanan;
-use App\Models\StandarLayanan;
+    use App\Components\Html;
+    use App\Constants\LayananConstant;
+    use App\Http\Controllers\LayananController;use App\Models\Layanan;
+    use App\Models\StandarLayanan;
 
-/**
- * @var Layanan $model
- * @var \Illuminate\Support\Collection<\App\Models\LayananKomponen> $allLayananKomponen
- * @var \Illuminate\Support\Collection<\App\Models\RefLayananKomponen> $allRefLayananKomponen
- * @var \Illuminate\Support\Collection<StandarLayanan> $allStandarLayanan
- * @var array<int,string> $groupLabels
- */
+    /**
+     * @var Layanan $model
+     * @var \Illuminate\Support\Collection<\App\Models\LayananKomponen> $allLayananKomponen
+     * @var \Illuminate\Support\Collection<\App\Models\RefLayananKomponen> $allRefLayananKomponen
+     * @var \Illuminate\Support\Collection<StandarLayanan> $allStandarLayanan
+     * @var array<int,string> $groupLabels
+     */
 
-$breadcrumbs[] = ['label' => 'Layanan', 'url' => route(LayananConstant::RouteIndex)];
-$breadcrumbs[] = 'Detail Layanan';
+    $breadcrumbs[] = ['label' => 'Layanan', 'url' => route(LayananConstant::RouteIndex)];
+    $breadcrumbs[] = 'Detail Layanan';
 
 
 @endphp
@@ -137,8 +137,8 @@ $breadcrumbs[] = 'Detail Layanan';
                 <tr>
                     <th style="width:200px;">Dilakukan SKM?</th>
                     <td>
-                        <?= $model->status_skm == 1 ? "Ya" : "" ?>
-                        <?= $model->status_skm == 0 ? "Tidak" : "" ?>
+                        <?= $model->status_skm === 1 ? "Ya" : "" ?>
+                        <?= $model->status_skm === 0 ? "Tidak" : "" ?>
                     </td>
                 </tr>
                 <tr>
@@ -151,6 +151,57 @@ $breadcrumbs[] = 'Detail Layanan';
         </div>
         <div class="card-footer">
             <?= Html::a('<i class="fa fa-pencil-alt"></i> Ubah', route(LayananController::ROUTE_UPDATE_SKM, ['id' => $model->id]), [
+                'class' => 'btn btn-primary'
+            ]) ?>
+        </div>
+    </div>
+
+    <div class="card card-default">
+        <div class="card-header">
+            <h3 class="card-title">
+                Digitalisasi dan Inovasi
+            </h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <tr>
+                    <th style="width:200px;">Status Digitalisasi</th>
+                    <td>
+                        <?= $model->status_digitalisasi == 1 ? "Manual" : "" ?>
+                        <?= $model->status_digitalisasi == 2 ? "Semi Digital" : "" ?>
+                        <?= $model->status_digitalisasi == 3 ? "Full Online" : "" ?>
+
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width:200px;">Nama Aplikasi</th>
+                    <td>
+                        <?= @$model->nama_aplikasi; ?>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width:200px;">Link Aplikasi</th>
+                    <td>
+                        <?= @$model->link_aplikasi; ?>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width:200px;">Apakah Ada Inovasi?</th>
+                    <td>
+                        <?= $model->status_inovasi === 1 ? "Ada" : "" ?>
+                        <?= $model->status_inovasi === 0 ? "Tidak Ada" : "" ?>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width:200px;">Deskripsi Inovasi</th>
+                    <td>
+                        <?= $model->deskripsi_inovasi ?>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="card-footer">
+            <?= Html::a('<i class="fa fa-pencil-alt"></i> Ubah', route(LayananController::ROUTE_UPDATE_DIGITALISASI_INOVASI, ['id' => $model->id]), [
                 'class' => 'btn btn-primary'
             ]) ?>
         </div>

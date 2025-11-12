@@ -57,6 +57,11 @@ class Layanan extends Model
         'jumlah_pengguna',
         'status_skm',
         'nilai_skm',
+        'status_digitalisasi',
+        'nama_aplikasi',
+        'link_aplikasi',
+        'status_inovasi',
+        'deskripsi_inovasi',
         'persen_komponen',
     ];
 

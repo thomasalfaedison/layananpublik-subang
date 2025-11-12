@@ -65,6 +65,8 @@ Route::get('/layanan/update-identitas', [LayananController::class, 'updateIdenti
 Route::post('/layanan/update-identitas', [LayananController::class, 'updateIdentitas'])->name(LayananController::ROUTE_UPDATE_IDENTITAS);
 Route::get('/layanan/update-skm', [LayananController::class, 'updateSkm'])->name(LayananController::ROUTE_UPDATE_SKM);
 Route::post('/layanan/update-skm', [LayananController::class, 'updateSkm'])->name(LayananController::ROUTE_UPDATE_SKM);
+Route::get('/layanan/update-digitalisasi-inovasi', [LayananController::class, 'updateDigitalisasiInovasi'])->name(LayananController::ROUTE_UPDATE_DIGITALISASI_INOVASI);
+Route::post('/layanan/update-digitalisasi-inovasi', [LayananController::class, 'updateDigitalisasiInovasi'])->name(LayananController::ROUTE_UPDATE_DIGITALISASI_INOVASI);
 Route::get('/layanan/view', [LayananController::class, 'view'])->name(LayananConstant::RouteView);
 Route::post('/layanan/delete', [LayananController::class, 'delete'])->name(LayananConstant::RouteDelete);
 
