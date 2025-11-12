@@ -15,7 +15,8 @@ class LayananService
     public function validate(array $data): void
     {
         $rules = [
-            'id_instansi' => 'required|integer|exists:instansi,id',
+            'id_induk' => 'nullable|integer',
+            'id_instansi' => 'required|integer',
             'nama' => 'required|string',
             'deskripsi' => 'nullable|string',
             'id_ref_layanan_pemicu' => 'nullable|integer|exists:ref_layanan_pemicu,id',
@@ -55,6 +56,10 @@ class LayananService
 
         if (@$params['id'] !== null) {
             $query->where('id', $params['id']);
+        }
+
+        if (@$params['id_induk'] !== null) {
+            $query->where('id_induk', $params['id_induk']);
         }
 
         if (@$params['id_instansi'] !== null) {

@@ -139,16 +139,21 @@ class LayananKomponenController extends Controller implements HasMiddleware
 
     protected function getFormData(array $data = []): array
     {
+        $model = $data['model'];
+
         $listLayanan = $this->getListLayanan();
         $listRefLayananKomponen = $this->refLayananKomponenService->getList();
+        $listLayananKomponenInduk = $this->layananKomponenService->getList([
+            'id_layanan' => $model->id_layanan,
+            'id_ref_layanan_komponen' => $model->id_ref_layanan_komponen,
+            'id_not_in' => @$model->id,
+        ]);
 
-        return array_merge($data, compact('listLayanan', 'listRefLayananKomponen'));
+        return array_merge($data, compact('listLayanan', 'listRefLayananKomponen', 'listLayananKomponenInduk'));
     }
 
-    protected function getListLayanan(): array
+    protected function getListLayanan(array $params = []): array
     {
-        $params = [];
-
         if (Session::isInstansi()) {
             $params['id_instansi'] = Session::getIdInstansi();
         }

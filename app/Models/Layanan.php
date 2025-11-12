@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $created_at
  * @property string|null $updated_at
  * @property string|null $deleted_at
+ * @property Layanan|null $induk
  * @property Instansi $instansi
  * @property RefLayananPemicu|null $layananPemicu
  * @property RefLayananTeknis|null $layananTeknis
@@ -40,6 +41,7 @@ class Layanan extends Model
     protected $table = 'layanan';
 
     protected $fillable = [
+        'id_induk',
         'id_instansi',
         'nama',
         'deskripsi',
@@ -64,6 +66,11 @@ class Layanan extends Model
         'deskripsi_inovasi',
         'persen_komponen',
     ];
+
+    public function induk()
+    {
+        return $this->belongsTo(Layanan::class, 'id_induk', 'id');
+    }
 
     public function instansi()
     {

@@ -61,6 +61,10 @@ class LayananKomponenService
             });
         }
 
+        if (@$params['id_not_in'] !== null) {
+            $query->whereNotIn('id', (array) $params['id_not_in']);
+        }
+
         $query->orderBy('urutan')->orderBy('id');
 
         return $query;
@@ -246,5 +250,12 @@ class LayananKomponenService
         $max = $query->max('urutan');
 
         return $max === null ? 0 : (int) $max;
+    }
+
+    public function getList(array $params = []): array
+    {
+        $query = $this->query($params);
+
+        return $query->pluck('uraian', 'id')->toArray();
     }
 }

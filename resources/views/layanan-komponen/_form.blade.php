@@ -23,6 +23,23 @@ use App\Constants\LayananKomponenConstant;
 
         <div class="card-body">
 
+            <?php /*
+            <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <?= Form::label('id_induk', 'Induk', ['required' => true]) ?>
+                            <?= Form::select('id_induk', $listLayananKomponenInduk, old('id_induk', $model->id_induk), [
+                                'class' => 'form-control' . ($errors->has('id_induk') ? ' is-invalid' : ''),
+                                'placeholder' => '- Pilih Induk -',
+                            ]) ?>
+                            @error('id_induk')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+                */ ?>
+
             @if ($model->id_layanan == null)    
                 <div class="row">
                     <div class="col-sm-6">
