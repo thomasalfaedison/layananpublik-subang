@@ -33,6 +33,10 @@
                 <?= Html::a('<i class="fa fa-file-excel"></i> Export Excel', route(LayananConstant::RouteExportExcelAll, request()->query()), [
                     'class' => 'btn btn-success',
                 ]) ?>
+                <?= Html::a('<i class="fa fa-file-pdf"></i> Export PDF Detail', route(LayananConstant::RouteExportPdfAll, request()->query()), [
+                    'class' => 'btn btn-danger',
+                    'target' => '_blank',
+                ]) ?>
                 <?= Html::a('<i class="fa fa-file-pdf"></i> Export PDF SK', route(StandarPelayananController::ROUTE_EXPORT_PDF, [
                     'id_instansi' => request()->query('id_instansi'),
                     'urutan_persen_kelengkapan' => request()->query('urutan_persen_kelengkapan'),

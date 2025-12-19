@@ -72,6 +72,7 @@ Route::get('/layanan/view', [LayananController::class, 'view'])->name(LayananCon
 Route::post('/layanan/delete', [LayananController::class, 'delete'])->name(LayananConstant::RouteDelete);
 Route::get('/layanan/export-pdf', [LayananController::class, 'exportPdf'])->name(LayananConstant::RouteExportPdf);
 Route::get('/layana/export-excel-all', [LayananController::class, 'exportExcelAll'])->name(LayananConstant::RouteExportExcelAll);
+Route::get('/layanan/export-pdf-all', [LayananController::class, 'exportPdfAll'])->name(LayananConstant::RouteExportPdfAll);
 
 // LAYANAN KOMPONEN
 Route::get('/layanan-komponen/index', [LayananKomponenController::class, 'index'])->name(LayananKomponenConstant::RouteIndex);

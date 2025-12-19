@@ -13,4 +13,5 @@ class LayananConstant
     public const RouteDelete = 'layanan.delete';
     public const RouteExportPdf = 'layanan.export-pdf';
     public const RouteExportExcelAll = 'layanan.export-excel-all';
+    public const RouteExportPdfAll = 'layanan.export-pdf-all';
 }
