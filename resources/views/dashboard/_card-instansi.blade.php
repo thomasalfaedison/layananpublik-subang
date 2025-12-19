@@ -1,5 +1,7 @@
 @php
     use App\Components\Helper;
+    use App\Components\Html;
+    use App\Http\Controllers\DashboardController;
 
     /**
      * @var \Illuminate\Support\Collection<\App\Models\Instansi> $allInstansi
@@ -14,6 +16,11 @@
         </h3>
     </div>
     <div class="card-body">
+        <div style="margin-bottom: 20px">
+            <?= Html::a('<i class="fa fa-file-excel"></i> Export Excel', route(DashboardController::ROUTE_EXPORT_INSTANSI_EXCEL), [
+                'class' => 'btn btn-success',
+            ]) ?>
+        </div>
         <table class="table table-bordered">
             <thead>
                 <tr>

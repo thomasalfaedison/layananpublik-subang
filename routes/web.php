@@ -25,6 +25,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // DASHBOARD
 Route::get('/dashboard', [DashboardController::class, 'index'])->name(DashboardController::ROUTE_INDEX);
+Route::get('/dashboard/export-instansi-excel', [DashboardController::class, 'exportInstansiExcel'])->name(DashboardController::ROUTE_EXPORT_INSTANSI_EXCEL);
 
 // INSTANSI
 Route::get('/instansi/index', [InstansiController::class, 'index'])->name(InstansiController::ROUTE_INDEX);

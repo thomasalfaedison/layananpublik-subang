@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Components\Session;
-use App\Constants\DashboardConstant;
 use App\Constants\LayananConstant;
+use App\Services\ExportExcelInstansiService;
 use App\Services\DashboardService;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class DashboardController extends Controller implements HasMiddleware
 {
     public const ROUTE_INDEX = 'dashboard.index';
+    public const ROUTE_EXPORT_INSTANSI_EXCEL = 'dashboard.exportInstansiExcel';
 
     public static function middleware()
     {
@@ -20,6 +23,7 @@ class DashboardController extends Controller implements HasMiddleware
 
     public function __construct(
         protected DashboardService $dashboardService,
+        protected ExportExcelInstansiService $exportExcelInstansiService,
     ) {}
 
     public function index(Request $request)
@@ -65,5 +69,41 @@ class DashboardController extends Controller implements HasMiddleware
 
         return view('dashboard.instansi');
         */
+    }
+
+    public function exportInstansiExcel()
+    {
+        if (!Session::isAdmin()) {
+            abort(403, 'Anda tidak memiliki akses ke fitur ini.');
+        }
+
+        [$allInstansi, $instansiSummary] = $this->exportExcelInstansiService->getData();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $this->exportExcelInstansiService->setTitle($sheet);
+
+        $startRow = 3;
+        $headerInfo = $this->exportExcelInstansiService->setHeader($sheet, $startRow);
+        $row = $headerInfo['row'];
+        $lastColumn = $headerInfo['last_column'];
+
+        $row = $this->exportExcelInstansiService->setBody($sheet, $row + 1, $allInstansi, $instansiSummary);
+
+        $this->exportExcelInstansiService->applyTableStyle($sheet, $startRow, $lastColumn, $row - 1);
+
+        foreach (range('A', $lastColumn) as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        $writer = new Xlsx($spreadsheet);
+
+        $filename = 'daftar-perangkat-daerah.xlsx';
+
+        $temp_file = tempnam(sys_get_temp_dir(), $filename);
+        $writer->save($temp_file);
+
+        return response()->download($temp_file, $filename)->deleteFileAfterSend(true);
     }
 }
