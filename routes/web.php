@@ -70,6 +70,7 @@ Route::get('/layanan/update-digitalisasi-inovasi', [LayananController::class, 'u
 Route::post('/layanan/update-digitalisasi-inovasi', [LayananController::class, 'updateDigitalisasiInovasi'])->name(LayananController::ROUTE_UPDATE_DIGITALISASI_INOVASI);
 Route::get('/layanan/view', [LayananController::class, 'view'])->name(LayananConstant::RouteView);
 Route::post('/layanan/delete', [LayananController::class, 'delete'])->name(LayananConstant::RouteDelete);
+Route::get('/layanan/export-pdf', [LayananController::class, 'exportPdf'])->name(LayananConstant::RouteExportPdf);
 
 // LAYANAN KOMPONEN
 Route::get('/layanan-komponen/index', [LayananKomponenController::class, 'index'])->name(LayananKomponenConstant::RouteIndex);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Components\Session;
+use App\Services\LayananExportPdfService;
 use App\Models\Layanan;
 use App\Models\RefLayananKomponen;
 use App\Services\InstansiService;
@@ -29,6 +30,7 @@ class LayananController extends Controller implements HasMiddleware
     public const ROUTE_UPDATE_IDENTITAS = 'layanan.update-identitas';
     public const ROUTE_UPDATE_SKM = 'layanan.update-skm';
     public const ROUTE_UPDATE_DIGITALISASI_INOVASI = 'layanan.update-digitalisai-inovasi';
+    public const ROUTE_EXPORT_PDF = 'layanan.export-pdf';
 
     public static function middleware()
     {
@@ -48,6 +50,7 @@ class LayananController extends Controller implements HasMiddleware
         protected RefAtributSkmService $refAtributSkmService,
         protected RefLayananKomponenService $refLayananKomponenService,
         protected LayananKomponenService $layananKomponenService,
+        protected LayananExportPdfService $layananExportPdfService,
     ) {
     }
 
@@ -241,6 +244,15 @@ class LayananController extends Controller implements HasMiddleware
             'allLayananKomponen',
             'groupLabels'
         ));
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $id = $request->get('id');
+
+        return $this->layananExportPdfService->stream([
+            'id' => $id,
+        ]);
     }
 
     public function delete(Request $request)

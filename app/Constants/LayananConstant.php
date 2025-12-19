@@ -11,5 +11,5 @@ class LayananConstant
     public const RouteUpdateProcess = 'layanan.updateProcess';
     public const RouteView = 'layanan.view';
     public const RouteDelete = 'layanan.delete';
+    public const RouteExportPdf = 'layanan.export-pdf';
 }
-

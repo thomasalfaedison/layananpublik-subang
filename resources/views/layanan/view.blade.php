@@ -57,6 +57,11 @@
                 'class' => 'btn btn-primary'
             ]) ?>
 
+            <?= Html::a('<i class="fa fa-file-pdf"></i> Export PDF', route(LayananConstant::RouteExportPdf, ['id' => $model->id]), [
+                'class' => 'btn btn-danger',
+                'target' => '_blank',
+            ]) ?>
+
             <?= Html::a('<i class="fa fa-list"></i> Daftar Layanan', route(LayananConstant::RouteIndex), [
                 'class' => 'btn btn-warning'
             ]) ?>
