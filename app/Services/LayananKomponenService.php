@@ -47,6 +47,10 @@ class LayananKomponenService
             $query->where('id_layanan', $params['id_layanan']);
         }
 
+        if (@$params['array_id_layanan'] !== null) {
+            $query->whereIn('id_layanan', (array) $params['array_id_layanan']);
+        }
+
         if (@$params['id_ref_layanan_komponen'] !== null) {
             $query->where('id_ref_layanan_komponen', $params['id_ref_layanan_komponen']);
         }

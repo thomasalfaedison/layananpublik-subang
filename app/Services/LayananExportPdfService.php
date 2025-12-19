@@ -49,8 +49,19 @@ class LayananExportPdfService
         $allRefLayananKomponen = $this->refLayananKomponenService->findAll();
         $groupLabels = RefLayananKomponen::getListGrup();
 
-        $details = $allLayanan->map(function ($layanan) use ($allRefLayananKomponen, $groupLabels) {
-            $payload = $this->buildPayload($layanan, $allRefLayananKomponen, $groupLabels);
+        $idLayananList = $allLayanan->pluck('id')->all();
+
+        $allLayananKomponen = $this->layananKomponenService->findAll([
+            'array_id_layanan' => $idLayananList,
+        ])->groupBy('id_layanan');
+
+        $details = $allLayanan->map(function ($layanan) use ($allRefLayananKomponen, $groupLabels, $allLayananKomponen) {
+            $payload = $this->buildPayload(
+                $layanan,
+                $allRefLayananKomponen,
+                $groupLabels,
+                $allLayananKomponen
+            );
 
             return [
                 'model' => $payload['model'],
@@ -69,14 +80,16 @@ class LayananExportPdfService
         return $pdf->stream($filename);
     }
 
-    protected function buildPayload($model, $allRefLayananKomponen = null, $groupLabels = null): array
+    protected function buildPayload($model, $allRefLayananKomponen = null, $groupLabels = null, $groupedLayananKomponen = null): array
     {
         $allRefLayananKomponen = $allRefLayananKomponen ?? $this->refLayananKomponenService->findAll();
         $groupLabels = $groupLabels ?? RefLayananKomponen::getListGrup();
 
-        $allLayananKomponen = $this->layananKomponenService->findAll([
-            'id_layanan' => $model->id,
-        ]);
+        $allLayananKomponen = $groupedLayananKomponen
+            ? ($groupedLayananKomponen->get($model->id) ?? collect())
+            : $this->layananKomponenService->findAll([
+                'id_layanan' => $model->id,
+            ]);
 
         return [
             'model' => $model,
