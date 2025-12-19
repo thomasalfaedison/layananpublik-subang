@@ -263,6 +263,10 @@ class LayananController extends Controller implements HasMiddleware
     {
         $params = $request->query();
 
+        if (Session::isAdmin() && empty($params['id_instansi'])) {
+            return redirect()->back()->with('warning', 'Silahkan pilih perangkat daerah terlebih dahulu.');
+        }
+
         if (Session::isInstansi()) {
             $params['id_instansi'] = Session::getIdInstansi();
         }

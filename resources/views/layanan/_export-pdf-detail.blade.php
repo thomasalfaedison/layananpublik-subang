@@ -49,7 +49,7 @@
             <th colspan="3">{{ $groupLabel }}</th>
         </tr>
         <tr>
-            <th style="width: 40px; text-align:center">No</th>
+            <th style="width: 30px; text-align:center">No</th>
             <th style="width: 220px;">Komponen</th>
             <th>Uraian</th>
         </tr>
