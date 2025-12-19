@@ -2,6 +2,7 @@
     use App\Components\Helper;
     use App\Components\Html;
     use App\Http\Controllers\DashboardController;
+    use App\Constants\LayananConstant;
 
     /**
      * @var \Illuminate\Support\Collection<\App\Models\Instansi> $allInstansi
@@ -44,7 +45,11 @@
                         {{ $instansi->nama }}
                     </td>
                     <td style="text-align: center">
-                        <?= Helper::rp($jumlahLayanan, 0) ?>
+                        <?= Html::a(
+                            Helper::rp($jumlahLayanan, 0),
+                            route(LayananConstant::RouteIndex, ['id_instansi' => $instansi->id]),
+                            ['title' => 'Lihat layanan instansi ini']
+                        ) ?>
                     </td>
                     <td style="text-align: center">
                         <?= Helper::rp($persenKelengkapan, 0, 2) ?>%
