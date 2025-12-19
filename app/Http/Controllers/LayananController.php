@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Components\Session;
+use App\Services\ExportExcelLayananService;
 use App\Services\LayananExportPdfService;
 use App\Models\Layanan;
 use App\Models\RefLayananKomponen;
@@ -31,6 +32,7 @@ class LayananController extends Controller implements HasMiddleware
     public const ROUTE_UPDATE_SKM = 'layanan.update-skm';
     public const ROUTE_UPDATE_DIGITALISASI_INOVASI = 'layanan.update-digitalisai-inovasi';
     public const ROUTE_EXPORT_PDF = 'layanan.export-pdf';
+    public const ROUTE_EXPORT_EXCEL_ALL = 'layanan.export-excel-all';
 
     public static function middleware()
     {
@@ -51,6 +53,7 @@ class LayananController extends Controller implements HasMiddleware
         protected RefLayananKomponenService $refLayananKomponenService,
         protected LayananKomponenService $layananKomponenService,
         protected LayananExportPdfService $layananExportPdfService,
+        protected ExportExcelLayananService $exportExcelLayananService,
     ) {
     }
 
@@ -253,6 +256,43 @@ class LayananController extends Controller implements HasMiddleware
         return $this->layananExportPdfService->stream([
             'id' => $id,
         ]);
+    }
+
+    public function exportExcelAll(Request $request)
+    {
+        $params = $request->query();
+
+        if (Session::isInstansi()) {
+            $params['id_instansi'] = Session::getIdInstansi();
+        }
+
+        $includeInstansi = Session::isAdmin();
+
+        $allLayanan = $this->exportExcelLayananService->getData($params);
+
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $this->exportExcelLayananService->setTitle($sheet, $includeInstansi);
+
+        $startRow = 3;
+        $headerInfo = $this->exportExcelLayananService->setHeader($sheet, $startRow, $includeInstansi);
+        $this->exportExcelLayananService->applyColumnWidths($sheet, $includeInstansi);
+        $row = $headerInfo['row'];
+        $lastColumn = $headerInfo['last_column'];
+
+        $row = $this->exportExcelLayananService->setBody($sheet, $row + 1, $allLayanan, $includeInstansi);
+
+        $this->exportExcelLayananService->applyTableStyle($sheet, $startRow, $lastColumn, $row - 1);
+
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+
+        $filename = 'daftar-layanan.xlsx';
+
+        $temp_file = tempnam(sys_get_temp_dir(), $filename);
+        $writer->save($temp_file);
+
+        return response()->download($temp_file, $filename)->deleteFileAfterSend(true);
     }
 
     public function delete(Request $request)
