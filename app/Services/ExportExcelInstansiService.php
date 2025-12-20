@@ -24,12 +24,14 @@ class ExportExcelInstansiService
         if ($allInstansi->isNotEmpty()) {
             $instansiSummary = $this->dashboardService->getInstansiSummary($allInstansi->pluck('id')->all());
 
+            /*
             $allInstansi = $allInstansi
                 ->sortByDesc(function ($instansi) use ($instansiSummary) {
                     $summary = $instansiSummary->get($instansi->id);
                     return $summary->persen_kelengkapan ?? 0;
                 })
                 ->values();
+            */
         }
 
         return [$allInstansi, $instansiSummary];

@@ -31,6 +31,7 @@ class LayananController extends Controller implements HasMiddleware
     public const ROUTE_UPDATE_IDENTITAS = 'layanan.update-identitas';
     public const ROUTE_UPDATE_SKM = 'layanan.update-skm';
     public const ROUTE_UPDATE_DIGITALISASI_INOVASI = 'layanan.update-digitalisai-inovasi';
+    public const ROUTE_UPDATE_NAMA = '/layanan/update-nama';
     public const ROUTE_EXPORT_PDF = 'layanan.export-pdf';
     public const ROUTE_EXPORT_EXCEL_ALL = 'layanan.export-excel-all';
     public const ROUTE_EXPORT_PDF_ALL = 'layanan.export-pdf-all';
@@ -223,6 +224,28 @@ class LayananController extends Controller implements HasMiddleware
         $action = route(self::ROUTE_UPDATE_DIGITALISASI_INOVASI, ['id' => $model->id]);
 
         return view('layanan.update-digitalisasi-inovasi', $this->getFormData(compact('model', 'referrer','action')));
+    }
+
+    public function updateNama()
+    {
+        if(!Session::isAdmin())
+        {
+            return abort(403, 'Unauthorized action.');
+        }
+
+        $query = $this->layananService->query();
+        $query->whereLike('nama', 'Standar Pelayanan%');
+        $listLayanan = $query->get();
+        foreach($listLayanan as $layanan)
+        {
+            $layanan->nama = str_replace('STANDAR PELAYANAN','',$layanan->nama);
+            $layanan->nama = str_replace('Standar Pelayanan','',$layanan->nama);
+            $layanan->nama = str_replace('Standar pelayanan','',$layanan->nama);
+            $layanan->nama = str_replace('standar pelayanan','',$layanan->nama);
+            $layanan->save();
+        }
+
+        print($query->count());
     }
 
     public function view(Request $request)

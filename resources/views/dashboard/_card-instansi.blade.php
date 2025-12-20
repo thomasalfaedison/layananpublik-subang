@@ -1,14 +1,15 @@
-@php
-    use App\Components\Helper;
-    use App\Components\Html;
-    use App\Http\Controllers\DashboardController;
-    use App\Constants\LayananConstant;
+<?php
 
-    /**
-     * @var \Illuminate\Support\Collection<\App\Models\Instansi> $allInstansi
-     * @var \Illuminate\Support\Collection<int, \Illuminate\Database\Eloquent\Model> $instansiSummary
-     **/
-@endphp
+use App\Components\Helper;
+use App\Components\Html;
+use App\Http\Controllers\DashboardController;
+use App\Constants\LayananConstant;
+
+/* @see DashboardController::index() */
+/* @var \Illuminate\Support\Collection<\App\Models\Instansi> $allInstansi */
+/* @var \Illuminate\Support\Collection<int, \Illuminate\Database\Eloquent\Model> $instansiSummary */
+
+?>
 
 <div class="card card-default">
     <div class="card-header">
