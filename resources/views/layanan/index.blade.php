@@ -1,16 +1,17 @@
-@php
-    use App\Components\Html;
-    use App\Components\Helper;
-    use App\Components\Session;
-    use App\Constants\LayananConstant;
-    use App\Http\Controllers\StandarPelayananController;
+<?php
 
-    /**
-     * @var \Illuminate\Pagination\LengthAwarePaginator<int, \App\Models\Layanan> $allLayanan
-     **/
+use App\Components\Html;
+use App\Components\Helper;
+use App\Components\Session;
+use App\Constants\LayananConstant;
+use App\Http\Controllers\StandarPelayananController;
 
-    $breadcrumbs[] = 'Daftar Layanan';
-@endphp
+/* @see \App\Http\Controllers\LayananController::index() */
+/* @var \Illuminate\Pagination\LengthAwarePaginator<int, \App\Models\Layanan> $allLayanan */
+
+$breadcrumbs[] = 'Daftar Layanan';
+
+?>
 
 @extends(LayoutConstant::MAIN_LAYOUT)
 
@@ -147,5 +148,74 @@
             </div>
         </div>
     </div>
+
+    @if (request()->query('latex') == 1)
+        @php
+            $escapeLatex = function ($text) {
+                $text = (string) $text;
+                $replacements = [
+                    '\\' => '\\textbackslash{}',
+                    '{' => '\\{',
+                    '}' => '\\}',
+                    '$' => '\\$',
+                    '&' => '\\&',
+                    '%' => '\\%',
+                    '#' => '\\#',
+                    '_' => '\\_',
+                    '~' => '\\textasciitilde{}',
+                    '^' => '\\textasciicircum{}',
+                ];
+                return strtr($text, $replacements);
+            };
+
+            // Only two columns: No and Nama Layanan
+            $colsSpec = '|>{\centering\arraybackslash}p{0.8cm}|p{12cm}|';
+            $headers = ['No', 'Nama Layanan'];
+            $formatHeader = function ($text) use ($escapeLatex) {
+                return '\\textbf{' . $escapeLatex($text) . '}';
+            };
+
+            $lines = [];
+            $lines[] = '\\begin{longtable}{' . $colsSpec . '}';
+
+            if(@$instansi !== null)
+            {
+                $lines[] = '\caption{Daftar Layanan ' . $instansi->nama .'} \\\ ';
+            }
+
+            $lines[] = '\\hline';
+            $lines[] = implode(' & ', array_map($formatHeader, $headers)) . ' \\\ \\hline';
+            $lines[] = '\\endfirsthead';
+            $lines[] = '\\hline';
+            $lines[] = implode(' & ', array_map($formatHeader, $headers)) . ' \\\ \\hline';
+            $lines[] = '\\endhead';
+            $lines[] = '\\hline';
+            $lines[] = '\\endfoot';
+
+            $dataset = isset($allLayananAll) && $allLayananAll ? $allLayananAll : $allLayanan;
+            $baseNo = ($dataset instanceof \Illuminate\Pagination\LengthAwarePaginator) ? $dataset->firstItem() : 1;
+            foreach ($dataset as $index => $layanan) {
+                $row = [];
+                $row[] = $baseNo + $index;
+                $row[] = $escapeLatex($layanan->nama);
+                $lines[] = implode(' & ', $row) . ' \\\ ';
+            }
+
+            $lines[] = '\\hline';
+            $lines[] = '\\end{longtable}';
+
+            $latexTable = implode("\n", $lines);
+        @endphp
+
+        <div class="card card-default mt-3">
+            <div class="card-header">
+                <h3 class="card-title">LaTeX Tabel</h3>
+            </div>
+            <div class="card-body">
+                <p class="mb-2">Salin skrip LaTeX di bawah ini:</p>
+                <pre class="mb-0"><code>{{ $latexTable }}</code></pre>
+            </div>
+        </div>
+    @endif
 
 @endsection

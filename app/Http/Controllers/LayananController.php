@@ -69,11 +69,26 @@ class LayananController extends Controller implements HasMiddleware
 
         $allLayanan = $this->layananService->paginate($params);
 
+        // For LaTeX export, use full dataset without pagination
+        $allLayananAll = null;
+        if ($request->query('latex') == 1) {
+            $allLayananAll = $this->layananService->findAll($params);
+        }
+
         $listInstansi = $this->instansiService->getList();
+
+        $instansi = null;
+
+        if(@$params['id_instansi'] != null)
+        {
+            $instansi = $this->instansiService->findById($params['id_instansi']);
+        }
 
         return view('layanan.index', compact(
             'allLayanan',
+            'allLayananAll',
             'listInstansi',
+            'instansi',
         ));
     }
 
