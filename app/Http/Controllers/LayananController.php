@@ -84,12 +84,13 @@ class LayananController extends Controller implements HasMiddleware
             $instansi = $this->instansiService->findById($params['id_instansi']);
         }
 
-        return view('layanan.index', compact(
-            'allLayanan',
-            'allLayananAll',
-            'listInstansi',
-            'instansi',
-        ));
+        return view('layanan.index', [
+            'params' => $params,
+            'allLayanan' => $allLayanan,
+            'allLayananAll' => $allLayananAll,
+            'listInstansi' => $listInstansi,
+            'instansi' => $instansi,
+        ]);
     }
 
     public function create(Request $request)

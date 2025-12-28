@@ -7,11 +7,17 @@ use App\Constants\LayananConstant;
 use App\Http\Controllers\StandarPelayananController;
 
 /* @see \App\Http\Controllers\LayananController::index() */
-/* @var \Illuminate\Pagination\LengthAwarePaginator<int, \App\Models\Layanan> $allLayanan */
+/* @var $params array */
+/* @var $allLayanan \Illuminate\Pagination\LengthAwarePaginator<int, \App\Models\Layanan> */
 
 $breadcrumbs[] = 'Daftar Layanan';
 
 $isVisibleColumnPerangkatDaerah = false;
+$isVisibleColumnPenerimaManfaat = false;
+
+if(@$params['id_ref_layanan_penerima_manfaat']) {
+    $isVisibleColumnPenerimaManfaat = true;
+}
 
 ?>
 
@@ -55,6 +61,9 @@ $isVisibleColumnPerangkatDaerah = false;
                         <tr>
                             <th style="width:60px; text-align:center">No</th>
                             <th>Nama Layanan</th>
+                            <?php if($isVisibleColumnPenerimaManfaat) { ?>
+                                <th style="width:180px;" >Penerima Manfaat</th>
+                            <?php } ?>
                             @if (Session::isAdmin())
                                 <th style="width:400px;">Perangkat Daerah</th>
                             @endif
@@ -62,7 +71,6 @@ $isVisibleColumnPerangkatDaerah = false;
                             <th style="width:250px;">Deskripsi</th>
                             <th style="width:150px;">Pemicu</th>
                             <th style="width:150px;">Teknis</th>
-                            <th style="width:180px;">Penerima Manfaat</th>
                             <th style="width:180px;">Produk</th>
                             <th style="width:120px; text-align:center">Persyaratan</th>
                             <th style="width:120px; text-align:center">Prosedur</th>
@@ -83,6 +91,10 @@ $isVisibleColumnPerangkatDaerah = false;
                                     {{ $allLayanan->firstItem() + $loop->index }}
                                 </td>
                                 <td><?= Html::a($layanan->nama, route(LayananConstant::RouteView, ['id' => $layanan->id])) ?></td>
+                                <?php if($isVisibleColumnPenerimaManfaat) { ?>
+                                    <td>{{ optional($layanan->layananPenerimaManfaat)->nama }}</td>
+                                <?php } ?>
+
                                 @if (Session::isAdmin())
                                     <td>{{ optional($layanan->instansi)->nama }}</td>
                                 @endif
@@ -90,7 +102,6 @@ $isVisibleColumnPerangkatDaerah = false;
                                 <td>{{ Str::limit($layanan->deskripsi, 120) }}</td>
                                 <td>{{ optional($layanan->layananPemicu)->nama }}</td>
                                 <td>{{ optional($layanan->layananTeknis)->nama }}</td>
-                                <td>{{ optional($layanan->layananPenerimaManfaat)->nama }}</td>
                                 <td>{{ optional($layanan->layananProduk)->nama }}</td>
                                 <td class="text-center">
                                     <span class="badge badge-{{ $layanan->status_atribut_persyaratan ? 'success' : 'secondary' }}">

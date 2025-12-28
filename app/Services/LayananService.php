@@ -79,11 +79,19 @@ class LayananService
         }
 
         if (@$params['id_ref_layanan_penerima_manfaat'] !== null) {
-            $query->where('id_ref_layanan_penerima_manfaat', $params['id_ref_layanan_penerima_manfaat']);
+            if(@$params['id_ref_layanan_penerima_manfaat'] == 'null') {
+                $query->whereNull('id_ref_layanan_penerima_manfaat');
+            } else {
+                $query->where('id_ref_layanan_penerima_manfaat', $params['id_ref_layanan_penerima_manfaat']);
+            }
         }
 
         if (@$params['id_ref_layanan_produk'] !== null) {
-            $query->where('id_ref_layanan_produk', $params['id_ref_layanan_produk']);
+            if(@$params['id_ref_layanan_produk'] == 'null') {
+                $query->whereNull('id_ref_layanan_produk');
+            } else {
+                $query->where('id_ref_layanan_produk', $params['id_ref_layanan_produk']);
+            }
         }
 
         if (@$params['status_atribut_persyaratan'] !== null) {

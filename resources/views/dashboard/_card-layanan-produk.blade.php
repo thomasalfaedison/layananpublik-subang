@@ -1,9 +1,15 @@
-@php
-    $categories = ($produkChartCategories ?? collect())->values();
-    $seriesData = ($produkChartData ?? collect())->values();
-    $categoriesPenerima = ($penerimaChartCategories ?? collect())->values();
-    $seriesDataPenerima = ($penerimaChartData ?? collect())->values();
-@endphp
+<?php
+
+use \App\Http\Controllers\LayananController;
+
+/* @see \App\Http\Controllers\DashboardController::index() */
+
+$categories = ($produkChartCategories ?? collect())->values();
+$seriesData = ($produkChartData ?? collect())->values();
+$categoriesPenerima = ($penerimaChartCategories ?? collect())->values();
+$seriesDataPenerima = ($penerimaChartData ?? collect())->values();
+
+?>
 
 <div class="card card-default">
     <div class="card-header">
@@ -29,10 +35,15 @@
                             </thead>
                             <tbody>
                                 @foreach ($produkSummary as $row)
+                                    <?php $href = route(LayananController::ROUTE_INDEX,[
+                                        'id_ref_layanan_produk' => $row->id_ref_layanan_produk ?? 'null'
+                                    ]); ?>
                                     <tr>
                                         <td>{{ $row->id_ref_layanan_produk ?? '-' }}</td>
                                         <td>{{ $row->produk_nama }}</td>
-                                        <td class="text-right">{{ number_format($row->jumlah_layanan) }}</td>
+                                        <td class="text-right">
+                                            <a href="<?= $href; ?>">{{ number_format($row->jumlah_layanan) }}</a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
