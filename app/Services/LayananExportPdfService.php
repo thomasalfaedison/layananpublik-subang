@@ -12,6 +12,7 @@ class LayananExportPdfService
         protected LayananService $layananService,
         protected RefLayananKomponenService $refLayananKomponenService,
         protected LayananKomponenService $layananKomponenService,
+        protected InstansiService $instansiService,
     ) {
     }
 
@@ -44,6 +45,10 @@ class LayananExportPdfService
 
     public function streamAll(array $params = [])
     {
+        $id_instansi = $params['id_instansi'];
+
+        $instansi = $this->instansiService->findById($id_instansi);
+
         $allLayanan = $this->layananService->findAll($params);
 
         $allRefLayananKomponen = $this->refLayananKomponenService->findAll();
@@ -75,9 +80,11 @@ class LayananExportPdfService
             'groupLabels' => $groupLabels,
         ])->setPaper('A4', 'portrait');
 
-        $filename = 'daftar-layanan-detail.pdf';
+        $filename = strtolower($instansi->id.'-'.$instansi->nama);
+        $filename = str_replace(',','',$filename);
+        $filename = str_replace(' ','-',$filename);
 
-        return $pdf->stream($filename);
+        return $pdf->stream($filename.'.pdf');
     }
 
     protected function buildPayload($model, $allRefLayananKomponen = null, $groupLabels = null, $groupedLayananKomponen = null): array
