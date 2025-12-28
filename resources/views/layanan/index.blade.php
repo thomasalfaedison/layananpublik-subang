@@ -13,7 +13,12 @@ use App\Http\Controllers\StandarPelayananController;
 $breadcrumbs[] = 'Daftar Layanan';
 
 $isVisibleColumnPerangkatDaerah = false;
+$isVisibleColumnProduk = false;
 $isVisibleColumnPenerimaManfaat = false;
+
+if(@$params['id_ref_layanan_produk']) {
+    $isVisibleColumnProduk = true;
+}
 
 if(@$params['id_ref_layanan_penerima_manfaat']) {
     $isVisibleColumnPenerimaManfaat = true;
@@ -55,12 +60,28 @@ if(@$params['id_ref_layanan_penerima_manfaat']) {
                 ]) ?>
             </div>
 
+            <?php
+            $total = $allLayanan->total();
+            $from = $allLayanan->firstItem();
+            $to   = $allLayanan->lastItem();
+            ?>
+            <div class="mb-2 text-muted">
+                <?php if($total > 0) { ?>
+                    Menampilkan {{ number_format($from) }}–{{ number_format($to) }} dari total {{ number_format($total) }} data
+                <?php } else { ?>
+                    Menampilkan 0 data
+                <?php } ?>
+            </div>
+
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th style="width:60px; text-align:center">No</th>
                             <th>Nama Layanan</th>
+                            <?php if($isVisibleColumnProduk) { ?>
+                                <th style="width:180px;" >Jenis</th>
+                            <?php } ?>
                             <?php if($isVisibleColumnPenerimaManfaat) { ?>
                                 <th style="width:180px;" >Penerima Manfaat</th>
                             <?php } ?>
@@ -91,10 +112,12 @@ if(@$params['id_ref_layanan_penerima_manfaat']) {
                                     {{ $allLayanan->firstItem() + $loop->index }}
                                 </td>
                                 <td><?= Html::a($layanan->nama, route(LayananConstant::RouteView, ['id' => $layanan->id])) ?></td>
+                                <?php if($isVisibleColumnProduk) { ?>
+                                    <td>{{ optional($layanan->layananProduk)->nama }}</td>
+                                <?php } ?>
                                 <?php if($isVisibleColumnPenerimaManfaat) { ?>
                                     <td>{{ optional($layanan->layananPenerimaManfaat)->nama }}</td>
                                 <?php } ?>
-
                                 @if (Session::isAdmin())
                                     <td>{{ optional($layanan->instansi)->nama }}</td>
                                 @endif
