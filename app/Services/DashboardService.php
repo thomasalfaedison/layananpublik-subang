@@ -52,4 +52,16 @@ class DashboardService
 
         return $layananService->summarizeByInstansi($params);
     }
+
+    public function getLayananSummaryByProduk(): Collection
+    {
+        $layananService = $this->getLayananService();
+        return $layananService->summarizeByProduk();
+    }
+
+    public function getLayananSummaryByPenerimaManfaat(): Collection
+    {
+        $layananService = $this->getLayananService();
+        return $layananService->summarizeByPenerimaManfaat();
+    }
 }

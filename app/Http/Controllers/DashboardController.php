@@ -32,6 +32,13 @@ class DashboardController extends Controller implements HasMiddleware
         $jumlahLayanan = $this->dashboardService->getJumlahLayanan();
         $allInstansi = $this->dashboardService->getAllInstansi();
         $instansiSummary = collect();
+        $produkSummary = $this->dashboardService->getLayananSummaryByProduk();
+        $penerimaSummary = $this->dashboardService->getLayananSummaryByPenerimaManfaat();
+
+        $produkChartCategories = $produkSummary->pluck('produk_nama')->values();
+        $produkChartData = $produkSummary->pluck('jumlah_layanan')->map(fn($v) => (int) $v)->values();
+        $penerimaChartCategories = $penerimaSummary->pluck('penerima_nama')->values();
+        $penerimaChartData = $penerimaSummary->pluck('jumlah_layanan')->map(fn($v) => (int) $v)->values();
 
         if ($allInstansi->isNotEmpty()) {
             $instansiSummary = $this->dashboardService->getInstansiSummary($allInstansi->pluck('id')->all());
@@ -51,6 +58,12 @@ class DashboardController extends Controller implements HasMiddleware
             'jumlahLayanan' => $jumlahLayanan,
             'allInstansi' => $allInstansi,
             'instansiSummary' => $instansiSummary,
+            'produkSummary' => $produkSummary,
+            'produkChartCategories' => $produkChartCategories,
+            'produkChartData' => $produkChartData,
+            'penerimaSummary' => $penerimaSummary,
+            'penerimaChartCategories' => $penerimaChartCategories,
+            'penerimaChartData' => $penerimaChartData,
         ]);
     }
 

@@ -207,4 +207,36 @@ class LayananService
 
         return $query->get()->keyBy('id_instansi');
     }
+
+    public function summarizeByProduk(array $params = []): Collection
+    {
+        $query = Layanan::query()
+            ->leftJoin('ref_layanan_produk as rp', 'rp.id', '=', 'layanan.id_ref_layanan_produk')
+            ->selectRaw("layanan.id_ref_layanan_produk, COALESCE(rp.nama, 'Tidak Ditentukan') as produk_nama")
+            ->selectRaw('COUNT(*) as jumlah_layanan')
+            ->groupBy('layanan.id_ref_layanan_produk', 'rp.nama')
+            ->orderByDesc('jumlah_layanan');
+
+        if (Session::isInstansi()) {
+            $query->where('layanan.id_instansi', Session::getIdInstansi());
+        }
+
+        return $query->get();
+    }
+
+    public function summarizeByPenerimaManfaat(array $params = []): Collection
+    {
+        $query = Layanan::query()
+            ->leftJoin('ref_layanan_penerima_manfaat as rm', 'rm.id', '=', 'layanan.id_ref_layanan_penerima_manfaat')
+            ->selectRaw("layanan.id_ref_layanan_penerima_manfaat, COALESCE(rm.nama, 'Tidak Ditentukan') as penerima_nama")
+            ->selectRaw('COUNT(*) as jumlah_layanan')
+            ->groupBy('layanan.id_ref_layanan_penerima_manfaat', 'rm.nama')
+            ->orderByDesc('jumlah_layanan');
+
+        if (Session::isInstansi()) {
+            $query->where('layanan.id_instansi', Session::getIdInstansi());
+        }
+
+        return $query->get();
+    }
 }

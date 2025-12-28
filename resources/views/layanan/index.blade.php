@@ -11,6 +11,8 @@ use App\Http\Controllers\StandarPelayananController;
 
 $breadcrumbs[] = 'Daftar Layanan';
 
+$isVisibleColumnPerangkatDaerah = false;
+
 ?>
 
 @extends(LayoutConstant::MAIN_LAYOUT)
