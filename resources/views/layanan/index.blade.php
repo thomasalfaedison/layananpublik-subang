@@ -223,6 +223,10 @@ if (@$params['id_ref_layanan_penerima_manfaat']) {
             };
 
             $lines = [];
+            if ($instansi != null) {
+                $lines[] = 'Bagian ini menyajikan daftar layanan yang diselenggarakan oleh ' . $instansi->nama . ' Kabupaten Subang';
+                $lines[] = '';
+            }
             $lines[] = '\\begin{longtable}{' . $colsSpec . '}';
 
             if(@$instansi !== null)
