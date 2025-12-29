@@ -4,10 +4,12 @@ use App\Components\Html;
 use App\Components\Helper;
 use App\Components\Session;
 use App\Constants\LayananConstant;
+use App\Http\Controllers\LayananController;
 use App\Http\Controllers\StandarPelayananController;
 
 /* @see \App\Http\Controllers\LayananController::index() */
 /* @var $params array */
+/* @var $debug string */
 /* @var $allLayanan \Illuminate\Pagination\LengthAwarePaginator<int, \App\Models\Layanan> */
 
 $breadcrumbs[] = 'Daftar Layanan';
@@ -16,11 +18,11 @@ $isVisibleColumnPerangkatDaerah = false;
 $isVisibleColumnProduk = false;
 $isVisibleColumnPenerimaManfaat = false;
 
-if(@$params['id_ref_layanan_produk']) {
+if (@$params['id_ref_layanan_produk']) {
     $isVisibleColumnProduk = true;
 }
 
-if(@$params['id_ref_layanan_penerima_manfaat']) {
+if (@$params['id_ref_layanan_penerima_manfaat']) {
     $isVisibleColumnPenerimaManfaat = true;
 }
 
@@ -63,32 +65,33 @@ if(@$params['id_ref_layanan_penerima_manfaat']) {
             <?php
             $total = $allLayanan->total();
             $from = $allLayanan->firstItem();
-            $to   = $allLayanan->lastItem();
+            $to = $allLayanan->lastItem();
             ?>
             <div class="mb-2 text-muted">
-                <?php if($total > 0) { ?>
-                    Menampilkan {{ number_format($from) }}–{{ number_format($to) }} dari total {{ number_format($total) }} data
+                <?php if ($total > 0) { ?>
+                Menampilkan {{ number_format($from) }}–{{ number_format($to) }} dari total {{ number_format($total) }}
+                data
                 <?php } else { ?>
-                    Menampilkan 0 data
+                Menampilkan 0 data
                 <?php } ?>
             </div>
 
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
                     <thead>
-                        <tr>
-                            <th style="width:60px; text-align:center">No</th>
-                            <th>Nama Layanan</th>
-                            <?php if($isVisibleColumnProduk) { ?>
-                                <th style="width:180px;" >Jenis</th>
-                            <?php } ?>
-                            <?php if($isVisibleColumnPenerimaManfaat) { ?>
-                                <th style="width:180px;" >Penerima Manfaat</th>
-                            <?php } ?>
-                            @if (Session::isAdmin())
-                                <th style="width:400px;">Perangkat Daerah</th>
-                            @endif
-                            <?php /*
+                    <tr>
+                        <th style="width:60px; text-align:center">No</th>
+                        <th>Nama Layanan</th>
+                        <?php if ($isVisibleColumnProduk) { ?>
+                        <th style="width:180px;">Jenis</th>
+                        <?php } ?>
+                        <?php if ($isVisibleColumnPenerimaManfaat) { ?>
+                        <th style="width:180px;">Penerima Manfaat</th>
+                        <?php } ?>
+                        @if (Session::isAdmin())
+                            <th style="width:400px;">Perangkat Daerah</th>
+                        @endif
+                        <?php /*
                             <th style="width:250px;">Deskripsi</th>
                             <th style="width:150px;">Pemicu</th>
                             <th style="width:150px;">Teknis</th>
@@ -101,26 +104,34 @@ if(@$params['id_ref_layanan_penerima_manfaat']) {
                             <th style="width:220px;">Siklus</th>
                             <th style="width:120px;">SKM</th>
                             */ ?>
-                            <th style="width:110px; text-align:center">Persen Kelengkapan</th>
-                            <th style="width:80px; text-align:center">Aksi</th>
-                        </tr>
+                        <th style="width:110px; text-align:center">Persen Kelengkapan</th>
+                        <th style="width:80px; text-align:center">Aksi</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        @forelse ($allLayanan as $layanan)
-                            <tr>
-                                <td class="text-center">
-                                    {{ $allLayanan->firstItem() + $loop->index }}
-                                </td>
-                                <td><?= Html::a($layanan->nama, route(LayananConstant::RouteView, ['id' => $layanan->id])) ?></td>
-                                <?php if($isVisibleColumnProduk) { ?>
-                                    <td>{{ optional($layanan->layananProduk)->nama }}</td>
+                    @forelse ($allLayanan as $layanan)
+                        <tr>
+                            <td class="text-center">
+                                {{ $allLayanan->firstItem() + $loop->index }}
+                            </td>
+                            <td>
+                                <?= Html::a($layanan->nama, route(LayananConstant::RouteView, ['id' => $layanan->id])) ?>
+                                <?php if(@$params['debug']) { ?>
+                                    <?= Html::a('<i class="fa fa-sync-alt"></i>', route(LayananController::ROUTE_UPDATE_UCWORDS, ['id' => $layanan->id]), [
+                                        'data-toggle' => 'tooltip',
+                                        'title' => 'Ubah Ucwords',
+                                    ]) ?>
                                 <?php } ?>
-                                <?php if($isVisibleColumnPenerimaManfaat) { ?>
-                                    <td>{{ optional($layanan->layananPenerimaManfaat)->nama }}</td>
-                                <?php } ?>
-                                @if (Session::isAdmin())
-                                    <td>{{ optional($layanan->instansi)->nama }}</td>
-                                @endif
+                            </td>
+                            <?php if ($isVisibleColumnProduk) { ?>
+                                <td>{{ optional($layanan->layananProduk)->nama }}</td>
+                            <?php } ?>
+                            <?php if ($isVisibleColumnPenerimaManfaat) { ?>
+                                <td>{{ optional($layanan->layananPenerimaManfaat)->nama }}</td>
+                            <?php } ?>
+                            @if (Session::isAdmin())
+                                <td>{{ optional($layanan->instansi)->nama }}</td>
+                            @endif
                                 <?php /*
                                 <td>{{ Str::limit($layanan->deskripsi, 120) }}</td>
                                 <td>{{ optional($layanan->layananPemicu)->nama }}</td>
@@ -142,39 +153,39 @@ if(@$params['id_ref_layanan_penerima_manfaat']) {
                                 <td>{{ optional($layanan->atributSiklusLayanan)->nama }}</td>
                                 <td>{{ optional($layanan->atributSkm)->nama }}</td>
                                 */ ?>
-                                <td style="text-align: center">
-                                    <?= Helper::rp($layanan->persen_komponen, 0, 2) ?>%
-                                </td>
-                                <td class="text-center">
-                                    <?= Html::a('<i class="fa fa-eye"></i>', route(LayananConstant::RouteView, ['id' => $layanan->id]), [
-                                        'data-toggle' => 'tooltip',
-                                        'title' => 'Lihat',
-                                    ]) ?>
+                            <td style="text-align: center">
+                                <?= Helper::rp($layanan->persen_komponen, 0, 2) ?>%
+                            </td>
+                            <td class="text-center">
+                                <?= Html::a('<i class="fa fa-eye"></i>', route(LayananConstant::RouteView, ['id' => $layanan->id]), [
+                                    'data-toggle' => 'tooltip',
+                                    'title' => 'Lihat',
+                                ]) ?>
 
-                                    <?= Html::a('<i class="fa fa-pencil-alt"></i>', route(LayananConstant::RouteUpdate, ['id' => $layanan->id]), [
-                                        'data-toggle' => 'tooltip',
-                                        'title' => 'Ubah',
-                                    ]) ?>
+                                <?= Html::a('<i class="fa fa-pencil-alt"></i>', route(LayananConstant::RouteUpdate, ['id' => $layanan->id]), [
+                                    'data-toggle' => 'tooltip',
+                                    'title' => 'Ubah',
+                                ]) ?>
 
-                                    <?= Html::a('<i class="fa fa-trash"></i>', route(LayananConstant::RouteDelete, ['id' => $layanan->id]), [
-                                        'data-toggle' => 'tooltip',
-                                        'title' => 'Hapus',
-                                        'data-method' => 'POST',
-                                        'data-confirm' => 'Yakin ingin menghapus data?',
-                                    ]) ?>
-                                </td>
-                            </tr>
-                        @empty
-                            @php
-                                $colspan = 15;
-                                if (Session::isAdmin()) $colspan++;
-                            @endphp
-                            <tr>
-                                <td colspan="{{ $colspan }}" class="text-center">
-                                    Data Layanan tidak ditemukan.
-                                </td>
-                            </tr>
-                        @endforelse
+                                <?= Html::a('<i class="fa fa-trash"></i>', route(LayananConstant::RouteDelete, ['id' => $layanan->id]), [
+                                    'data-toggle' => 'tooltip',
+                                    'title' => 'Hapus',
+                                    'data-method' => 'POST',
+                                    'data-confirm' => 'Yakin ingin menghapus data?',
+                                ]) ?>
+                            </td>
+                        </tr>
+                    @empty
+                        @php
+                            $colspan = 15;
+                            if (Session::isAdmin()) $colspan++;
+                        @endphp
+                        <tr>
+                            <td colspan="{{ $colspan }}" class="text-center">
+                                Data Layanan tidak ditemukan.
+                            </td>
+                        </tr>
+                    @endforelse
                     </tbody>
                 </table>
             </div>

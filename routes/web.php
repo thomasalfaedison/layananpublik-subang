@@ -69,6 +69,8 @@ Route::post('/layanan/update-skm', [LayananController::class, 'updateSkm'])->nam
 Route::get('/layanan/update-digitalisasi-inovasi', [LayananController::class, 'updateDigitalisasiInovasi'])->name(LayananController::ROUTE_UPDATE_DIGITALISASI_INOVASI);
 Route::post('/layanan/update-digitalisasi-inovasi', [LayananController::class, 'updateDigitalisasiInovasi'])->name(LayananController::ROUTE_UPDATE_DIGITALISASI_INOVASI);
 Route::get('/layanan/update-nama', [LayananController::class, 'updateNama'])->name(LayananController::ROUTE_UPDATE_NAMA);
+Route::get('/layanan/update-ucwords', [LayananController::class, 'updateUcwords'])->name(LayananController::ROUTE_UPDATE_UCWORDS);
+Route::post('/layanan/update-ucwords', [LayananController::class, 'updateUcwords'])->name(LayananController::ROUTE_UPDATE_UCWORDS);
 Route::get('/layanan/view', [LayananController::class, 'view'])->name(LayananConstant::RouteView);
 Route::post('/layanan/delete', [LayananController::class, 'delete'])->name(LayananConstant::RouteDelete);
 Route::get('/layanan/export-pdf', [LayananController::class, 'exportPdf'])->name(LayananConstant::RouteExportPdf);

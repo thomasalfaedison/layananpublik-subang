@@ -35,6 +35,7 @@ class LayananController extends Controller implements HasMiddleware
     public const ROUTE_EXPORT_PDF = 'layanan.export-pdf';
     public const ROUTE_EXPORT_EXCEL_ALL = 'layanan.export-excel-all';
     public const ROUTE_EXPORT_PDF_ALL = 'layanan.export-pdf-all';
+    public const ROUTE_UPDATE_UCWORDS = '/layanan/update-ucwords';
 
     public static function middleware()
     {
@@ -240,6 +241,43 @@ class LayananController extends Controller implements HasMiddleware
         $action = route(self::ROUTE_UPDATE_DIGITALISASI_INOVASI, ['id' => $model->id]);
 
         return view('layanan.update-digitalisasi-inovasi', $this->getFormData(compact('model', 'referrer','action')));
+    }
+
+    public function updateUcwords(Request $request)
+    {
+        $id = $request->get('id');
+        $layanan = $this->layananService->findById($id);
+        $referrer = URL::previous();
+
+        if ($layanan === null) {
+            return abort(404, 'Not Found');
+        }
+
+        if ($request->isMethod('post')) {
+            try {
+                $data = $this->normalizeBooleanFields($request->all());
+                $referrer = $request->post('referrer', $referrer);
+
+                $model = $this->layananService->update($layanan, $data);
+
+                return redirect($referrer)->with('success', 'Layanan berhasil diperbarui');
+            } catch (ValidationException $e) {
+                return redirect()->back()
+                    ->withErrors($e->validator)
+                    ->withInput()
+                    ->with('danger', 'Data gagal disimpan. Silakan periksa kembali isian Anda.');
+            }
+        }
+
+        $action = route(LayananController::ROUTE_UPDATE_UCWORDS, [
+            'id' => $layanan->id
+        ]);
+
+        return view('layanan.update-ucwords', [
+            'referrer' => $referrer,
+            'layanan' => $layanan,
+            'action' => $action,
+        ]);
     }
 
     public function updateNama()
