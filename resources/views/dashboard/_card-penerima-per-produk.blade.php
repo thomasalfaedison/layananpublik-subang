@@ -29,7 +29,7 @@ foreach ($rows as $r) { $categoriesPenerima[] = $r->nama; }
           <div class="col-md-6 mb-3">
             <div class="border rounded p-2 h-100">
               <div class="font-weight-bold mb-1">{{ $col->nama }}</div>
-              <div id="chart-penerima-per-produk-{{ $loop->index }}" style="width: 100%; height: 260px;"></div>
+              <canvas id="chart-penerima-per-produk-{{ $loop->index }}" style="width: 100%; height: 260px;"></canvas>
             </div>
           </div>
         @endforeach
@@ -77,6 +77,12 @@ foreach ($rows as $r) { $categoriesPenerima[] = $r->nama; }
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         const categories = @json($categoriesPenerima);
+        function paletteColors(n) {
+          const base = ['#106518', '#FF9900', '#990099', '#3366CC', '#FF9900'];
+          const colors = [];
+          for (let i = 0; i < n; i++) colors.push(base[i % base.length]);
+          return colors;
+        }
         @foreach ($cols as $col)
           (function(){
             const elId = 'chart-penerima-per-produk-{{ $loop->index }}';
@@ -85,16 +91,12 @@ foreach ($rows as $r) { $categoriesPenerima[] = $r->nama; }
                 {{ (int) ($matrix[$row->id === null ? 'null' : (string) $row->id][$col->id === null ? 'null' : (string) $col->id] ?? 0) }},
               @endforeach
             ];
-            if (document.getElementById(elId)) {
-              Highcharts.chart(elId, {
-                chart: { type: 'column' },
-                title: { text: null },
-                xAxis: { categories, labels: { style: { fontSize: '10px' } } },
-                yAxis: { min: 0, allowDecimals: false, title: { text: null } },
-                legend: { enabled: false },
-                tooltip: { pointFormat: '<b>{point.y} layanan</b>' },
-                series: [{ name: 'Jumlah', data }],
-                credits: { enabled: false }
+            const canvas = document.getElementById(elId);
+            if (canvas) {
+              new Chart(canvas, {
+                type: 'bar',
+                data: { labels: categories, datasets: [{ label: 'Jumlah', data, backgroundColor: paletteColors(data.length) }] },
+                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
               });
             }
           })();
@@ -103,4 +105,3 @@ foreach ($rows as $r) { $categoriesPenerima[] = $r->nama; }
     </script>
   @endif
 @endpush
-

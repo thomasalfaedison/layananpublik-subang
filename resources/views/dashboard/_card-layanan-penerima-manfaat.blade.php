@@ -21,7 +21,7 @@ $seriesDataPenerima = ($penerimaChartData ?? collect())->values();
         <?php } else { ?>
         <div class="row">
             <div class="col-md-7">
-                <div id="chart-layanan-penerima" style="width: 100%; height: 360px;"></div>
+                <canvas id="chart-layanan-penerima" style="width: 100%; height: 360px;"></canvas>
             </div>
             <div class="col-md-5">
                 <div class="table-responsive">
@@ -58,29 +58,25 @@ $seriesDataPenerima = ($penerimaChartData ?? collect())->values();
     @if (($penerimaSummary ?? collect())->isNotEmpty())
         <script>
           document.addEventListener('DOMContentLoaded', function () {
-            Highcharts.chart('chart-layanan-penerima', {
-              chart: {type: 'column'},
-              title: {text: 'Distribusi Layanan per Penerima Manfaat'},
-              xAxis: {
-                categories: @json($categoriesPenerima),
-                title: {text: 'Penerima Manfaat'},
-                labels: {style: {fontSize: '11px'}}
+            function paletteColors(n) {
+              const base = ['#106518', '#FF9900', '#990099', '#3366CC', '#FF9900'];
+              const colors = [];
+              for (let i = 0; i < n; i++) colors.push(base[i % base.length]);
+              return colors;
+            }
+            const ctx = document.getElementById('chart-layanan-penerima');
+            if (!ctx) return;
+            new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: @json($categoriesPenerima),
+                datasets: [{ label: 'Jumlah', data: @json($seriesDataPenerima), backgroundColor: paletteColors(@json($seriesDataPenerima).length) }]
               },
-              yAxis: {
-                min: 0,
-                allowDecimals: false,
-                title: {text: 'Jumlah Layanan'}
-              },
-              legend: {enabled: false},
-              tooltip: {
-                pointFormat: '<b>{point.y} layanan</b>'
-              },
-              series: [{
-                name: 'Jumlah',
-                data: @json($seriesDataPenerima),
-                colorByPoint: true
-              }],
-              credits: {enabled: false}
+              options: {
+                responsive: true,
+                plugins: { legend: { display: false }, title: { display: true, text: 'Distribusi Layanan per Penerima Manfaat' } },
+                scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+              }
             });
           });
         </script>

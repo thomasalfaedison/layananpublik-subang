@@ -21,7 +21,7 @@ $seriesDataPenerima = ($penerimaChartData ?? collect())->values();
         <?php } else { ?>
             <div class="row">
                 <div class="col-md-7">
-                    <div id="chart-layanan-produk" style="width: 100%; height: 360px;"></div>
+                    <canvas id="chart-layanan-produk" style="width: 100%; height: 360px;"></canvas>
                 </div>
                 <div class="col-md-5">
                     <div class="table-responsive">
@@ -59,29 +59,34 @@ $seriesDataPenerima = ($penerimaChartData ?? collect())->values();
     @if (($produkSummary ?? collect())->isNotEmpty())
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                Highcharts.chart('chart-layanan-produk', {
-                    chart: { type: 'column' },
-                    title: { text: 'Distribusi Layanan per Produk' },
-                    xAxis: {
-                        categories: @json($categories),
-                        title: { text: 'Produk' },
-                        labels: { style: { fontSize: '11px' } }
+                function paletteColors(n) {
+                    const base = ['#106518', '#FF9900', '#990099', '#3366CC', '#FF9900'];
+                    const colors = [];
+                    for (let i = 0; i < n; i++) colors.push(base[i % base.length]);
+                    return colors;
+                }
+                const ctx = document.getElementById('chart-layanan-produk');
+                if (!ctx) return;
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: @json($categories),
+                        datasets: [{
+                            label: 'Jumlah',
+                            data: @json($seriesData),
+                            backgroundColor: paletteColors(@json($seriesData).length)
+                        }]
                     },
-                    yAxis: {
-                        min: 0,
-                        allowDecimals: false,
-                        title: { text: 'Jumlah Layanan' }
-                    },
-                    legend: { enabled: false },
-                    tooltip: {
-                        pointFormat: '<b>{point.y} layanan</b>'
-                    },
-                    series: [{
-                        name: 'Jumlah',
-                        data: @json($seriesData),
-                        colorByPoint: true
-                    }],
-                    credits: { enabled: false }
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: false },
+                            title: { display: true, text: 'Distribusi Layanan per Produk' }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, ticks: { precision: 0 } }
+                        }
+                    }
                 });
             });
         </script>
