@@ -43,6 +43,10 @@
                         ]
                     ) ?>
                 </div>
+
+                @if (request()->has('latex'))
+                    <?= Form::hidden('latex', request()->query('latex')) ?>
+                @endif
             </div>
         </div>
 
