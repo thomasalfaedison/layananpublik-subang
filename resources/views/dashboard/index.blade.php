@@ -20,6 +20,10 @@ use App\Components\Session;
 
 @include('dashboard._card-layanan-penerima-manfaat')
 
+@include('dashboard._card-produk-per-penerima')
+
+@include('dashboard._card-penerima-per-produk')
+
 @if (Session::isAdmin())
     @include('dashboard._card-instansi')
 @endif
