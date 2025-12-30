@@ -96,7 +96,19 @@ foreach ($rows as $r) { $categoriesPenerima[] = $r->nama; }
               new Chart(canvas, {
                 type: 'bar',
                 data: { labels: categories, datasets: [{ label: 'Jumlah', data, backgroundColor: paletteColors(data.length) }] },
-                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
+                options: {
+                  responsive: true,
+                  plugins: {
+                    legend: { display: false },
+                    datalabels: {
+                      anchor: 'end', align: 'end', color: '#111', clamp: true,
+                      formatter: (v) => (v ?? 0).toLocaleString('id-ID'),
+                      font: { weight: 'bold', size: 9 }
+                    }
+                  },
+                  layout: { padding: { top: 16 } },
+                  scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+                }
               });
             }
           })();

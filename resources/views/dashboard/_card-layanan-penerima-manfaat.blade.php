@@ -74,7 +74,16 @@ $seriesDataPenerima = ($penerimaChartData ?? collect())->values();
               },
               options: {
                 responsive: true,
-                plugins: { legend: { display: false }, title: { display: true, text: 'Distribusi Layanan per Penerima Manfaat' } },
+                plugins: {
+                  legend: { display: false },
+                  title: { display: true, text: 'Distribusi Layanan per Penerima Manfaat' },
+                  datalabels: {
+                    anchor: 'end', align: 'end', color: '#111', clamp: true,
+                    formatter: (v) => (v ?? 0).toLocaleString('id-ID'),
+                    font: { weight: 'bold', size: 10 }
+                  }
+                },
+                layout: { padding: { top: 16 } },
                 scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
               }
             });
