@@ -11,8 +11,10 @@ use App\Components\Session;
 @section('title', 'Dashboard')
 
 @section('content')
-    
+
 @include('dashboard._card-rekap-data')
+
+@include('dashboard._card-pivot-penerima-produk')
 
 @include('dashboard._card-layanan-produk')
 

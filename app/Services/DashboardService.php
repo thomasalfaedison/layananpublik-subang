@@ -64,4 +64,10 @@ class DashboardService
         $layananService = $this->getLayananService();
         return $layananService->summarizeByPenerimaManfaat();
     }
+
+    public function getLayananPivotPenerimaVsProduk(): array
+    {
+        $layananService = $this->getLayananService();
+        return $layananService->pivotPenerimaVsProduk();
+    }
 }

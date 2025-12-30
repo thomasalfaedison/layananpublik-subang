@@ -34,6 +34,7 @@ class DashboardController extends Controller implements HasMiddleware
         $instansiSummary = collect();
         $produkSummary = $this->dashboardService->getLayananSummaryByProduk();
         $penerimaSummary = $this->dashboardService->getLayananSummaryByPenerimaManfaat();
+        $pivotPenerimaProduk = $this->dashboardService->getLayananPivotPenerimaVsProduk();
 
         $produkChartCategories = $produkSummary->pluck('produk_nama')->values();
         $produkChartData = $produkSummary->pluck('jumlah_layanan')->map(fn($v) => (int) $v)->values();
@@ -64,6 +65,7 @@ class DashboardController extends Controller implements HasMiddleware
             'penerimaSummary' => $penerimaSummary,
             'penerimaChartCategories' => $penerimaChartCategories,
             'penerimaChartData' => $penerimaChartData,
+            'pivotPenerimaProduk' => $pivotPenerimaProduk,
         ]);
     }
 

@@ -7,6 +7,7 @@ use App\Models\Layanan;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -246,5 +247,96 @@ class LayananService
         }
 
         return $query->get();
+    }
+
+    /**
+     * Build a pivot of counts by penerima_manfaat (rows) vs produk (columns).
+     * Returns array: rows, cols, matrix, rowTotals, colTotals, grandTotal
+     */
+    public function pivotPenerimaVsProduk(): array
+    {
+        $base = Layanan::query();
+
+        if (Session::isInstansi()) {
+            $base->where('layanan.id_instansi', Session::getIdInstansi());
+        }
+
+        $rows = (clone $base)
+            ->leftJoin('ref_layanan_penerima_manfaat as rm', 'rm.id', '=', 'layanan.id_ref_layanan_penerima_manfaat')
+            ->selectRaw("layanan.id_ref_layanan_penerima_manfaat as id, COALESCE(rm.nama, 'Tidak Ditentukan') as nama")
+            ->groupBy('layanan.id_ref_layanan_penerima_manfaat', 'rm.nama')
+            ->orderBy('rm.nama')
+            ->get();
+
+        $cols = (clone $base)
+            ->leftJoin('ref_layanan_produk as rp', 'rp.id', '=', 'layanan.id_ref_layanan_produk')
+            ->selectRaw("layanan.id_ref_layanan_produk as id, COALESCE(rp.nama, 'Tidak Ditentukan') as nama")
+            ->groupBy('layanan.id_ref_layanan_produk', 'rp.nama')
+            ->orderBy('rp.nama')
+            ->get();
+
+        $cells = (clone $base)
+            ->selectRaw('layanan.id_ref_layanan_penerima_manfaat as penerima_id')
+            ->selectRaw('layanan.id_ref_layanan_produk as produk_id')
+            ->selectRaw('COUNT(*) as jumlah')
+            ->groupBy('layanan.id_ref_layanan_penerima_manfaat', 'layanan.id_ref_layanan_produk')
+            ->get();
+
+        // Initialize matrix with zeros for all combinations
+        $matrix = [];
+        $rowTotals = [];
+        $colTotals = [];
+        $grandTotal = 0;
+
+        $colKeys = [];
+        foreach ($cols as $col) {
+            $key = $col->id === null ? 'null' : (string) $col->id;
+            $colKeys[] = $key;
+            $colTotals[$key] = 0;
+        }
+
+        foreach ($rows as $row) {
+            $rowKey = $row->id === null ? 'null' : (string) $row->id;
+            $matrix[$rowKey] = [];
+            foreach ($colKeys as $colKey) {
+                $matrix[$rowKey][$colKey] = 0;
+            }
+            $rowTotals[$rowKey] = 0;
+        }
+
+        foreach ($cells as $cell) {
+            $rk = $cell->penerima_id === null ? 'null' : (string) $cell->penerima_id;
+            $ck = $cell->produk_id === null ? 'null' : (string) $cell->produk_id;
+            $jumlah = (int) $cell->jumlah;
+
+            if (!isset($matrix[$rk])) {
+                $matrix[$rk] = [];
+                foreach ($colKeys as $colKey) {
+                    $matrix[$rk][$colKey] = 0;
+                }
+                $rowTotals[$rk] = 0;
+            }
+
+            if (!array_key_exists($ck, $matrix[$rk])) {
+                $matrix[$rk][$ck] = 0;
+            }
+
+            $matrix[$rk][$ck] = $jumlah;
+            $rowTotals[$rk] += $jumlah;
+            if (!isset($colTotals[$ck])) {
+                $colTotals[$ck] = 0;
+            }
+            $colTotals[$ck] += $jumlah;
+            $grandTotal += $jumlah;
+        }
+
+        return [
+            'rows' => $rows,
+            'cols' => $cols,
+            'matrix' => $matrix,
+            'rowTotals' => $rowTotals,
+            'colTotals' => $colTotals,
+            'grandTotal' => $grandTotal,
+        ];
     }
 }
