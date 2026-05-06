@@ -1,6 +1,6 @@
 @php
     /**
-     * @var \App\Livewire\Form\IdentitasLayananForm $form
+     * @var \App\Livewire\Form\LayananIdentitasForm $form
      * @var \App\Models\Layanan $model
      */
 @endphp
@@ -17,20 +17,11 @@
                 </div>
 
                 <div class="modal-body">
-                    <table class="table table-bordered mb-4">
-                        <tr>
-                            <th style="width: 200px">Perangkat Daerah</th>
-                            <td>{{ $model->instansi?->nama }}</td>
-                        </tr>
-                        <tr>
-                            <th>Nama Layanan</th>
-                            <td>{{ $model->nama }}</td>
-                        </tr>
-                        <tr>
-                            <th>Deskripsi Layanan</th>
-                            <td>{{ $model->deskripsi }}</td>
-                        </tr>
-                    </table>
+                    @include('livewire.layanan.partials._info-tabel-layanan', [
+                        'model' => $model,
+                    ])
+
+                    <hr/>
 
                     <div class="row">
                         <div class="col-sm-6">
@@ -75,7 +66,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-sm-4">
+                        <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="jumlah_pengguna">Jumlah Pengguna (Per Tahun)</label>
                                 <input

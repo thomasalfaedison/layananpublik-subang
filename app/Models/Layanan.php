@@ -21,6 +21,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $id_ref_atribut_siklus_layanan
  * @property int|null $id_ref_atribut_skm
  * @property int|null $jumlah_pengguna
+ * @property int|null $status_skm
+ * @property int|null $nilai_skm
  * @property string|null $persen_komponen
  * @property string|null $created_at
  * @property string|null $updated_at

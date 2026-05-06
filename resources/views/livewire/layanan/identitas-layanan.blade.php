@@ -1,7 +1,9 @@
 @php
     /**
+     * @see \App\Livewire\Layanan\IdentitasLayanan::render()
+     * @see \App\Http\Controllers\LayananController::viewV2()
      * @var \App\Models\Layanan $model
-     * @var \App\Livewire\Form\IdentitasLayananForm $form
+     * @var \App\Livewire\Form\LayananIdentitasForm $form
      * @var array<int,string> $listRefLayananProduk
      * @var array<int,string> $listRefLayananPenerimaManfaat
      */

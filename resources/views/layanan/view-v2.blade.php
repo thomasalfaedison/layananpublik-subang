@@ -11,8 +11,6 @@
 
     $breadcrumbs[] = ['label' => 'Layanan', 'url' => route(LayananConstant::RouteIndex)];
     $breadcrumbs[] = 'Detail Layanan';
-
-
 @endphp
 
 @extends(LayoutConstant::MAIN_LAYOUT)
@@ -72,35 +70,9 @@
         'model' => $model,
     ])
 
-    <div class="card card-default">
-        <div class="card-header">
-            <h3 class="card-title">
-                Survei Kepuasan Masyarakat (SKM)
-            </h3>
-        </div>
-        <div class="card-body">
-            <table class="table table-bordered">
-                <tr>
-                    <th style="width:200px;">Dilakukan SKM?</th>
-                    <td>
-                        <?= $model->status_skm === 1 ? "Ya" : "" ?>
-                        <?= $model->status_skm === 0 ? "Tidak" : "" ?>
-                    </td>
-                </tr>
-                <tr>
-                    <th style="width:200px;">Nilai SKM Terakhir</th>
-                    <td>
-                        <?= @$model->nilai_skm; ?>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div class="card-footer">
-            <?= Html::a('<i class="fa fa-pencil-alt"></i> Ubah', route(LayananController::ROUTE_UPDATE_SKM, ['id' => $model->id]), [
-                'class' => 'btn btn-primary'
-            ]) ?>
-        </div>
-    </div>
+    @livewire('layanan.survei-kepuasan-masyarat', [
+        'model' => $model,
+    ])
 
     <div class="card card-default">
         <div class="card-header">

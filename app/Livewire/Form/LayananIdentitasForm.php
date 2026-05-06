@@ -7,7 +7,7 @@ use Livewire\Attributes\Locked;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 
-class IdentitasLayananForm extends Form
+class LayananIdentitasForm extends Form
 {
     #[Locked]
     public ?int $id = null;
