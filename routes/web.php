@@ -72,6 +72,7 @@ Route::get('/layanan/update-nama', [LayananController::class, 'updateNama'])->na
 Route::get('/layanan/update-ucwords', [LayananController::class, 'updateUcwords'])->name(LayananController::ROUTE_UPDATE_UCWORDS);
 Route::post('/layanan/update-ucwords', [LayananController::class, 'updateUcwords'])->name(LayananController::ROUTE_UPDATE_UCWORDS);
 Route::get('/layanan/view', [LayananController::class, 'view'])->name(LayananConstant::RouteView);
+Route::get('/layanan/view-v2', [LayananController::class, 'viewV2'])->name(LayananController::ROUTE_VIEW_V2);
 Route::post('/layanan/delete', [LayananController::class, 'delete'])->name(LayananConstant::RouteDelete);
 Route::get('/layanan/export-pdf', [LayananController::class, 'exportPdf'])->name(LayananConstant::RouteExportPdf);
 Route::get('/layana/export-excel-all', [LayananController::class, 'exportExcelAll'])->name(LayananConstant::RouteExportExcelAll);

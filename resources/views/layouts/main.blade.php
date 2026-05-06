@@ -131,6 +131,9 @@
 
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- App JS -->
     <script src="{{ asset('js/app.js') }}"></script>
 
@@ -172,6 +175,30 @@
 
             if (window.focus) newWindow.focus();
         };
+    </script>
+
+    <script>
+        window.addEventListener('modal-open', () => {
+            document.body.classList.add('modal-open');
+        });
+
+        window.addEventListener('modal-close', () => {
+            document.body.classList.remove('modal-open');
+        });
+
+        window.addEventListener('notify', event => {
+            const { type, message } = event.detail;
+
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: type,
+                title: message,
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            });
+        });
     </script>
 
     @stack('scripts')

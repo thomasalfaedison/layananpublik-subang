@@ -36,6 +36,7 @@ class LayananController extends Controller implements HasMiddleware
     public const ROUTE_EXPORT_EXCEL_ALL = 'layanan.export-excel-all';
     public const ROUTE_EXPORT_PDF_ALL = 'layanan.export-pdf-all';
     public const ROUTE_UPDATE_UCWORDS = '/layanan/update-ucwords';
+    public const ROUTE_VIEW_V2 = '/layanan/view-v2';
 
     public static function middleware()
     {
@@ -324,6 +325,25 @@ class LayananController extends Controller implements HasMiddleware
             'allRefLayananKomponen',
             'allLayananKomponen',
             'groupLabels'
+        ));
+    }
+
+    public function viewV2(Request $request)
+    {
+        $id = $request->get('id');
+        $model = $this->layananService->findById($id);
+
+        if ($model === null) {
+            return abort(404, 'Not Found');
+        }
+
+        $allLayananKomponen = $this->layananKomponenService->findAll([
+            'id_layanan' => $model->id,
+        ]);
+
+        return view('layanan.view-v2', compact(
+            'model',
+            'allLayananKomponen',
         ));
     }
 
