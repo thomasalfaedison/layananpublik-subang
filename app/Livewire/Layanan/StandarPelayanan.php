@@ -101,7 +101,7 @@ class StandarPelayanan extends Component
             return;
         }
 
-        $this->toastSuccess('Data berhasil ' . ($isUpdate ? 'diupdate' : 'disimpan'));
+        $this->toastSuccess('Data berhasil disimpan');
 
         $this->form->resetForm();
         $this->closeModal();

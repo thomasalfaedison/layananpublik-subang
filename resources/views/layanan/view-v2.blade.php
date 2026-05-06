@@ -74,55 +74,8 @@
         'model' => $model,
     ])
 
-    <div class="card card-default">
-        <div class="card-header">
-            <h3 class="card-title">
-                Digitalisasi dan Inovasi
-            </h3>
-        </div>
-        <div class="card-body">
-            <table class="table table-bordered">
-                <tr>
-                    <th style="width:200px;">Status Digitalisasi</th>
-                    <td>
-                        <?= $model->status_digitalisasi == 1 ? "Manual" : "" ?>
-                        <?= $model->status_digitalisasi == 2 ? "Semi Digital" : "" ?>
-                        <?= $model->status_digitalisasi == 3 ? "Full Online" : "" ?>
-
-                    </td>
-                </tr>
-                <tr>
-                    <th style="width:200px;">Nama Aplikasi</th>
-                    <td>
-                        <?= @$model->nama_aplikasi; ?>
-                    </td>
-                </tr>
-                <tr>
-                    <th style="width:200px;">Link Aplikasi</th>
-                    <td>
-                        <?= @$model->link_aplikasi; ?>
-                    </td>
-                </tr>
-                <tr>
-                    <th style="width:200px;">Apakah Ada Inovasi?</th>
-                    <td>
-                        <?= $model->status_inovasi === 1 ? "Ada" : "" ?>
-                        <?= $model->status_inovasi === 0 ? "Tidak Ada" : "" ?>
-                    </td>
-                </tr>
-                <tr>
-                    <th style="width:200px;">Deskripsi Inovasi</th>
-                    <td>
-                        <?= $model->deskripsi_inovasi ?>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div class="card-footer">
-            <?= Html::a('<i class="fa fa-pencil-alt"></i> Ubah', route(LayananController::ROUTE_UPDATE_DIGITALISASI_INOVASI, ['id' => $model->id]), [
-                'class' => 'btn btn-primary'
-            ]) ?>
-        </div>
-    </div>
+    @livewire('layanan.digitalisasi-inovasi', [
+        'model' => $model,
+    ])
 
 @endsection

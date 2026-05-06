@@ -27,7 +27,6 @@
                     <hr/>
 
                     <div class="row">
-                        {{-- FORM UTAMA --}}
                         <div class="{{ $isEdit ? 'col-sm-12' : 'col-sm-6' }}">
                             <div class="form-group">
                                 <label>Uraian Persyaratan <span class="text-danger">*</span></label>
@@ -43,7 +42,6 @@
                             </div>                                
                         </div>
 
-                        {{-- ALERT (hanya saat create) --}}
                         @if (!$isEdit)
                             <div class="col-sm-6">
                                 <div class="form-group">

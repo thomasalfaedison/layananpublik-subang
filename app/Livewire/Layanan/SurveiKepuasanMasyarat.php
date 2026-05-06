@@ -71,7 +71,7 @@ class SurveiKepuasanMasyarat extends Component
 
         $this->form->setModel($this->model);
         $this->closeModal();
-        $this->toastSuccess('Data berhasil diupdate');
+        $this->toastSuccess('Data berhasil disimpan');
     }
     
     public function render()

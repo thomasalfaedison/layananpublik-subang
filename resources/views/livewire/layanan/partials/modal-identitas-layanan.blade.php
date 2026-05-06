@@ -42,9 +42,7 @@
                                 @enderror
                             </div>
                         </div>
-                    </div>
 
-                    <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="id_ref_layanan_penerima_manfaat">Pengguna Layanan</label>
