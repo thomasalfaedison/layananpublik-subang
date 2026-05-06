@@ -337,13 +337,8 @@ class LayananController extends Controller implements HasMiddleware
             return abort(404, 'Not Found');
         }
 
-        $allLayananKomponen = $this->layananKomponenService->findAll([
-            'id_layanan' => $model->id,
-        ]);
-
         return view('layanan.view-v2', compact(
             'model',
-            'allLayananKomponen',
         ));
     }
 

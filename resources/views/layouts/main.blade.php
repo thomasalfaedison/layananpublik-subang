@@ -199,6 +199,18 @@
                 timerProgressBar: true
             });
         });
+
+        document.addEventListener('livewire:init', () => {
+            $('[data-toggle="tooltip"]').tooltip();
+
+            document.addEventListener('click', () => {
+                $('[data-toggle="tooltip"]').tooltip('hide');
+            });
+
+            Livewire.hook('message.processed', () => {
+                $('[data-toggle="tooltip"]').tooltip();
+            });
+        });
     </script>
 
     @stack('scripts')

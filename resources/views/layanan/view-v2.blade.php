@@ -2,15 +2,11 @@
 
     use App\Components\Html;
     use App\Constants\LayananConstant;
-    use App\Http\Controllers\LayananController;use App\Models\Layanan;
-    use App\Models\StandarLayanan;
+    use App\Http\Controllers\LayananController;
+    use App\Models\Layanan;
 
     /**
      * @var Layanan $model
-     * @var \Illuminate\Support\Collection<\App\Models\LayananKomponen> $allLayananKomponen
-     * @var \Illuminate\Support\Collection<\App\Models\RefLayananKomponen> $allRefLayananKomponen
-     * @var \Illuminate\Support\Collection<StandarLayanan> $allStandarLayanan
-     * @var array<int,string> $groupLabels
      */
 
     $breadcrumbs[] = ['label' => 'Layanan', 'url' => route(LayananConstant::RouteIndex)];
@@ -68,40 +64,9 @@
         </div>
     </div>
 
-    <div class="card card-default">
-        <div class="card-header">
-            <h3 class="card-title">
-                Identitas Layanan
-            </h3>
-        </div>
-        <div class="card-body">
-            <table class="table table-bordered">
-                <tr>
-                    <th style="width:200px;">Jenis Layanan</th>
-                    <td>
-                        <?= @$model->layananProduk?->nama; ?>
-                    </td>
-                </tr>
-                <tr>
-                    <th style="width:200px;">Pengguna Layanan</th>
-                    <td>
-                        <?= @$model->layananPenerimaManfaat?->nama; ?>
-                    </td>
-                </tr>
-                <tr>
-                    <th style="width:200px;">Jumlah Pengguna</th>
-                    <td>
-                        <?= @$model->jumlah_pengguna; ?> Pengguna Per Tahun
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div class="card-footer">
-            <?= Html::a('<i class="fa fa-pencil-alt"></i> Ubah', route(LayananController::ROUTE_UPDATE_IDENTITAS, ['id' => $model->id]), [
-                'class' => 'btn btn-primary'
-            ]) ?>
-        </div>
-    </div>
+    @livewire('layanan.identitas-layanan', [
+        'model' => $model,
+    ])
 
     @livewire('layanan.standar-pelayanan', [
         'model' => $model,
