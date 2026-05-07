@@ -684,4 +684,15 @@ class Helper
 		return null;
 	}
 
+	public static function normalizeWhitespace($text = null): ?string
+    {
+        if ($text == null) {
+            return null;
+        }
+
+        $text = preg_replace('/\s+/', ' ', $text);
+
+        return trim($text);
+    }
+
 }

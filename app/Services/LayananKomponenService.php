@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Components\Helper;
 use App\Components\Session;
 use App\Models\Layanan;
 use App\Models\LayananKomponen;
@@ -123,6 +124,7 @@ class LayananKomponenService
         $currentUrutan = $lastUrutan + 1;
 
         if (count($uraianList) <= 1) {
+            $data = $this->applyTextNormalization($data);
             $data = $this->applyAudit($data, true);
 
             if (@$data['urutan'] == null) {
@@ -138,6 +140,8 @@ class LayananKomponenService
                     $payload = $data;
                     $payload['uraian'] = $uraian;
                     $payload['urutan'] = $currentUrutan++;
+                    
+                    $payload = $this->applyTextNormalization($payload);
                     $payload = $this->applyAudit($payload, true);
 
                     $lastModel = LayananKomponen::create($payload);
@@ -157,11 +161,11 @@ class LayananKomponenService
         $data['id_layanan'] = $model->id_layanan;
         $data['id_ref_layanan_komponen'] = $model->id_ref_layanan_komponen;
 
-
         $this->validate($data);
 
         $this->guardLayananAccess($data['id_layanan']);
 
+        $data = $this->applyTextNormalization($data);
         $data = $this->applyAudit($data);
 
         $model->update($data);
@@ -207,6 +211,15 @@ class LayananKomponenService
         }
 
         $data['updated_by'] = $userId;
+
+        return $data;
+    }
+
+    protected function applyTextNormalization(array $data): array
+    {
+        if (isset($data['uraian'])) {
+            $data['uraian'] = Helper::normalizeWhitespace($data['uraian']);
+        }
 
         return $data;
     }
