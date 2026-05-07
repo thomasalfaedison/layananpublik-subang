@@ -207,7 +207,7 @@ class UserController extends Controller implements HasMiddleware
             'id_role' => UserConstant::ROLE_INSTANSI,
         ]);
 
-        return redirect()->back()->with('success', 'Semua password perangkat daerah berhasil direset ke default: subangkab2025');
+        return redirect()->back()->with('success', 'Semua password perangkat daerah berhasil direset ke default: Subang2026@');
     }
 
     public function exportExcel(Request $request)

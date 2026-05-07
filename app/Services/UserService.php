@@ -116,7 +116,7 @@ class UserService
         return $model->delete();
     }
 
-    public function resetPasswordDefault(array $params = [], string $default = 'subangkab2025'): int
+    public function resetPasswordDefault(array $params = [], string $default = 'Subang2026@'): int
     {
         $query = $this->query($params);
 

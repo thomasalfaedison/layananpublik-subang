@@ -35,7 +35,7 @@
                 @if ($id_role == UserConstant::ROLE_INSTANSI)
                     <?= Html::a('<i class="fa fa-sync"></i> Reset Password Default', route(UserConstant::RouteResetPasswordDefaultAll), [
                         'class' => 'btn btn-danger',
-                        'data-confirm' => 'Semua password perangkat daerah akan direset ke: subangkab2025. Lanjutkan?',
+                        'data-confirm' => 'Semua password perangkat daerah akan direset ke: Subang2026@. Lanjutkan?',
                         'data-method' => 'post'
                     ]) ?>
                 @endif
