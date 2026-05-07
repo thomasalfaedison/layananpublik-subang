@@ -55,6 +55,7 @@ Route::get('/user/read', [UserController::class, 'read'])->name(UserConstant::Ro
 Route::post('/user/delete', [UserController::class, 'delete'])->name(UserConstant::RouteDelete);
 Route::get('/user/export-excel', [UserController::class, 'exportExcel'])->name(UserConstant::RouteExportExcel);
 Route::post('/user/reset-password-default-all', [UserController::class, 'resetPasswordDefaultAll'])->name(UserConstant::RouteResetPasswordDefaultAll);
+Route::post('/user/reset-password-all', [App\Http\Controllers\UserController::class, 'resetPasswordAll'])->name(UserController::ROUTE_PASSWORD_ALL);
 
 // LAYANAN
 Route::get('/layanan/index', [LayananController::class, 'index'])->name(LayananController::ROUTE_INDEX);

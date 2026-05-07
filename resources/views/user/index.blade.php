@@ -33,11 +33,9 @@
                 ]) ?>
 
                 @if ($id_role == UserConstant::ROLE_INSTANSI)
-                    <?= Html::a('<i class="fa fa-sync"></i> Reset Password Default', route(UserConstant::RouteResetPasswordDefaultAll), [
-                        'class' => 'btn btn-danger',
-                        'data-confirm' => 'Semua password perangkat daerah akan direset ke: Subang2026@. Lanjutkan?',
-                        'data-method' => 'post'
-                    ]) ?>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#resetPasswordAllModal">
+                        <i class="fa fa-key"></i> Reset Password
+                    </button>
                 @endif
             </div>
 
@@ -105,4 +103,9 @@
         </div>
     </div>
 
+    @if ($id_role == UserConstant::ROLE_INSTANSI)
+        @include('user._modal-reset-password', [
+            'id_role' => $id_role
+        ])
+    @endif
 @endsection

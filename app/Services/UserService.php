@@ -165,4 +165,17 @@ class UserService
 
         return $model;
     }
+
+    public function resetPasswordAll(int $id_role, string $password): bool
+    {
+        $allUser = $this->findAll(['id_role' => $id_role]);
+        $hashedPassword = Hash::make($password);
+
+        foreach ($allUser as $user) {
+            $user->password = $hashedPassword;
+            $user->save();
+        }
+
+        return true;
+    }
 }

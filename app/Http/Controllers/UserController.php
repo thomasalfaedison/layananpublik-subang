@@ -19,6 +19,8 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class UserController extends Controller implements HasMiddleware
 {
+    public const ROUTE_PASSWORD_ALL = '/user/reset-password-all';
+
     public static function middleware()
     {
         return ['auth'];
@@ -208,6 +210,28 @@ class UserController extends Controller implements HasMiddleware
         ]);
 
         return redirect()->back()->with('success', 'Semua password perangkat daerah berhasil direset ke default: Subang2026@');
+    }
+
+    public function resetPasswordAll(Request $request)
+    {
+        if (Session::isAdmin() == false) {
+            abort(403, 'Akses ditolak.');
+        }
+
+        $id_role = $request->input('id_role', UserConstant::ROLE_INSTANSI);
+        $password = $request->input('password');
+
+        if ($password == null) {
+            return redirect()->back()->with('danger', 'Password baru harus diisi.');
+        }
+
+        $success = $this->userService->resetPasswordAll($id_role, $password);
+
+        if ($success) {
+            return redirect()->back()->with('success', 'Password berhasil direset');
+        }
+
+        return redirect()->back()->with('danger', 'Password gagal direset');
     }
 
     public function exportExcel(Request $request)
