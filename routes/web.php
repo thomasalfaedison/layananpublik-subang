@@ -71,8 +71,8 @@ Route::post('/layanan/update-digitalisasi-inovasi', [LayananController::class, '
 Route::get('/layanan/update-nama', [LayananController::class, 'updateNama'])->name(LayananController::ROUTE_UPDATE_NAMA);
 Route::get('/layanan/update-ucwords', [LayananController::class, 'updateUcwords'])->name(LayananController::ROUTE_UPDATE_UCWORDS);
 Route::post('/layanan/update-ucwords', [LayananController::class, 'updateUcwords'])->name(LayananController::ROUTE_UPDATE_UCWORDS);
-Route::get('/layanan/view', [LayananController::class, 'view'])->name(LayananConstant::RouteView);
-Route::get('/layanan/view-v2', [LayananController::class, 'viewV2'])->name(LayananController::ROUTE_VIEW_V2);
+Route::get('/layanan/view', [LayananController::class, 'view'])->name(LayananController::ROUTE_VIEW);
+Route::get('/layanan/view-v1', [LayananController::class, 'viewV1'])->name(LayananController::ROUTE_VIEW_V1);
 Route::post('/layanan/delete', [LayananController::class, 'delete'])->name(LayananConstant::RouteDelete);
 Route::get('/layanan/export-pdf', [LayananController::class, 'exportPdf'])->name(LayananConstant::RouteExportPdf);
 Route::get('/layana/export-excel-all', [LayananController::class, 'exportExcelAll'])->name(LayananConstant::RouteExportExcelAll);

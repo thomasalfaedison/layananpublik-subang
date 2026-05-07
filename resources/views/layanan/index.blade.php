@@ -115,7 +115,7 @@ if (@$params['id_ref_layanan_penerima_manfaat']) {
                                 {{ $allLayanan->firstItem() + $loop->index }}
                             </td>
                             <td>
-                                <?= Html::a($layanan->nama, route(LayananConstant::RouteView, ['id' => $layanan->id])) ?>
+                                <?= Html::a($layanan->nama, route(LayananController::ROUTE_VIEW, ['id' => $layanan->id])) ?>
                                 <?php if(@$params['debug']) { ?>
                                     <?= Html::a('<i class="fa fa-sync-alt"></i>', route(LayananController::ROUTE_UPDATE_UCWORDS, ['id' => $layanan->id]), [
                                         'data-toggle' => 'tooltip',
@@ -157,7 +157,7 @@ if (@$params['id_ref_layanan_penerima_manfaat']) {
                                 <?= Helper::rp($layanan->persen_komponen, 0, 2) ?>%
                             </td>
                             <td class="text-center">
-                                <?= Html::a('<i class="fa fa-eye"></i>', route(LayananConstant::RouteView, ['id' => $layanan->id]), [
+                                <?= Html::a('<i class="fa fa-eye"></i>', route(LayananController::ROUTE_VIEW, ['id' => $layanan->id]), [
                                     'data-toggle' => 'tooltip',
                                     'title' => 'Lihat',
                                 ]) ?>

@@ -36,7 +36,8 @@ class LayananController extends Controller implements HasMiddleware
     public const ROUTE_EXPORT_EXCEL_ALL = 'layanan.export-excel-all';
     public const ROUTE_EXPORT_PDF_ALL = 'layanan.export-pdf-all';
     public const ROUTE_UPDATE_UCWORDS = '/layanan/update-ucwords';
-    public const ROUTE_VIEW_V2 = '/layanan/view-v2';
+    public const ROUTE_VIEW = '/layanan/view';
+    public const ROUTE_VIEW_V1 = '/layanan/view-v1';
 
     public static function middleware()
     {
@@ -303,7 +304,7 @@ class LayananController extends Controller implements HasMiddleware
         print($query->count());
     }
 
-    public function view(Request $request)
+    public function viewV1(Request $request)
     {
         $id = $request->get('id');
         $model = $this->layananService->findById($id);
@@ -320,7 +321,7 @@ class LayananController extends Controller implements HasMiddleware
 
         $groupLabels = RefLayananKomponen::getListGrup();
 
-        return view('layanan.view', compact(
+        return view('layanan.view-v1', compact(
             'model',
             'allRefLayananKomponen',
             'allLayananKomponen',
@@ -328,7 +329,7 @@ class LayananController extends Controller implements HasMiddleware
         ));
     }
 
-    public function viewV2(Request $request)
+    public function view(Request $request)
     {
         $id = $request->get('id');
         $model = $this->layananService->findById($id);
@@ -337,7 +338,7 @@ class LayananController extends Controller implements HasMiddleware
             return abort(404, 'Not Found');
         }
 
-        return view('layanan.view-v2', compact(
+        return view('layanan.view', compact(
             'model',
         ));
     }
