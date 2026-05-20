@@ -310,11 +310,14 @@ class StandarPelayananExportService
 
     protected function buildMaklumatPelayananDocument(array $payload): PhpWord
     {
+        $instansi = $payload['instansi'];
+        $standarPelayanan = $payload['standarPelayanan'];
+
         $phpWord = new PhpWord();
         $phpWord->setDefaultFontName('Bookman Old Style');
         $phpWord->setDefaultFontSize(12);
         $phpWord->addNumberingStyle(
-            'numbering',
+            'maklumat-decimal-list',
             [
                 'type' => 'multilevel',
                 'levels' => [
@@ -327,46 +330,323 @@ class StandarPelayananExportService
                 ],
             ]
         );
+        $phpWord->addNumberingStyle(
+            'maklumat-alpha-list',
+            [
+                'type' => 'multilevel',
+                'levels' => [
+                    [
+                        'format' => 'lowerLetter',
+                        'text' => '%1.',
+                        'left' => 450,
+                        'hanging' => 450,
+                    ],
+                ],
+            ]
+        );
 
         $section = $phpWord->addSection([
-            'marginTop' => 1440,
-            'marginRight' => 1440,
-            'marginBottom' => 1440,
-            'marginLeft' => 1440,
+            'marginTop' => 900,
+            'marginRight' => 900,
+            'marginBottom' => 900,
+            'marginLeft' => 900,
             'paperSize' => 'Legal',
         ]);
 
-        $titleStyle = [
+        $headerTitleStyle = [
             'bold' => true,
             'name' => 'Bookman Old Style',
-            'size' => 14,
+            'size' => 17,
         ];
 
-        $subtitleStyle = [
+        $headerSubtitleStyle = [
             'bold' => true,
+            'name' => 'Bookman Old Style',
+            'size' => 24,
+        ];
+
+        $titleStyle = [
+            'bold' => false,
             'name' => 'Bookman Old Style',
             'size' => 12,
         ];
 
-        $centerNoSpace = [
+        $smallStyle = [
+            'name' => 'Bookman Old Style',
+            'size' => 10.5,
+        ];
+
+        $signatureNameStyle = [
+            'bold' => true,
+            'underline' => 'single',
+            'name' => 'Bookman Old Style',
+            'size' => 12,
+        ];
+
+        $centerParagraph = [
             'alignment' => Jc::CENTER,
             'spaceAfter' => 0,
             'lineHeight' => 1,
         ];
 
-        $justifyParagraph = [
-            'alignment' => Jc::BOTH,
-            'lineHeight' => 1.15,
-            'spaceAfter' => 120,
-        ];
-
-        $listParagraphStyle = [
+        $bodyParagraph = [
             'alignment' => Jc::BOTH,
             'lineHeight' => 1,
+            'spaceAfter' => 0,
         ];
 
-        
+        $maklumatQuoteParagraph = array_merge($bodyParagraph, ['spaceBefore' => 120]);
+
+        $headerTable = $section->addTable([
+            'width' => 100 * 50,
+            'unit' => 'pct',
+            'alignment' => JcTable::CENTER,
+            'borderSize' => 0,
+            'borderColor' => 'FFFFFF',
+            'cellMarginTop' => 0,
+            'cellMarginBottom' => 0,
+            'cellMarginLeft' => 0,
+            'cellMarginRight' => 0,
+        ]);
+
+        $headerTable->addRow();
+        $logoCell = $headerTable->addCell(1100, [
+            'valign' => 'top',
+            'borderSize' => 0,
+            'borderColor' => 'FFFFFF',
+        ]);
+        $logoPath = public_path('images/logo.png');
+        if (file_exists($logoPath)) {
+            $logoCell->addImage($logoPath, [
+                'width' => 75,
+                'height' => 75,
+                'alignment' => Jc::CENTER,
+            ]);
+        }
+
+        $headerTextCell = $headerTable->addCell(8300, [
+            'valign' => 'center',
+            'borderSize' => 0,
+            'borderColor' => 'FFFFFF',
+        ]);
+
+        $headerTextCell->addText('PEMERINTAH DAERAH KABUPATEN SUBANG', $headerTitleStyle, $centerParagraph);
+        $headerTextCell->addText(strtoupper($instansi->nama), $headerSubtitleStyle, $centerParagraph);
+        $headerTextCell->addText(Helper::normalizeWhitespace($standarPelayanan?->alamat), $smallStyle, $centerParagraph);
+
+        $section->addText(
+            '',
+            [],
+            [
+                'borderBottomSize' => 12,
+                'borderBottomColor' => '000000',
+            ]
+        );
+
+        $section->addTextBreak(1);
+        $section->addText(
+            'KEPUTUSAN ' . $this->buildJudul($standarPelayanan?->jabatan_ttd, $instansi),
+            $titleStyle,
+            $centerParagraph
+        );
+        $section->addText(
+            'NOMOR : ' . ($standarPelayanan?->nomor ?: '........................................'),
+            $titleStyle,
+            $centerParagraph
+        );
+        $section->addTextBreak(1);
+        $section->addText('TENTANG', $titleStyle, $centerParagraph);
+        $section->addTextBreak(1);
+        $section->addText('MAKLUMAT PELAYANAN', $titleStyle, $centerParagraph);
+        $section->addText(
+            'PADA ' . strtoupper($instansi->nama) . ' KABUPATEN SUBANG',
+            $titleStyle,
+            $centerParagraph
+        );
+        $section->addTextBreak(1);
+        $section->addText(
+            $this->buildJudul($standarPelayanan?->jabatan_ttd, $instansi) . ',',
+            $titleStyle,
+            $centerParagraph
+        );
+        $section->addTextBreak(1);
+
+        $bodyTable = $section->addTable([
+            'width' => 100 * 50,
+            'unit' => 'pct',
+            'alignment' => JcTable::START,
+            'borderSize' => 0,
+            'borderColor' => 'FFFFFF',
+            'cellMarginTop' => 0,
+            'cellMarginBottom' => 0,
+            'cellMarginLeft' => 0,
+            'cellMarginRight' => 0,
+        ]);
+
+        $bodyTable->addRow();
+        $bodyTable->addCell(1700)->addText('Menimbang', $titleStyle, $bodyParagraph);
+        $bodyTable->addCell(300)->addText(':', $titleStyle, $centerParagraph);
+        $menimbangCell = $bodyTable->addCell(7400);
+        $menimbangCell->addListItem(
+            'bahwa Standar Pelayanan pada ' . $instansi->nama . ' Kabupaten Subang telah ditetapkan dengan Keputusan ' .
+            ($standarPelayanan?->jabatan_ttd ?: 'Kepala Instansi') . ' Kabupaten Subang Nomor ' .
+            ($standarPelayanan?->nomor ?: '........................................') . ';',
+            0,
+            $titleStyle,
+            'maklumat-alpha-list',
+            $bodyParagraph
+        );
+        $menimbangCell->addListItem(
+            'bahwa untuk memberikan janji pelayanan terhadap seluruh pengguna layanan, maka perlu dibuat maklumat pelayanan pada ' .
+            $instansi->nama . ' Kabupaten Subang dengan Keputusan ' .
+            ($standarPelayanan?->jabatan_ttd ?: 'Kepala Instansi') . ' Kabupaten Subang;',
+            0,
+            $titleStyle,
+            'maklumat-alpha-list',
+            $bodyParagraph
+        );
+
+        $bodyTable->addRow();
+        $bodyTable->addCell(1700)->addText('Mengingat', $titleStyle, $bodyParagraph);
+        $bodyTable->addCell(300)->addText(':', $titleStyle, $centerParagraph);
+        $mengingatCell = $bodyTable->addCell(7400);
+
+        foreach ($this->getListReferensiHukum() as $reference) {
+            $mengingatCell->addListItem(
+                $reference,
+                0,
+                $titleStyle,
+                'maklumat-decimal-list',
+                $bodyParagraph
+            );
+        }
+
+        $section->addTextBreak(1);
+        $section->addText('MEMUTUSKAN :', $titleStyle, $centerParagraph);
+        $section->addTextBreak(1);
+
+        $decisionTable = $section->addTable([
+            'width' => 100 * 50,
+            'unit' => 'pct',
+            'alignment' => JcTable::START,
+            'borderSize' => 0,
+            'borderColor' => 'FFFFFF',
+            'cellMarginTop' => 0,
+            'cellMarginBottom' => 0,
+            'cellMarginLeft' => 0,
+            'cellMarginRight' => 0,
+        ]);
+
+        $decisionTable->addRow();
+        $decisionTable->addCell(1700)->addText('Menetapkan', $titleStyle, $bodyParagraph);
+        $decisionTable->addCell(300)->addText(':', $titleStyle, $centerParagraph);
+        $decisionTable->addCell(7400)->addText('', $titleStyle, $bodyParagraph);
+
+        $decisionTable->addRow();
+        $decisionTable->addCell(1700)->addText('KESATU', $titleStyle, $bodyParagraph);
+        $decisionTable->addCell(300)->addText(':', $titleStyle, $centerParagraph);
+        $decisionTable->addCell(7400)->addText(
+            'Maklumat Pelayanan pada ' . $instansi->nama . ' Kabupaten Subang.',
+            $titleStyle,
+            $bodyParagraph
+        );
+
+        $decisionTable->addRow();
+        $decisionTable->addCell(1700)->addText('KEDUA', $titleStyle, $bodyParagraph);
+        $decisionTable->addCell(300)->addText(':', $titleStyle, $centerParagraph);
+        $keduaCell = $decisionTable->addCell(7400);
+        $keduaCell->addText(
+            'Maklumat Pelayanan pada ' . $instansi->nama . ' Kabupaten Subang adalah sebagai berikut :',
+            $titleStyle,
+            $bodyParagraph
+        );
+        $keduaCell->addText(
+            '“DENGAN INI KAMI MENYATAKAN SANGGUP MENYELENGGARAKAN PELAYANAN SESUAI STANDAR PELAYANAN YANG TELAH DITETAPKAN, APABILA TIDAK MEMENUHI JANJI INI KAMI BERSEDIA MENERIMA SANKSI SESUAI DENGAN KETENTUAN PERATURAN PERUNDANG-UNDANGAN YANG BERLAKU”',
+            $titleStyle,
+            $maklumatQuoteParagraph
+        );
+
+        $decisionTable->addRow();
+        $decisionTable->addCell(1700)->addText('KETIGA', $titleStyle, $bodyParagraph);
+        $decisionTable->addCell(300)->addText(':', $titleStyle, $centerParagraph);
+        $decisionTable->addCell(7400)->addText(
+            'Keputusan ' . ($standarPelayanan?->jabatan_ttd ?: 'Sekretaris Daerah') . ' ini mulai berlaku pada tanggal ditetapkan.',
+            $titleStyle,
+            $bodyParagraph
+        );
+
+        $section->addTextBreak(1);
+
+        $signatureTable = $section->addTable([
+            'width' => 100 * 50,
+            'unit' => 'pct',
+            'alignment' => JcTable::END,
+            'borderSize' => 0,
+            'borderColor' => 'FFFFFF',
+            'cellMarginTop' => 0,
+            'cellMarginBottom' => 0,
+            'cellMarginLeft' => 0,
+            'cellMarginRight' => 0,
+        ]);
+
+        $signatureTable->addRow();
+        $signatureTable->addCell(4700)->addText('', [], $bodyParagraph);
+        $signatureCell = $signatureTable->addCell(4700);
+        $signatureCell->addText('Ditetapkan di Subang', $titleStyle, $bodyParagraph);
+        $signatureCell->addText(
+            'pada tanggal ' . Helper::getTanggal(date('Y-m-d')),
+            $titleStyle,
+            array_merge($bodyParagraph, ['spaceAfter' => 120]),
+        );
+        $signatureCell->addText(
+            $this->buildJudulTandatangan($standarPelayanan?->jabatan_ttd, $instansi),
+            $titleStyle,
+            $centerParagraph
+        );
+        $signatureCell->addTextBreak(3);
+        $signatureCell->addText(
+            $standarPelayanan?->nama_ttd ?? '',
+            $signatureNameStyle,
+            $centerParagraph
+        );
+
+        $nipTtd = $standarPelayanan?->nip_ttd ? 'NIP. ' . $standarPelayanan?->nip_ttd : '';
+
+        $signatureCell->addText(
+            $nipTtd,
+            $titleStyle,
+            $centerParagraph
+        );
 
         return $phpWord;
+    }
+
+    protected function getListReferensiHukum(): array
+    {
+        return [
+            'Undang-Undang Nomor 14 Tahun 1950 tentang Pembentukan Daerah-Daerah Kabupaten Dalam Lingkungan Propinsi Djawa Barat (Berita Negara Republik Indonesia Tahun 1950), sebagaimana telah diubah dengan Undang-Undang Nomor 4 Tahun 1968 tentang Pembentukan Kabupaten Purwakarta dan Kabupaten Subang, dengan Mengubah Undang-Undang Nomor 14 Tahun 1950 tentang Pembentukan Daerah-Daerah Kabupaten Dalam Lingkungan Propinsi Djawa Barat (Lembaran Negara Republik Indonesia Tahun 1968 Nomor 31, Tambahan Lembaran Negara Republik Indonesia Nomor 2851);',
+            'Undang-Undang Nomor 25 Tahun 2009 tentang Pelayanan Publik (Lembaran Negara Republik Indonesia Tahun 2009 Nomor 112, Tambahan Lembaran Negara Republik Indonesia Nomor 5038);',
+            'Undang-Undang Nomor 23 Tahun 2014 tentang Pemerintahan Daerah (Lembaran Negara Republik Indonesia Tahun 2014 Nomor 244, Tambahan Lembaran Negara Republik Indonesia Nomor 5587), sebagaimana telah diubah beberapa kali terakhir dengan Undang-Undang Nomor 9 Tahun 2015 tentang Perubahan Kedua Atas Undang-Undang Nomor 23 Tahun 2014 tentang Pemerintahan Daerah (Lembaran Negara Republik Indonesia Tahun 2015 Nomor 58, Tambahan Lembaran Negara Republik Indonesia Nomor 5679);',
+            'Undang-Undang Nomor 30 Tahun 2014 tentang Administrasi Pemerintahan (Lembaran Negara Republik Indonesia Tahun 2014 Nomor 292, Tambahan Lembaran Negara Republik Indonesia Nomor 5601);',
+            'Peraturan Pemerintah Nomor 96 Tahun 2012 tentang Pelaksanaan Undang-Undang Nomor 25 Tahun 2009 tentang Pelayanan Publik (Lembaran Negara Republik Indonesia Tahun 2012 Nomor 215, Tambahan Lembaran Negara Republik Indonesia Nomor 5357);',
+            'Peraturan Menteri Pendayagunaan Aparatur Negara dan Reformasi Birokrasi Nomor 15 Tahun 2014 tentang Pedoman Standar Pelayanan (Berita Negara Republik Indonesia Tahun 2014 Nomor 615);',
+            'Peraturan Daerah Kabupaten Subang Nomor 7 Tahun 2016 tentang Pembentukan dan Susunan Perangkat Daerah Kabupaten Subang (Lembaran Daerah Kabupaten Subang Tahun 2016 Nomor 7), sebagaimana telah diubah beberapa kali terakhir dengan Peraturan Daerah Kabupaten Subang Nomor 1 Tahun 2021 tentang Perubahan Ketiga Atas Peraturan Daerah Kabupaten Subang Nomor 7 Tahun 2016 tentang Pembentukan dan Susunan Perangkat Daerah Kabupaten Subang (Lembaran Daerah Kabupaten Subang Tahun 2021 Nomor 1);',
+        ];
+    }
+
+    protected function buildJudul(?string $nama_jabatan, $instansi): string
+    {
+        $nama_jabatan = strtoupper($nama_jabatan ?: ('KEPALA ' . $instansi->nama));
+
+        if (str_contains($nama_jabatan, 'KABUPATEN SUBANG')) {
+            return $nama_jabatan;
+        }
+
+        return trim($nama_jabatan . ' KABUPATEN SUBANG');
+    }
+
+    protected function buildJudulTandatangan(?string $jabatan, $instansi): string
+    {
+        return $this->buildJudul($jabatan ?: 'SEKRETARIS DAERAH', $instansi);
     }
 }
