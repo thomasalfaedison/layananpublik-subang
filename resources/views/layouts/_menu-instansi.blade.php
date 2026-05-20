@@ -23,6 +23,12 @@
                 <p>Cetak SK Layanan</p>
             </a>
         </li>
+        <li class="nav-item">
+            <a href="{{ url('/instansi/index-berita-acara') }}" class="nav-link {{ Helper::isMenuActive('instansi/index-berita-acara') }}">
+                <i class="fas fa-book nav-icon"></i>
+                <p>Berita Acara</p>
+            </a>
+        </li>
 
         <li class="nav-header">MENU LAINNYA</li>
         <li class="nav-item">

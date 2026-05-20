@@ -71,7 +71,6 @@
             'id_instansi' => $model->id_instansi,
         ]), [
             'class' => 'btn btn-primary ml-2',
-            'target' => '_blank',
         ]) ?>
     </div>
 </div>
