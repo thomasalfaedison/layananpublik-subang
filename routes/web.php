@@ -40,6 +40,7 @@ Route::get('/instansi/export-excel', [InstansiController::class, 'exportExcel'])
 Route::get('/instansi/index-pengisian', [InstansiController::class, 'indexPengisian'])->name(InstansiConstant::RouteIndexPengisian);
 Route::get('/instansi/index-penilaian', [InstansiController::class, 'indexPenilaian'])->name(InstansiConstant::RouteIndexPenilaian);
 Route::get('/instansi/index-berita-acara', [InstansiController::class, 'indexBeritaAcara'])->name(InstansiConstant::RouteIndexBeritaAcara);
+Route::get('/instansi/index-maklumat-pelayanan', [InstansiController::class, 'indexMaklumatPelayanan'])->name(InstansiController::ROUTE_INDEX_MAKLUMAT_PELAYANAN);
 
 // USER
 Route::get('/user/index', [UserController::class, 'index'])->name(UserConstant::RouteIndex);
@@ -98,3 +99,4 @@ Route::get('/standar-pelayanan/view', [StandarPelayananController::class, 'view'
 Route::post('/standar-pelayanan/delete', [StandarPelayananController::class, 'delete'])->name(StandarPelayananController::ROUTE_DELETE);
 Route::get('/standar-pelayanan/export-pdf', [StandarPelayananController::class, 'exportPdf'])->name(StandarPelayananController::ROUTE_EXPORT_PDF);
 Route::get('/standar-pelayanan/export-word-berita-acara', [StandarPelayananController::class, 'exportWordBeritaAcara'])->name(StandarPelayananController::ROUTE_EXPORT_WORD_BERITA_ACARA);
+Route::get('/standar-pelayanan/export-word-maklumat-pelayanan', [StandarPelayananController::class, 'exportWordMaklumatPelayanan'])->name(StandarPelayananController::ROUTE_EXPORT_WORD_MAKLUMAT_PELAYANAN);

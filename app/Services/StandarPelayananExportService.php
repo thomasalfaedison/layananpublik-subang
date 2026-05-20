@@ -81,6 +81,47 @@ class StandarPelayananExportService
         return response()->download($tmpFile, $filename)->deleteFileAfterSend(true);
     }
 
+    public function streamWordMaklumatPelayanan(array $params = [])
+    {
+        $id_instansi = $params['id_instansi'] ?? null;
+
+        if ($id_instansi === null) {
+            throw new \InvalidArgumentException('id_instansi tidak boleh kosong');
+        }
+
+        $instansi = $this->instansiService->findById($id_instansi);
+
+        if ($instansi === null) {
+            abort(404, 'Instansi tidak ditemukan');
+        }
+
+        $standarPelayanan = $this->standarPelayananService->firstOrCreate([
+            'id_instansi' => $id_instansi,
+        ]);
+
+        $phpWord = $this->buildMaklumatPelayananDocument([
+            'instansi' => $instansi,
+            'standarPelayanan' => $standarPelayanan,
+        ]);
+
+        $tmpBase = tempnam(sys_get_temp_dir(), 'mp-sp-');
+        $tmpFile = $tmpBase . '.docx';
+
+        if ($tmpBase !== false && file_exists($tmpBase)) {
+            @unlink($tmpBase);
+        }
+
+        $writer = IOFactory::createWriter($phpWord, 'Word2007');
+        $writer->save($tmpFile);
+
+        $filename = sprintf(
+            'maklumat-pelayanan-%s.docx',
+            Str::slug($instansi->nama),
+        );
+
+        return response()->download($tmpFile, $filename)->deleteFileAfterSend(true);
+    }
+
     protected function buildPayload(array $params = []): array
     {
         $id_instansi = $params['id_instansi'] ?? null;
@@ -149,6 +190,7 @@ class StandarPelayananExportService
             'marginRight' => 1440,
             'marginBottom' => 1440,
             'marginLeft' => 1440,
+            'paperSize' => 'Legal',
         ]);
 
         $titleStyle = [
@@ -262,6 +304,68 @@ class StandarPelayananExportService
                 ['alignment' => Jc::CENTER, 'spaceAfter' => 0, 'lineHeight' => 1]
             );
         }
+
+        return $phpWord;
+    }
+
+    protected function buildMaklumatPelayananDocument(array $payload): PhpWord
+    {
+        $phpWord = new PhpWord();
+        $phpWord->setDefaultFontName('Bookman Old Style');
+        $phpWord->setDefaultFontSize(12);
+        $phpWord->addNumberingStyle(
+            'numbering',
+            [
+                'type' => 'multilevel',
+                'levels' => [
+                    [
+                        'format' => 'decimal',
+                        'text' => '%1.',
+                        'left' => 450,
+                        'hanging' => 450,
+                    ],
+                ],
+            ]
+        );
+
+        $section = $phpWord->addSection([
+            'marginTop' => 1440,
+            'marginRight' => 1440,
+            'marginBottom' => 1440,
+            'marginLeft' => 1440,
+            'paperSize' => 'Legal',
+        ]);
+
+        $titleStyle = [
+            'bold' => true,
+            'name' => 'Bookman Old Style',
+            'size' => 14,
+        ];
+
+        $subtitleStyle = [
+            'bold' => true,
+            'name' => 'Bookman Old Style',
+            'size' => 12,
+        ];
+
+        $centerNoSpace = [
+            'alignment' => Jc::CENTER,
+            'spaceAfter' => 0,
+            'lineHeight' => 1,
+        ];
+
+        $justifyParagraph = [
+            'alignment' => Jc::BOTH,
+            'lineHeight' => 1.15,
+            'spaceAfter' => 120,
+        ];
+
+        $listParagraphStyle = [
+            'alignment' => Jc::BOTH,
+            'lineHeight' => 1,
+        ];
+
+        
 
         return $phpWord;
     }

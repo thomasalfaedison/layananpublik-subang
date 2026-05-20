@@ -30,6 +30,12 @@
                 <p>Berita Acara</p>
             </a>
         </li>
+        <li class="nav-item">
+            <a href="{{ url('/instansi/index-maklumat-pelayanan') }}" class="nav-link {{ Helper::isMenuActive('instansi/index-maklumat-pelayanan') }}">
+                <i class="fas fa-file-signature nav-icon"></i>
+                <p>Maklumat Pelayanan</p>
+            </a>
+        </li>
         <li class="nav-header">MENU LAINNYA</li>
         <li class="nav-item">
             <a href="{{ url('/instansi/index') }}" class="nav-link {{ Helper::isMenuActive('instansi/index') }}">

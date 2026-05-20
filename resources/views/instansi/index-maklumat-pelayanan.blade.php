@@ -3,12 +3,12 @@
     use App\Components\Session;
     use App\Http\Controllers\StandarPelayananController;
 
-    $breadcrumbs[] = 'Daftar Berita Acara';
+    $breadcrumbs[] = 'Daftar Maklumat Pelayanan';
 @endphp
 
 @extends(LayoutConstant::MAIN_LAYOUT)
 
-@section('title', 'Daftar Berita Acara')
+@section('title', 'Daftar Maklumat Pelayanan')
 
 @section('content')
 
@@ -42,7 +42,7 @@
                                 <td>{{ $instansi->nama }}</td>
                                 <td>{{ $instansi->standarPelayanan->nomor ?? '-' }}</td>
                                 <td class="text-center">
-                                    <?= Html::a('<i class="fa fa-file-word"></i> Export Word', route(StandarPelayananController::ROUTE_EXPORT_WORD_BERITA_ACARA, [
+                                    <?= Html::a('<i class="fa fa-file-word"></i> Export Word', route(StandarPelayananController::ROUTE_EXPORT_WORD_MAKLUMAT_PELAYANAN, [
                                         'id_instansi' => $instansi->id,
                                     ]), [
                                         'class' => 'btn btn-primary btn-xs',

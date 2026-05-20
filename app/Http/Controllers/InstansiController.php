@@ -17,6 +17,7 @@ class InstansiController extends Controller implements HasMiddleware
     public const ROUTE_INDEX = 'instansi.index';
     public const ROUTE_INDEX_STANDAR_PELAYANAN = 'instansi.indexStandarPelayanan';
     public const ROUTE_INDEX_BERITA_ACARA = 'instansi.indexBeritaAcara';
+    public const ROUTE_INDEX_MAKLUMAT_PELAYANAN = 'instansi.indexMaklumatPelayanan';
 
     public static function middleware()
     {
@@ -78,6 +79,29 @@ class InstansiController extends Controller implements HasMiddleware
         });
 
         return view('instansi.index-berita-acara', compact('allInstansi'));
+    }
+
+    public function indexMaklumatPelayanan(Request $request)
+    {
+        $params = $request->query();
+
+        if (Session::isInstansi()) {
+            $params['id'] = Session::getIdInstansi();
+        }
+
+        $allInstansi = $this->instansiService->paginate($params);
+
+        $allInstansi->getCollection()->transform(function (Instansi $instansi) {
+            $standarPelayanan = $this->standarPelayananService->firstOrCreate([
+                'id_instansi' => $instansi->id,
+            ]);
+
+            $instansi->setRelation('standarPelayanan', $standarPelayanan);
+
+            return $instansi;
+        });
+
+        return view('instansi.index-maklumat-pelayanan', compact('allInstansi'));
     }
 
     public function create(Request $request)
