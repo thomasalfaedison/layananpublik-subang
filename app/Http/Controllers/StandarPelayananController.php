@@ -22,6 +22,7 @@ class StandarPelayananController extends Controller implements HasMiddleware
     public const ROUTE_VIEW = 'standar-pelayanan.view';
     public const ROUTE_DELETE = 'standar-pelayanan.delete';
     public const ROUTE_EXPORT_PDF = 'standar-pelayanan.export-pdf';
+    public const ROUTE_EXPORT_WORD_BERITA_ACARA = 'standar-pelayanan.export-word-berita-acara';
 
     public static function middleware()
     {
@@ -170,6 +171,23 @@ class StandarPelayananController extends Controller implements HasMiddleware
         }
 
         return $this->exportService->stream($params);
+    }
+
+    public function exportWordBeritaAcara(Request $request)
+    {
+        $params = $request->query();
+
+        if (Session::isInstansi()) {
+            $params['id_instansi'] = Session::getIdInstansi();
+        }
+
+        $id_instansi = @$params['id_instansi'];
+
+        if ($id_instansi == null) {
+            return back()->with('danger', 'Silahkan pilih perangkat daerah terlebih dahulu');
+        }
+
+        return $this->exportService->streamWordBeritaAcara($params);
     }
 
     protected function getFormData(array $data = []): array

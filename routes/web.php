@@ -97,3 +97,4 @@ Route::post('/standar-pelayanan/update', [StandarPelayananController::class, 'up
 Route::get('/standar-pelayanan/view', [StandarPelayananController::class, 'view'])->name(StandarPelayananController::ROUTE_VIEW);
 Route::post('/standar-pelayanan/delete', [StandarPelayananController::class, 'delete'])->name(StandarPelayananController::ROUTE_DELETE);
 Route::get('/standar-pelayanan/export-pdf', [StandarPelayananController::class, 'exportPdf'])->name(StandarPelayananController::ROUTE_EXPORT_PDF);
+Route::get('/standar-pelayanan/export-word-berita-acara', [StandarPelayananController::class, 'exportWordBeritaAcara'])->name(StandarPelayananController::ROUTE_EXPORT_WORD_BERITA_ACARA);

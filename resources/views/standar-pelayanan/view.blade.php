@@ -66,6 +66,13 @@
             'class' => 'btn btn-danger ml-2',
             'target' => '_blank',
         ]) ?>
+
+        <?= Html::a('<i class="fa fa-file-word"></i> Export Word Berita Acara', route(StandarPelayananController::ROUTE_EXPORT_WORD_BERITA_ACARA, [
+            'id_instansi' => $model->id_instansi,
+        ]), [
+            'class' => 'btn btn-primary ml-2',
+            'target' => '_blank',
+        ]) ?>
     </div>
 </div>
 
