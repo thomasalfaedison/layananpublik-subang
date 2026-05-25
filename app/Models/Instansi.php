@@ -62,4 +62,9 @@ class Instansi extends Model
     {
         return $this->belongsTo(Instansi::class, 'id_induk', 'id');
     }
+
+    public function dokumen()
+    {
+        return $this->hasMany(Dokumen::class, 'id_instansi', 'id');
+    }
 }

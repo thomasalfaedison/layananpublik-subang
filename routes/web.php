@@ -6,6 +6,7 @@ use App\Constants\LayananKomponenConstant;
 use App\Constants\UserConstant;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\LayananController;
 use App\Http\Controllers\LayananKomponenController;
@@ -41,6 +42,9 @@ Route::get('/instansi/index-pengisian', [InstansiController::class, 'indexPengis
 Route::get('/instansi/index-penilaian', [InstansiController::class, 'indexPenilaian'])->name(InstansiConstant::RouteIndexPenilaian);
 Route::get('/instansi/index-berita-acara', [InstansiController::class, 'indexBeritaAcara'])->name(InstansiConstant::RouteIndexBeritaAcara);
 Route::get('/instansi/index-maklumat-pelayanan', [InstansiController::class, 'indexMaklumatPelayanan'])->name(InstansiController::ROUTE_INDEX_MAKLUMAT_PELAYANAN);
+Route::get('/dokumen/view/{slug}', [DokumenController::class, 'view'])->name(DokumenController::ROUTE_VIEW);
+Route::get('/dokumen/upload/{slug}', [DokumenController::class, 'uploadForm'])->name(DokumenController::ROUTE_UPLOAD_FORM);
+Route::post('/dokumen/upload/{slug}', [DokumenController::class, 'upload'])->name(DokumenController::ROUTE_UPLOAD);
 
 // USER
 Route::get('/user/index', [UserController::class, 'index'])->name(UserConstant::RouteIndex);

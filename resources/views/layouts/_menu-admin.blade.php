@@ -25,13 +25,13 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ url('/instansi/index-berita-acara') }}" class="nav-link {{ Helper::isMenuActive('instansi/index-berita-acara') }}">
+            <a href="{{ url('/instansi/index-berita-acara') }}" class="nav-link {{ Helper::isMenuActive(['instansi/index-berita-acara', 'dokumen/view/berita-acara', 'dokumen/upload/berita-acara']) }}">
                 <i class="fas fa-book nav-icon"></i>
                 <p>Berita Acara</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ url('/instansi/index-maklumat-pelayanan') }}" class="nav-link {{ Helper::isMenuActive('instansi/index-maklumat-pelayanan') }}">
+            <a href="{{ url('/instansi/index-maklumat-pelayanan') }}" class="nav-link {{ Helper::isMenuActive(['instansi/index-maklumat-pelayanan', 'dokumen/view/maklumat-pelayanan', 'dokumen/upload/maklumat-pelayanan']) }}">
                 <i class="fas fa-file-signature nav-icon"></i>
                 <p>Maklumat Pelayanan</p>
             </a>

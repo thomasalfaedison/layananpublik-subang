@@ -41,47 +41,38 @@ class InstansiController extends Controller implements HasMiddleware
 
     public function indexStandarPelayanan(Request $request)
     {
-        $params = $request->query();
-
-        $allInstansi = $this->instansiService->paginate($params);
-
-        $allInstansi->getCollection()->transform(function (Instansi $instansi) {
-            $standarPelayanan = $this->standarPelayananService->firstOrCreate([
-                'id_instansi' => $instansi->id,
+        if (Session::isInstansi()) {
+            return redirect()->route(DokumenController::ROUTE_VIEW, [
+                'slug' => \App\Models\Dokumen::SLUG_STANDAR_PELAYANAN,
             ]);
+        }
 
-            $instansi->setRelation('standarPelayanan', $standarPelayanan);
-
-            return $instansi;
-        });
-
-        return view('instansi.index-standar-pelayanan',compact('allInstansi'));
+        return $this->renderDokumenIndex($request, \App\Models\Dokumen::JENIS_SP, 'instansi.index-standar-pelayanan');
     }
 
     public function indexBeritaAcara(Request $request)
     {
-        $params = $request->query();
-
         if (Session::isInstansi()) {
-            $params['id'] = Session::getIdInstansi();
+            return redirect()->route(DokumenController::ROUTE_VIEW, [
+                'slug' => \App\Models\Dokumen::SLUG_BERITA_ACARA,
+            ]);
         }
 
-        $allInstansi = $this->instansiService->paginate($params);
-
-        $allInstansi->getCollection()->transform(function (Instansi $instansi) {
-            $standarPelayanan = $this->standarPelayananService->firstOrCreate([
-                'id_instansi' => $instansi->id,
-            ]);
-
-            $instansi->setRelation('standarPelayanan', $standarPelayanan);
-
-            return $instansi;
-        });
-
-        return view('instansi.index-berita-acara', compact('allInstansi'));
+        return $this->renderDokumenIndex($request, \App\Models\Dokumen::JENIS_BA, 'instansi.index-berita-acara');
     }
 
     public function indexMaklumatPelayanan(Request $request)
+    {
+        if (Session::isInstansi()) {
+            return redirect()->route(DokumenController::ROUTE_VIEW, [
+                'slug' => \App\Models\Dokumen::SLUG_MAKLUMAT_PELAYANAN,
+            ]);
+        }
+
+        return $this->renderDokumenIndex($request, \App\Models\Dokumen::JENIS_MP, 'instansi.index-maklumat-pelayanan');
+    }
+
+    protected function renderDokumenIndex(Request $request, string $jenisDokumen, string $view)
     {
         $params = $request->query();
 
@@ -91,17 +82,23 @@ class InstansiController extends Controller implements HasMiddleware
 
         $allInstansi = $this->instansiService->paginate($params);
 
-        $allInstansi->getCollection()->transform(function (Instansi $instansi) {
+        $dokumenByInstansi = app(\App\Services\DokumenService::class)->findAll([
+            'id_instansi' => $allInstansi->pluck('id')->all(),
+            'jenis' => $jenisDokumen,
+        ])->keyBy('id_instansi');
+
+        $allInstansi->getCollection()->transform(function (Instansi $instansi) use ($dokumenByInstansi) {
             $standarPelayanan = $this->standarPelayananService->firstOrCreate([
                 'id_instansi' => $instansi->id,
             ]);
 
             $instansi->setRelation('standarPelayanan', $standarPelayanan);
+            $instansi->setRelation('dokumenItem', $dokumenByInstansi->get($instansi->id));
 
             return $instansi;
         });
 
-        return view('instansi.index-maklumat-pelayanan', compact('allInstansi'));
+        return view($view, compact('allInstansi', 'jenisDokumen'));
     }
 
     public function create(Request $request)
