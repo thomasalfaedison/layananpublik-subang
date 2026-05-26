@@ -10,6 +10,18 @@
         <h3 class="card-title">Standar Pelayanan</h3>
     </div>
     <div class="card-body">
+        @if (\App\Components\Session::isInstansi())
+            @if ($dokumenModel->getFileUrl('file', \App\Models\Dokumen::FOLDER_FILE))
+                <div class="alert alert-success">
+                    Dokumen Standar Pelayanan sudah diunggah, silahkan klik lihat file untuk meninjau hasil file yang diunggah.
+                </div>
+            @else
+                <div class="alert alert-danger">
+                    Dokumen Standar Pelayanan belum diunggah! Silahkan unggah terlebih dahulu atau klik cek PDF SK untuk meninjau dokumen template.
+                </div>
+            @endif
+        @endif
+
         <table class="table table-bordered">
             <tr>
                 <th style="width:200px;">Perangkat Daerah</th>
