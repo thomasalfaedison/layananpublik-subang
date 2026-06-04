@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Components\Helper;
+use App\Components\Html;
 use App\Models\RefLayananKomponen;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
@@ -243,7 +244,7 @@ class StandarPelayananExportService
         foreach ($allLayanan->values() as $index => $layanan) {
             $suffix = $index === ($jumlahLayanan - 1) ? '.' : ';';
             $section->addListItem(
-                Helper::normalizeWhitespace($layanan->nama) . $suffix,
+                Helper::normalizeWhitespace($this->cleanText($layanan->nama)) . $suffix,
                 0,
                 [],
                 'numbering',
@@ -648,5 +649,15 @@ class StandarPelayananExportService
     protected function buildJudulTandatangan(?string $jabatan, $instansi): string
     {
         return $this->buildJudul($jabatan ?: 'SEKRETARIS DAERAH', $instansi);
+    }
+
+    protected function cleanText(?string $text)
+    {
+        if ($text === null) return null;
+        
+        $text = htmlspecialchars($text); 
+        $text = strip_tags($text);
+        
+        return trim($text);
     }
 }
