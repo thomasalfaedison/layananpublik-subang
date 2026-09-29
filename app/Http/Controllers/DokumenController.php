@@ -46,15 +46,30 @@ class DokumenController extends Controller implements HasMiddleware
             return back()->with('danger', 'Silahkan pilih perangkat daerah terlebih dahulu');
         }
 
-        $dokumenModel = $this->dokumenService->findOne([
+        $berdasarkanTahun = in_array($jenisDokumen, [Dokumen::JENIS_BA, Dokumen::JENIS_MP], true);
+        $tahun = null;
+
+        if ($berdasarkanTahun) {
+            $request->validate(['tahun' => 'nullable|integer|between:1901,2155']);
+            $tahun = (int) ($request->query('tahun') ?: Session::getTahun());
+        }
+
+        $params = [
             'id_instansi' => $idInstansi,
             'jenis' => $jenisDokumen,
-        ]);
+        ];
+
+        if ($berdasarkanTahun) {
+            $params['tahun'] = $tahun;
+        }
+
+        $dokumenModel = $this->dokumenService->findOne($params);
 
         if ($dokumenModel === null) {
             $dokumenModel = new Dokumen([
                 'id_instansi' => $idInstansi,
                 'jenis' => $jenisDokumen,
+                ...($berdasarkanTahun ? ['tahun' => $tahun] : []),
             ]);
 
             $dokumenModel->setRelation('instansi', $this->instansiService->findById($idInstansi));
@@ -73,6 +88,7 @@ class DokumenController extends Controller implements HasMiddleware
             'standarPelayananModel',
             'jenisDokumen',
             'slug',
+            'tahun',
         ));
     }
 
@@ -88,9 +104,16 @@ class DokumenController extends Controller implements HasMiddleware
             ? []
             : $this->instansiService->getList();
 
+        $tahun = null;
+
+        if (in_array($jenisDokumen, [Dokumen::JENIS_BA, Dokumen::JENIS_MP], true)) {
+            $request->validate(['tahun' => 'nullable|integer|between:1901,2155']);
+            $tahun = (int) ($request->query('tahun') ?: Session::getTahun());
+        }
+
         $referrer = URL::previous();
 
-        return view('dokumen.upload', compact('jenisDokumen', 'slug', 'listInstansiDokumen', 'referrer'));
+        return view('dokumen.upload', compact('jenisDokumen', 'slug', 'listInstansiDokumen', 'referrer', 'tahun'));
     }
 
     public function upload(Request $request, string $slug)
@@ -108,6 +131,22 @@ class DokumenController extends Controller implements HasMiddleware
             $data['jenis'] = $jenisDokumen;
 
             $this->dokumenService->upsert($data);
+
+            if (in_array($jenisDokumen, [Dokumen::JENIS_BA, Dokumen::JENIS_MP], true)) {
+                if (Session::isInstansi()) {
+                    return redirect()->route(self::ROUTE_VIEW, [
+                        'slug' => $slug,
+                        'tahun' => $data['tahun'],
+                    ])->with('success', 'Dokumen berhasil diupload');
+                }
+
+                $route = $jenisDokumen === Dokumen::JENIS_BA
+                    ? InstansiController::ROUTE_INDEX_BERITA_ACARA
+                    : InstansiController::ROUTE_INDEX_MAKLUMAT_PELAYANAN;
+
+                return redirect()->route($route, ['tahun' => $data['tahun']])
+                    ->with('success', 'Dokumen berhasil diupload');
+            }
 
             return redirect($referrer)->with('success', 'Dokumen berhasil diupload');
         } catch (ValidationException $e) {

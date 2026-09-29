@@ -22,10 +22,16 @@
             @endif
         @endif
 
+        @include('dokumen._pilih-tahun')
+
         <table class="table table-bordered">
             <tr>
                 <th style="width:200px;">Perangkat Daerah</th>
                 <td>{{ $dokumenModel->instansi?->nama ?? '-' }}</td>
+            </tr>
+            <tr>
+                <th>Tahun Dokumen</th>
+                <td>{{ $dokumenModel->tahun }}</td>
             </tr>
             <tr>
                 <th>Nomor Dokumen</th>
@@ -53,6 +59,7 @@
     <div class="card-footer">
         <?= Html::a('<i class="fa fa-upload"></i> Unggah Dokumen', route(DokumenController::ROUTE_UPLOAD_FORM, [
             'slug' => $slug,
+            'tahun' => $dokumenModel->tahun,
         ]), [
             'class' => 'btn btn-success',
         ]) ?>

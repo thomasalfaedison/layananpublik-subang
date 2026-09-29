@@ -75,6 +75,14 @@ class InstansiController extends Controller implements HasMiddleware
     protected function renderDokumenIndex(Request $request, string $jenisDokumen, string $view)
     {
         $params = $request->query();
+        $berdasarkanTahun = in_array($jenisDokumen, [\App\Models\Dokumen::JENIS_BA, \App\Models\Dokumen::JENIS_MP], true);
+        $tahun = null;
+
+        if ($berdasarkanTahun) {
+            $request->validate(['tahun' => 'nullable|integer|between:1901,2155']);
+            $tahun = (int) ($request->query('tahun') ?: Session::getTahun());
+            unset($params['tahun']);
+        }
 
         if (Session::isInstansi()) {
             $params['id'] = Session::getIdInstansi();
@@ -82,10 +90,20 @@ class InstansiController extends Controller implements HasMiddleware
 
         $allInstansi = $this->instansiService->paginate($params);
 
-        $dokumenByInstansi = app(\App\Services\DokumenService::class)->findAll([
+        if ($berdasarkanTahun) {
+            $allInstansi->appends(['tahun' => $tahun]);
+        }
+
+        $dokumenParams = [
             'id_instansi' => $allInstansi->pluck('id')->all(),
             'jenis' => $jenisDokumen,
-        ])->keyBy('id_instansi');
+        ];
+
+        if ($berdasarkanTahun) {
+            $dokumenParams['tahun'] = $tahun;
+        }
+
+        $dokumenByInstansi = app(\App\Services\DokumenService::class)->findAll($dokumenParams)->keyBy('id_instansi');
 
         $allInstansi->getCollection()->transform(function (Instansi $instansi) use ($dokumenByInstansi) {
             $standarPelayanan = $this->standarPelayananService->firstOrCreate([
@@ -98,7 +116,7 @@ class InstansiController extends Controller implements HasMiddleware
             return $instansi;
         });
 
-        return view($view, compact('allInstansi', 'jenisDokumen'));
+        return view($view, compact('allInstansi', 'jenisDokumen', 'tahun'));
     }
 
     public function create(Request $request)

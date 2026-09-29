@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property int $id_instansi
+ * @property int|null $tahun
  * @property string $jenis
  * @property string $nomor
  * @property string $tanggal
@@ -31,6 +32,7 @@ class Dokumen extends Model
     protected $fillable = [
         'id_instansi',
         'jenis',
+        'tahun',
         'nomor',
         'tanggal',
         'file',

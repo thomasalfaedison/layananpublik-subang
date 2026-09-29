@@ -34,6 +34,21 @@
                     </div>
                 @endif
 
+                @if ($tahun !== null)
+                    <div class="form-group">
+                        <?= Form::label('tahun', 'Tahun Dokumen', ['required' => true]) ?>
+                        <?= Form::number('tahun', old('tahun', $tahun), [
+                            'class' => 'form-control' . ($errors->has('tahun') ? ' is-invalid' : ''),
+                            'min' => 1901,
+                            'max' => 2155,
+                            'required' => true,
+                        ]) ?>
+                        @error('tahun')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                @endif
+
                 <div class="form-group">
                     <?= Form::label('nomor', 'Nomor ' . $judulDokumen, ['required' => true]) ?>
                     <?= Form::text('nomor', old('nomor'), [

@@ -10,7 +10,7 @@
 
 @extends(LayoutConstant::MAIN_LAYOUT)
 
-@section('title', 'Daftar Berita Acara')
+@section('title', 'Daftar Berita Acara Tahun ' . $tahun)
 
 @section('content')
 
@@ -27,6 +27,7 @@
             <div class="mb-3">
                 <?= Html::a('<i class="fa fa-upload"></i> Unggah Berita Acara', route(DokumenController::ROUTE_UPLOAD_FORM, [
                     'slug' => \App\Models\Dokumen::getSlugByJenis($jenisDokumen),
+                    'tahun' => $tahun,
                 ]), [
                     'class' => 'btn btn-success',
                 ]) ?>

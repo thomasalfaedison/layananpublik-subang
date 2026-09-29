@@ -17,6 +17,16 @@
                         'placeholder' => 'Nama Perangkat Daerah'
                     ]) ?>
                 </div>
+                @if (isset($tahun))
+                    <div class="col-sm-2">
+                        <?= Form::label('tahun', 'Tahun Dokumen') ?>
+                        <?= Form::number('tahun', $tahun, [
+                            'class' => 'form-control',
+                            'min' => 1901,
+                            'max' => 2155,
+                        ]) ?>
+                    </div>
+                @endif
             </div>
         </div>
         <div class="card-footer">

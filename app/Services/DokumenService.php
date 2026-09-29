@@ -25,7 +25,9 @@ class DokumenService
                 'integer',
                 'exists:instansi,id',
                 Rule::unique('dokumen')->where(function ($query) use ($data) {
-                    return $query->where('jenis', $data['jenis'] ?? null);
+                    $query->where('jenis', $data['jenis'] ?? null);
+                    $query->where('tahun', $data['tahun'] ?? Session::getTahun());
+                    return $query;
                 })->ignore($model?->id),
             ],
             'jenis' => [
@@ -37,6 +39,7 @@ class DokumenService
                 ]),
             ],
             'nomor' => 'required|string|max:255',
+            'tahun' => 'required|integer|between:1901,2155',
             'tanggal' => 'required|date',
             'file' => [
                 $model?->file ? 'nullable' : 'required',
@@ -74,6 +77,10 @@ class DokumenService
             $query->where('jenis', $params['jenis']);
         }
 
+        if (@$params['tahun'] !== null) {
+            $query->where('tahun', $params['tahun']);
+        }
+
         return $query->get();
     }
 
@@ -94,6 +101,7 @@ class DokumenService
         $model = $this->findOne([
             'id_instansi' => $data['id_instansi'] ?? null,
             'jenis' => $data['jenis'] ?? null,
+            'tahun' => $data['tahun']  ?? Session::getTahun(),
         ]);
 
         $this->validate($data, $model);

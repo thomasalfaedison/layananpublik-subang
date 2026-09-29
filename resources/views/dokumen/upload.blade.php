@@ -14,5 +14,6 @@
         'slug' => $slug,
         'listInstansiDokumen' => $listInstansiDokumen,
         'referrer' => $referrer,
+        'tahun' => $tahun,
     ])
 @endsection
