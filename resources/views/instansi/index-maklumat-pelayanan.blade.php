@@ -40,6 +40,7 @@
                             <th style="width:60px; text-align:center">No</th>
                             <th>Perangkat Daerah</th>
                             <th>Nomor Dokumen</th>
+                            <th style="width:90px; text-align:center">Tahun</th>
                             <th style="width:120px; text-align:center">Tanggal</th>
                             <th style="width:110px; text-align:center">File</th>
                             <th style="width:180px; text-align:center">Aksi</th>
@@ -54,6 +55,7 @@
                                 </td>
                                 <td>{{ $instansi->nama }}</td>
                                 <td>{{ $dokumen->nomor ?? '-' }}</td>
+                                <td class="text-center">{{ $dokumen->tahun ?? '-' }}</td>
                                 <td style="text-align: center;">{{ $dokumen ? Helper::getTanggal($dokumen->tanggal) : '-' }}</td>
                                 <td class="text-center">
                                     @if ($dokumen?->getFileUrl('file', \App\Models\Dokumen::FOLDER_FILE))
@@ -75,7 +77,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center">
+                                <td colspan="7" class="text-center">
                                     Data perangkat daerah tidak ditemukan.
                                 </td>
                             </tr>
