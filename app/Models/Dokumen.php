@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\FileAccessModelTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
@@ -13,11 +14,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $nomor
  * @property string $tanggal
  * @property string|null $file
+ * @property string|null $deleted_at
  * @property Instansi $instansi
  */
 class Dokumen extends Model
 {
     use FileAccessModelTrait;
+    use SoftDeletes;
 
     public const JENIS_SP = 'SP';
     public const JENIS_BA = 'BA';

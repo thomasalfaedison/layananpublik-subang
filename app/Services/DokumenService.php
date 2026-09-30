@@ -31,6 +31,7 @@ class DokumenService
             $tahunRules[] = Rule::unique('dokumen', 'tahun')
                 ->where('id_instansi', $data['id_instansi'] ?? null)
                 ->where('jenis', $data['jenis'])
+                ->withoutTrashed()
                 ->ignore($model?->id);
         }
 
@@ -131,16 +132,6 @@ class DokumenService
 
     public function delete(Dokumen $model): bool
     {
-        $file = $model->file;
-
-        if (!$model->delete()) {
-            return false;
-        }
-
-        if ($file) {
-            static::deleteFileIfExists(Dokumen::FOLDER_FILE . '/' . $file);
-        }
-
-        return true;
+        return (bool) $model->delete();
     }
 }
