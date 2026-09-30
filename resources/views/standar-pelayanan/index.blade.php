@@ -8,7 +8,7 @@
      * @var \Illuminate\Pagination\LengthAwarePaginator<int, \App\Models\StandarPelayanan> $allStandarPelayanan
      **/
 
-    $breadcrumbs[] = 'Standar Pelayanan';
+    $breadcrumbs[] = 'Cetak SK Layanan';
 
     $exportInstansiId = request()->query('id_instansi');
 
@@ -21,7 +21,7 @@
 
 @extends(LayoutConstant::MAIN_LAYOUT)
 
-@section('title', 'Standar Pelayanan')
+@section('title', 'Cetak SK Layanan')
 
 @section('content')
 
@@ -29,12 +29,12 @@
 
     <div class="card card-default">
         <div class="card-header">
-            <h3 class="card-title">Daftar Standar Pelayanan</h3>
+            <h3 class="card-title">Daftar Pengaturan SK Layanan</h3>
         </div>
 
         <div class="card-body">
             <div class="mb-3">
-                <?= Html::a('<i class="fa fa-plus"></i> Tambah Standar Pelayanan', route(StandarPelayananController::ROUTE_CREATE), [
+                <?= Html::a('<i class="fa fa-plus"></i> Tambah Pengaturan SK', route(StandarPelayananController::ROUTE_CREATE), [
                     'class' => 'btn btn-success',
                 ]) ?>
 
@@ -106,7 +106,7 @@
                             @endphp
                             <tr>
                                 <td colspan="{{ $colspan }}" class="text-center">
-                                    Data Standar Pelayanan tidak ditemukan.
+                                    Data pengaturan SK tidak ditemukan.
                                 </td>
                             </tr>
                         @endforelse

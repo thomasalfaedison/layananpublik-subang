@@ -19,17 +19,23 @@ class DokumenService
      */
     public function validate(array $data, ?Dokumen $model = null): void
     {
+        $isAnnualDocument = in_array($data['jenis'] ?? null, [
+            Dokumen::JENIS_SP,
+            Dokumen::JENIS_BA,
+            Dokumen::JENIS_MP,
+        ], true);
+        $idInstansiRules = ['required', 'integer', 'exists:instansi,id'];
+        $tahunRules = ['required', 'integer', 'between:1901,2155'];
+
+        if ($isAnnualDocument) {
+            $tahunRules[] = Rule::unique('dokumen', 'tahun')
+                ->where('id_instansi', $data['id_instansi'] ?? null)
+                ->where('jenis', $data['jenis'])
+                ->ignore($model?->id);
+        }
+
         $validator = Validator::make($data, [
-            'id_instansi' => [
-                'required',
-                'integer',
-                'exists:instansi,id',
-                Rule::unique('dokumen')->where(function ($query) use ($data) {
-                    $query->where('jenis', $data['jenis'] ?? null);
-                    $query->where('tahun', $data['tahun'] ?? Session::getTahun());
-                    return $query;
-                })->ignore($model?->id),
-            ],
+            'id_instansi' => $idInstansiRules,
             'jenis' => [
                 'required',
                 Rule::in([
@@ -39,7 +45,7 @@ class DokumenService
                 ]),
             ],
             'nomor' => 'required|string|max:255',
-            'tahun' => 'required|integer|between:1901,2155',
+            'tahun' => $tahunRules,
             'tanggal' => 'required|date',
             'file' => [
                 $model?->file ? 'nullable' : 'required',
@@ -47,6 +53,8 @@ class DokumenService
                 'mimes:pdf,doc,docx',
                 'max:5120',
             ],
+        ], [
+            'tahun.unique' => 'Dokumen untuk perangkat daerah, jenis, dan tahun ini sudah ada. Gunakan aksi Ubah untuk memperbaruinya.',
         ]);
 
         if ($validator->fails()) {
@@ -98,22 +106,41 @@ class DokumenService
             $data['id_instansi'] = Session::getIdInstansi();
         }
 
-        $model = $this->findOne([
-            'id_instansi' => $data['id_instansi'] ?? null,
-            'jenis' => $data['jenis'] ?? null,
-            'tahun' => $data['tahun']  ?? Session::getTahun(),
-        ]);
+        $this->validate($data);
 
-        $this->validate($data, $model);
-
-        static::handleFileUploads($data, ['file'], Dokumen::FOLDER_FILE, $model);
-
-        if ($model) {
-            $model->update($data);
-
-            return $model;
-        }
+        static::handleFileUploads($data, ['file'], Dokumen::FOLDER_FILE);
 
         return Dokumen::create($data);
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    public function update(Dokumen $model, array $data): Dokumen
+    {
+        $data['id_instansi'] = $model->id_instansi;
+        $data['jenis'] = $model->jenis;
+        $data['tahun'] = $model->tahun ?? ($model->jenis === Dokumen::JENIS_SP ? ($data['tahun'] ?? null) : null);
+
+        $this->validate($data, $model);
+        static::handleFileUploads($data, ['file'], Dokumen::FOLDER_FILE, $model);
+        $model->update($data);
+
+        return $model;
+    }
+
+    public function delete(Dokumen $model): bool
+    {
+        $file = $model->file;
+
+        if (!$model->delete()) {
+            return false;
+        }
+
+        if ($file) {
+            static::deleteFileIfExists(Dokumen::FOLDER_FILE . '/' . $file);
+        }
+
+        return true;
     }
 }

@@ -69,7 +69,7 @@ class StandarPelayananController extends Controller implements HasMiddleware
                 $this->standarPelayananService->create($data);
 
                 return redirect(route(self::ROUTE_INDEX))
-                    ->with('success', 'Standar Pelayanan berhasil dibuat');
+                    ->with('success', 'Pengaturan SK berhasil dibuat');
             } catch (ValidationException $e) {
                 return redirect()->back()
                     ->withErrors($e->validator)
@@ -102,7 +102,7 @@ class StandarPelayananController extends Controller implements HasMiddleware
 
                 $this->standarPelayananService->update($model, $data);
 
-                return redirect($referrer)->with('success', 'Standar Pelayanan berhasil diperbarui');
+                return redirect($referrer)->with('success', 'Pengaturan SK berhasil diperbarui');
             } catch (ValidationException $e) {
                 return redirect()->back()
                     ->withErrors($e->validator)
@@ -151,7 +151,7 @@ class StandarPelayananController extends Controller implements HasMiddleware
         try {
             $this->standarPelayananService->delete($model);
 
-            return redirect()->back()->with('success', 'Standar Pelayanan berhasil dihapus');
+            return redirect()->back()->with('success', 'Pengaturan SK berhasil dihapus');
         } catch (\Exception $e) {
             return redirect()->back()->with('danger', 'Data gagal dihapus. Silakan coba lagi.');
         }

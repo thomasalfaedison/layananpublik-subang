@@ -42,9 +42,7 @@ class InstansiController extends Controller implements HasMiddleware
     public function indexStandarPelayanan(Request $request)
     {
         if (Session::isInstansi()) {
-            return redirect()->route(DokumenController::ROUTE_VIEW, [
-                'slug' => \App\Models\Dokumen::SLUG_STANDAR_PELAYANAN,
-            ]);
+            return redirect()->route(DokumenController::ROUTE_INDEX_STANDAR_PELAYANAN);
         }
 
         return $this->renderDokumenIndex($request, \App\Models\Dokumen::JENIS_SP, 'instansi.index-standar-pelayanan');
@@ -53,9 +51,7 @@ class InstansiController extends Controller implements HasMiddleware
     public function indexBeritaAcara(Request $request)
     {
         if (Session::isInstansi()) {
-            return redirect()->route(DokumenController::ROUTE_VIEW, [
-                'slug' => \App\Models\Dokumen::SLUG_BERITA_ACARA,
-            ]);
+            return redirect()->route(DokumenController::ROUTE_INDEX_BERITA_ACARA);
         }
 
         return $this->renderDokumenIndex($request, \App\Models\Dokumen::JENIS_BA, 'instansi.index-berita-acara');
@@ -64,9 +60,7 @@ class InstansiController extends Controller implements HasMiddleware
     public function indexMaklumatPelayanan(Request $request)
     {
         if (Session::isInstansi()) {
-            return redirect()->route(DokumenController::ROUTE_VIEW, [
-                'slug' => \App\Models\Dokumen::SLUG_MAKLUMAT_PELAYANAN,
-            ]);
+            return redirect()->route(DokumenController::ROUTE_INDEX_MAKLUMAT_PELAYANAN);
         }
 
         return $this->renderDokumenIndex($request, \App\Models\Dokumen::JENIS_MP, 'instansi.index-maklumat-pelayanan');
@@ -75,7 +69,11 @@ class InstansiController extends Controller implements HasMiddleware
     protected function renderDokumenIndex(Request $request, string $jenisDokumen, string $view)
     {
         $params = $request->query();
-        $berdasarkanTahun = in_array($jenisDokumen, [\App\Models\Dokumen::JENIS_BA, \App\Models\Dokumen::JENIS_MP], true);
+        $berdasarkanTahun = in_array($jenisDokumen, [
+            \App\Models\Dokumen::JENIS_SP,
+            \App\Models\Dokumen::JENIS_BA,
+            \App\Models\Dokumen::JENIS_MP,
+        ], true);
         $tahun = null;
 
         if ($berdasarkanTahun) {
@@ -103,15 +101,26 @@ class InstansiController extends Controller implements HasMiddleware
             $dokumenParams['tahun'] = $tahun;
         }
 
-        $dokumenByInstansi = app(\App\Services\DokumenService::class)->findAll($dokumenParams)->keyBy('id_instansi');
+        $allDokumen = app(\App\Services\DokumenService::class)->findAll($dokumenParams);
+        $dokumenByInstansi = $jenisDokumen === \App\Models\Dokumen::JENIS_SP
+            ? $allDokumen->groupBy('id_instansi')
+            : $allDokumen->keyBy('id_instansi');
 
-        $allInstansi->getCollection()->transform(function (Instansi $instansi) use ($dokumenByInstansi) {
+        $allInstansi->getCollection()->transform(function (Instansi $instansi) use ($dokumenByInstansi, $jenisDokumen) {
             $standarPelayanan = $this->standarPelayananService->firstOrCreate([
                 'id_instansi' => $instansi->id,
             ]);
 
             $instansi->setRelation('standarPelayanan', $standarPelayanan);
-            $instansi->setRelation('dokumenItem', $dokumenByInstansi->get($instansi->id));
+            if ($jenisDokumen === \App\Models\Dokumen::JENIS_SP) {
+                $dokumenItems = $dokumenByInstansi->get($instansi->id, collect());
+                $instansi->setRelation('dokumenItems', $dokumenItems->sortBy([
+                    ['tahun', 'desc'],
+                    ['tanggal', 'desc'],
+                ])->values());
+            } else {
+                $instansi->setRelation('dokumenItem', $dokumenByInstansi->get($instansi->id));
+            }
 
             return $instansi;
         });

@@ -31,6 +31,7 @@ Route::get('/dashboard/export-instansi-excel', [DashboardController::class, 'exp
 // INSTANSI
 Route::get('/instansi/index', [InstansiController::class, 'index'])->name(InstansiController::ROUTE_INDEX);
 Route::get('/instansi/index-standar-pelayanan', [InstansiController::class, 'indexStandarPelayanan'])->name(InstansiController::ROUTE_INDEX_STANDAR_PELAYANAN);
+Route::get('/dokumen/index-standar-pelayanan', [DokumenController::class, 'indexStandarPelayanan'])->name(DokumenController::ROUTE_INDEX_STANDAR_PELAYANAN);
 Route::get('/instansi/create', [InstansiController::class, 'create'])->name(InstansiConstant::RouteCreate);
 Route::post('/instansi/create', [InstansiController::class, 'create'])->name(InstansiConstant::RouteCreateProcess);
 Route::get('/instansi/update', [InstansiController::class, 'update'])->name(InstansiConstant::RouteUpdate);
@@ -41,10 +42,15 @@ Route::get('/instansi/export-excel', [InstansiController::class, 'exportExcel'])
 Route::get('/instansi/index-pengisian', [InstansiController::class, 'indexPengisian'])->name(InstansiConstant::RouteIndexPengisian);
 Route::get('/instansi/index-penilaian', [InstansiController::class, 'indexPenilaian'])->name(InstansiConstant::RouteIndexPenilaian);
 Route::get('/instansi/index-berita-acara', [InstansiController::class, 'indexBeritaAcara'])->name(InstansiConstant::RouteIndexBeritaAcara);
+Route::get('/dokumen/index-berita-acara', [DokumenController::class, 'indexBeritaAcara'])->name(DokumenController::ROUTE_INDEX_BERITA_ACARA);
 Route::get('/instansi/index-maklumat-pelayanan', [InstansiController::class, 'indexMaklumatPelayanan'])->name(InstansiController::ROUTE_INDEX_MAKLUMAT_PELAYANAN);
+Route::get('/dokumen/index-maklumat-pelayanan', [DokumenController::class, 'indexMaklumatPelayanan'])->name(DokumenController::ROUTE_INDEX_MAKLUMAT_PELAYANAN);
 Route::get('/dokumen/view/{slug}', [DokumenController::class, 'view'])->name(DokumenController::ROUTE_VIEW);
 Route::get('/dokumen/upload/{slug}', [DokumenController::class, 'uploadForm'])->name(DokumenController::ROUTE_UPLOAD_FORM);
 Route::post('/dokumen/upload/{slug}', [DokumenController::class, 'upload'])->name(DokumenController::ROUTE_UPLOAD);
+Route::get('/dokumen/update', [DokumenController::class, 'update'])->name(DokumenController::ROUTE_UPDATE);
+Route::post('/dokumen/update', [DokumenController::class, 'update'])->name(DokumenController::ROUTE_UPDATE_PROCESS);
+Route::post('/dokumen/delete', [DokumenController::class, 'delete'])->name(DokumenController::ROUTE_DELETE);
 
 // USER
 Route::get('/user/index', [UserController::class, 'index'])->name(UserConstant::RouteIndex);

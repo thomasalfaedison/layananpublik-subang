@@ -23,7 +23,12 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrapFour();
         
-        class_alias(LayoutConstant::class, 'LayoutConstant');
-        class_alias(\App\Facades\Form::class, 'Form');
+        if (!class_exists('LayoutConstant', false)) {
+            class_alias(LayoutConstant::class, 'LayoutConstant');
+        }
+
+        if (!class_exists('Form', false)) {
+            class_alias(\App\Facades\Form::class, 'Form');
+        }
     }
 }

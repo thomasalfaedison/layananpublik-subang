@@ -15,8 +15,14 @@ use Illuminate\Validation\ValidationException;
 class DokumenController extends Controller implements HasMiddleware
 {
     public const ROUTE_VIEW = 'dokumen.view';
+    public const ROUTE_INDEX_STANDAR_PELAYANAN = 'dokumen.indexStandarPelayanan';
+    public const ROUTE_INDEX_BERITA_ACARA = 'dokumen.indexBeritaAcara';
+    public const ROUTE_INDEX_MAKLUMAT_PELAYANAN = 'dokumen.indexMaklumatPelayanan';
     public const ROUTE_UPLOAD_FORM = 'dokumen.uploadForm';
     public const ROUTE_UPLOAD = 'dokumen.upload';
+    public const ROUTE_UPDATE = 'dokumen.update';
+    public const ROUTE_UPDATE_PROCESS = 'dokumen.updateProcess';
+    public const ROUTE_DELETE = 'dokumen.delete';
 
     public static function middleware()
     {
@@ -30,12 +36,73 @@ class DokumenController extends Controller implements HasMiddleware
     ) {
     }
 
+    public function indexStandarPelayanan()
+    {
+        if (!Session::isInstansi()) {
+            return redirect()->route(InstansiController::ROUTE_INDEX_STANDAR_PELAYANAN);
+        }
+
+        $idInstansi = Session::getIdInstansi();
+        $allDokumen = Dokumen::query()
+            ->where('id_instansi', $idInstansi)
+            ->where('jenis', Dokumen::JENIS_SP)
+            ->orderByDesc('tahun')
+            ->orderByDesc('tanggal')
+            ->orderByDesc('id')
+            ->paginate(10);
+        return view('dokumen.index-standar-pelayanan', compact('allDokumen'));
+    }
+
+    public function indexBeritaAcara()
+    {
+        if (!Session::isInstansi()) {
+            return redirect()->route(InstansiController::ROUTE_INDEX_BERITA_ACARA);
+        }
+
+        $allDokumen = Dokumen::query()
+            ->where('id_instansi', Session::getIdInstansi())
+            ->where('jenis', Dokumen::JENIS_BA)
+            ->orderByDesc('tahun')
+            ->paginate(10);
+
+        return view('dokumen.index-berita-acara', compact('allDokumen'));
+    }
+
+    public function indexMaklumatPelayanan()
+    {
+        if (!Session::isInstansi()) {
+            return redirect()->route(InstansiController::ROUTE_INDEX_MAKLUMAT_PELAYANAN);
+        }
+
+        $allDokumen = Dokumen::query()
+            ->where('id_instansi', Session::getIdInstansi())
+            ->where('jenis', Dokumen::JENIS_MP)
+            ->orderByDesc('tahun')
+            ->paginate(10);
+
+        return view('dokumen.index-maklumat-pelayanan', compact('allDokumen'));
+    }
+
     public function view(Request $request, string $slug)
     {
         $jenisDokumen = Dokumen::getJenisBySlug($slug);
 
         if ($jenisDokumen === null) {
             abort(404, 'Not Found');
+        }
+
+        if ($jenisDokumen === Dokumen::JENIS_BA && Session::isInstansi()) {
+            return redirect()->route(self::ROUTE_INDEX_BERITA_ACARA);
+        }
+
+        if ($jenisDokumen === Dokumen::JENIS_MP && Session::isInstansi()) {
+            return redirect()->route(self::ROUTE_INDEX_MAKLUMAT_PELAYANAN);
+        }
+
+        if ($jenisDokumen === Dokumen::JENIS_SP) {
+            return redirect()->route(Session::isInstansi()
+                ? self::ROUTE_INDEX_STANDAR_PELAYANAN
+                : InstansiController::ROUTE_INDEX_STANDAR_PELAYANAN);
         }
 
         $idInstansi = Session::isInstansi()
@@ -77,12 +144,6 @@ class DokumenController extends Controller implements HasMiddleware
 
         $standarPelayananModel = null;
 
-        if ($jenisDokumen === Dokumen::JENIS_SP) {
-            $standarPelayananModel = $this->standarPelayananService->firstOrCreate([
-                'id_instansi' => $idInstansi,
-            ]);
-        }
-
         return view('dokumen.view', compact(
             'dokumenModel',
             'standarPelayananModel',
@@ -106,7 +167,7 @@ class DokumenController extends Controller implements HasMiddleware
 
         $tahun = null;
 
-        if (in_array($jenisDokumen, [Dokumen::JENIS_BA, Dokumen::JENIS_MP], true)) {
+        if (in_array($jenisDokumen, [Dokumen::JENIS_SP, Dokumen::JENIS_BA, Dokumen::JENIS_MP], true)) {
             $request->validate(['tahun' => 'nullable|integer|between:1901,2155']);
             $tahun = (int) ($request->query('tahun') ?: Session::getTahun());
         }
@@ -134,10 +195,13 @@ class DokumenController extends Controller implements HasMiddleware
 
             if (in_array($jenisDokumen, [Dokumen::JENIS_BA, Dokumen::JENIS_MP], true)) {
                 if (Session::isInstansi()) {
-                    return redirect()->route(self::ROUTE_VIEW, [
-                        'slug' => $slug,
-                        'tahun' => $data['tahun'],
-                    ])->with('success', 'Dokumen berhasil diupload');
+                    if ($jenisDokumen === Dokumen::JENIS_BA) {
+                        return redirect()->route(self::ROUTE_INDEX_BERITA_ACARA)
+                            ->with('success', 'Dokumen berhasil diupload');
+                    }
+
+                    return redirect()->route(self::ROUTE_INDEX_MAKLUMAT_PELAYANAN)
+                        ->with('success', 'Dokumen berhasil diupload');
                 }
 
                 $route = $jenisDokumen === Dokumen::JENIS_BA
@@ -148,6 +212,17 @@ class DokumenController extends Controller implements HasMiddleware
                     ->with('success', 'Dokumen berhasil diupload');
             }
 
+            if ($jenisDokumen === Dokumen::JENIS_SP && Session::isInstansi()) {
+                return redirect()->route(self::ROUTE_INDEX_STANDAR_PELAYANAN)
+                    ->with('success', 'Dokumen berhasil diupload');
+            }
+
+            if ($jenisDokumen === Dokumen::JENIS_SP) {
+                return redirect()->route(InstansiController::ROUTE_INDEX_STANDAR_PELAYANAN, [
+                    'tahun' => $data['tahun'],
+                ])->with('success', 'Dokumen berhasil diupload');
+            }
+
             return redirect($referrer)->with('success', 'Dokumen berhasil diupload');
         } catch (ValidationException $e) {
             return redirect()->back()
@@ -155,5 +230,79 @@ class DokumenController extends Controller implements HasMiddleware
                 ->withInput()
                 ->with('danger', 'Data gagal disimpan. Silahkan periksa kembali isian Anda.');
         }
+    }
+
+    public function update(Request $request)
+    {
+        $dokumenModel = $this->manageableDokumen($request);
+        $referrer = $this->indexRouteFor($dokumenModel, $dokumenModel->tahun);
+
+        if ($request->isMethod('post')) {
+            try {
+                $this->dokumenService->update($dokumenModel, $request->all());
+
+                return redirect($this->indexRouteFor($dokumenModel, $dokumenModel->tahun))
+                    ->with('success', 'Dokumen berhasil diperbarui');
+            } catch (ValidationException $e) {
+                return redirect()->back()
+                    ->withErrors($e->validator)
+                    ->withInput()
+                    ->with('danger', 'Data gagal disimpan. Silahkan periksa kembali isian Anda.');
+            }
+        }
+
+        return view('dokumen.update', compact('dokumenModel', 'referrer'));
+    }
+
+    public function delete(Request $request)
+    {
+        $dokumenModel = $this->manageableDokumen($request);
+        $redirect = $this->indexRouteFor($dokumenModel, $dokumenModel->tahun);
+
+        try {
+            if (!$this->dokumenService->delete($dokumenModel)) {
+                return redirect($redirect)->with('danger', 'Dokumen gagal dihapus');
+            }
+
+            return redirect($redirect)->with('success', 'Dokumen berhasil dihapus');
+        } catch (\Exception $e) {
+            return redirect($redirect)->with('danger', 'Dokumen gagal dihapus');
+        }
+    }
+
+    protected function manageableDokumen(Request $request): Dokumen
+    {
+        if (!Session::isAdmin() && !Session::isInstansi()) {
+            abort(403);
+        }
+
+        $query = Dokumen::query()
+            ->whereKey((int) $request->get('id'))
+            ->whereIn('jenis', [Dokumen::JENIS_SP, Dokumen::JENIS_BA, Dokumen::JENIS_MP]);
+
+        if (Session::isInstansi()) {
+            $query->where('id_instansi', Session::getIdInstansi());
+        }
+
+        return $query->firstOrFail();
+    }
+
+    protected function indexRouteFor(Dokumen $model, ?int $tahun): string
+    {
+        if (Session::isInstansi()) {
+            return route(match ($model->jenis) {
+                Dokumen::JENIS_SP => self::ROUTE_INDEX_STANDAR_PELAYANAN,
+                Dokumen::JENIS_BA => self::ROUTE_INDEX_BERITA_ACARA,
+                Dokumen::JENIS_MP => self::ROUTE_INDEX_MAKLUMAT_PELAYANAN,
+            });
+        }
+
+        if ($model->jenis === Dokumen::JENIS_SP) {
+            return route(InstansiController::ROUTE_INDEX_STANDAR_PELAYANAN, ['tahun' => $tahun]);
+        }
+
+        return route($model->jenis === Dokumen::JENIS_BA
+            ? InstansiController::ROUTE_INDEX_BERITA_ACARA
+            : InstansiController::ROUTE_INDEX_MAKLUMAT_PELAYANAN, ['tahun' => $tahun]);
     }
 }

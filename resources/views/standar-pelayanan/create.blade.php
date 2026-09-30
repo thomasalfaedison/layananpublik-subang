@@ -1,13 +1,13 @@
 @php
     use App\Http\Controllers\StandarPelayananController;
 
-    $breadcrumbs[] = ['label' => 'Standar Pelayanan', 'url' => route(StandarPelayananController::ROUTE_INDEX)];
-    $breadcrumbs[] = 'Tambah Standar Pelayanan';
+    $breadcrumbs[] = ['label' => 'Cetak SK Layanan', 'url' => route(StandarPelayananController::ROUTE_INDEX)];
+    $breadcrumbs[] = 'Tambah Pengaturan SK';
 @endphp
 
 @extends(LayoutConstant::MAIN_LAYOUT)
 
-@section('title', 'Tambah Standar Pelayanan')
+@section('title', 'Tambah Pengaturan SK')
 
 @section('content')
     @include('standar-pelayanan._form', [

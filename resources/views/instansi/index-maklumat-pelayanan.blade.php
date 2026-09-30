@@ -41,9 +41,9 @@
                             <th>Perangkat Daerah</th>
                             <th>Nomor Dokumen</th>
                             <th style="width:90px; text-align:center">Tahun</th>
-                            <th style="width:120px; text-align:center">Tanggal</th>
+                            <th style="width:160px; text-align:center">Tanggal</th>
                             <th style="width:110px; text-align:center">File</th>
-                            <th style="width:180px; text-align:center">Aksi</th>
+                            <th style="width:80px; text-align:center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -68,11 +68,24 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    <?= Html::a('<i class="fa fa-file-word"></i> Export Word', route(StandarPelayananController::ROUTE_EXPORT_WORD_MAKLUMAT_PELAYANAN, [
+                                    <?= Html::a('<i class="fa fa-file-word"></i>', route(StandarPelayananController::ROUTE_EXPORT_WORD_MAKLUMAT_PELAYANAN, [
                                         'id_instansi' => $instansi->id,
                                     ]), [
-                                        'class' => 'btn btn-primary btn-xs',
+                                        'data-toggle' => 'tooltip',
+                                        'title' => 'Export Word',
                                     ]) ?>
+                                    @if ($dokumen)
+                                        <?= Html::a('<i class="fa fa-pencil-alt"></i>', route(DokumenController::ROUTE_UPDATE, ['id' => $dokumen->id]), [
+                                            'data-toggle' => 'tooltip',
+                                            'title' => 'Ubah',
+                                        ]) ?>
+                                        <?= Html::a('<i class="fa fa-trash"></i>', route(DokumenController::ROUTE_DELETE, ['id' => $dokumen->id]), [
+                                            'data-toggle' => 'tooltip',
+                                            'title' => 'Hapus',
+                                            'data-method' => 'POST',
+                                            'data-confirm' => 'Yakin ingin menghapus dokumen ini?',
+                                        ]) ?>
+                                    @endif
                                 </td>
                             </tr>
                         @empty

@@ -4,22 +4,24 @@
     use App\Http\Controllers\DokumenController;
 
     $judulDokumen = \App\Models\Dokumen::getLabelByJenis($jenisDokumen);
+    $isEditing = isset($dokumenModel);
+    $tahunTerkunci = $isEditing && $dokumenModel->tahun !== null;
 @endphp
 
-<form action="{{ route(DokumenController::ROUTE_UPLOAD, ['slug' => $slug]) }}" method="POST" enctype="multipart/form-data">
+<form action="{{ $isEditing ? route(DokumenController::ROUTE_UPDATE_PROCESS, ['id' => $dokumenModel->id]) : route(DokumenController::ROUTE_UPLOAD, ['slug' => $slug]) }}" method="POST" enctype="multipart/form-data">
     @csrf
 
     <div class="card card-default">
         <div class="card-header">
-            <h3 class="card-title">Form Unggah {{ $judulDokumen }}</h3>
+            <h3 class="card-title">Form {{ $isEditing ? 'Ubah' : 'Unggah' }} {{ $judulDokumen }}</h3>
         </div>
 
         <div class="card-body">
             <div class="col-sm-6 pl-0">
-                @if (Session::isInstansi())
+                @if (Session::isInstansi() || $isEditing)
                     <div class="form-group">
                         <?= Form::label('instansi_label_' . $jenisDokumen, 'Perangkat Daerah') ?>
-                        <input type="text" class="form-control" value="{{ optional(auth()->user()->instansi)->nama }}" disabled>
+                        <input type="text" class="form-control" value="{{ $isEditing ? $dokumenModel->instansi?->nama : optional(auth()->user()->instansi)->nama }}" disabled>
                     </div>
                 @else
                     <div class="form-group">
@@ -34,14 +36,14 @@
                     </div>
                 @endif
 
-                @if ($tahun !== null)
+                @if ($tahun !== null || $jenisDokumen === \App\Models\Dokumen::JENIS_SP)
                     <div class="form-group">
-                        <?= Form::label('tahun', 'Tahun Dokumen', ['required' => true]) ?>
-                        <?= Form::number('tahun', old('tahun', $tahun), [
+                        <?= Form::label('tahun', 'Tahun Dokumen', $tahunTerkunci ? [] : ['required' => true]) ?>
+                        <?= Form::number('tahun', $tahunTerkunci ? $dokumenModel->tahun : old('tahun', $tahun ?? Session::getTahun()), [
                             'class' => 'form-control' . ($errors->has('tahun') ? ' is-invalid' : ''),
                             'min' => 1901,
                             'max' => 2155,
-                            'required' => true,
+                            ...($tahunTerkunci ? ['disabled' => 'disabled'] : ['required' => 'required']),
                         ]) ?>
                         @error('tahun')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -51,7 +53,7 @@
 
                 <div class="form-group">
                     <?= Form::label('nomor', 'Nomor ' . $judulDokumen, ['required' => true]) ?>
-                    <?= Form::text('nomor', old('nomor'), [
+                    <?= Form::text('nomor', old('nomor', $dokumenModel->nomor ?? null), [
                         'class' => 'form-control' . ($errors->has('nomor') ? ' is-invalid' : ''),
                         'placeholder' => 'Masukkan nomor dokumen',
                     ]) ?>
@@ -62,7 +64,7 @@
 
                 <div class="form-group">
                     <?= Form::label('tanggal', 'Tanggal Dokumen', ['required' => true]) ?>
-                    <?= Form::date('tanggal', old('tanggal'), [
+                    <?= Form::date('tanggal', old('tanggal', $dokumenModel->tanggal ?? null), [
                         'class' => 'form-control' . ($errors->has('tanggal') ? ' is-invalid' : ''),
                     ]) ?>
                     @error('tanggal')
@@ -71,9 +73,12 @@
                 </div>
 
                 <div class="form-group">
-                    <?= Form::label('file', 'File Dokumen', ['required' => true]) ?>
+                    <?= Form::label('file', 'File Dokumen', $isEditing ? [] : ['required' => true]) ?>
                     <input type="file" name="file" class="form-control{{ $errors->has('file') ? ' is-invalid' : '' }}" accept=".pdf,.doc,.docx">
                     <small class="form-text text-muted">Format file: PDF, DOC, DOCX. Maksimal 5 MB.</small>
+                    @if ($isEditing && $dokumenModel->getFileUrl('file', \App\Models\Dokumen::FOLDER_FILE))
+                        <small class="form-text text-muted">Kosongkan jika tidak ingin mengganti file.</small>
+                    @endif
                     @error('file')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

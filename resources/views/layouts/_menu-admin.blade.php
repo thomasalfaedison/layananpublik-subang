@@ -19,9 +19,15 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ url('/instansi/index-standar-pelayanan') }}" class="nav-link {{ Helper::isMenuActive('instansi/index-standar-pelayanan') }}">
+            <a href="{{ route(\App\Http\Controllers\StandarPelayananController::ROUTE_INDEX) }}" class="nav-link {{ Helper::isMenuActive(['standar-pelayanan/index', 'standar-pelayanan/create', 'standar-pelayanan/update', 'standar-pelayanan/view']) }}">
                 <i class="fas fa-print nav-icon"></i>
                 <p>Cetak SK Layanan</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ url('/instansi/index-standar-pelayanan') }}" class="nav-link {{ Helper::isMenuActive(['instansi/index-standar-pelayanan', 'dokumen/upload/standar-pelayanan']) }}">
+                <i class="fas fa-file-alt nav-icon"></i>
+                <p>Standar Pelayanan</p>
             </a>
         </li>
         <li class="nav-item">

@@ -18,19 +18,25 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ url('/instansi/index-standar-pelayanan') }}" class="nav-link {{ Helper::isMenuActive(['instansi/index-standar-pelayanan', 'dokumen/view/standar-pelayanan', 'dokumen/upload/standar-pelayanan']) }}">
+            <a href="{{ route(\App\Http\Controllers\StandarPelayananController::ROUTE_VIEW) }}" class="nav-link {{ Helper::isMenuActive(['standar-pelayanan/view', 'standar-pelayanan/update']) }}">
                 <i class="fas fa-print nav-icon"></i>
                 <p>Cetak SK Layanan</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ url('/instansi/index-berita-acara') }}" class="nav-link {{ Helper::isMenuActive(['instansi/index-berita-acara', 'dokumen/view/berita-acara', 'dokumen/upload/berita-acara']) }}">
+            <a href="{{ route(\App\Http\Controllers\DokumenController::ROUTE_INDEX_STANDAR_PELAYANAN) }}" class="nav-link {{ Helper::isMenuActive(['dokumen/index-standar-pelayanan', 'dokumen/view/standar-pelayanan', 'dokumen/upload/standar-pelayanan']) }}">
+                <i class="fas fa-file-alt nav-icon"></i>
+                <p>Standar Pelayanan</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route(\App\Http\Controllers\DokumenController::ROUTE_INDEX_BERITA_ACARA) }}" class="nav-link {{ Helper::isMenuActive(['dokumen/index-berita-acara', 'dokumen/view/berita-acara', 'dokumen/upload/berita-acara']) }}">
                 <i class="fas fa-book nav-icon"></i>
                 <p>Berita Acara</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ url('/instansi/index-maklumat-pelayanan') }}" class="nav-link {{ Helper::isMenuActive(['instansi/index-maklumat-pelayanan', 'dokumen/view/maklumat-pelayanan', 'dokumen/upload/maklumat-pelayanan']) }}">
+            <a href="{{ route(\App\Http\Controllers\DokumenController::ROUTE_INDEX_MAKLUMAT_PELAYANAN) }}" class="nav-link {{ Helper::isMenuActive(['dokumen/index-maklumat-pelayanan', 'dokumen/view/maklumat-pelayanan', 'dokumen/upload/maklumat-pelayanan']) }}">
                 <i class="fas fa-file-signature nav-icon"></i>
                 <p>Maklumat Pelayanan</p>
             </a>

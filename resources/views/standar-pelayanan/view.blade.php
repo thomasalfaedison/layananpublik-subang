@@ -2,7 +2,7 @@
     use App\Components\Html;
     use App\Http\Controllers\StandarPelayananController;
 
-    $breadcrumbs[] = 'Standar Pelayanan';
+    $breadcrumbs[] = 'Cetak SK Layanan';
 
     /** 
      * @var \App\Models\StandarPelayanan $model
@@ -11,14 +11,14 @@
 
 @extends(LayoutConstant::MAIN_LAYOUT)
 
-@section('title', 'Standar Pelayanan')
+@section('title', 'Cetak SK Layanan')
 
 @section('content')
 
 <div class="card card-default">
     <div class="card-header">
         <h3 class="card-title">
-            Standar Pelayanan
+            Pengaturan SK Layanan
         </h3>
     </div>
     <div class="card-body">
